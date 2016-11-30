@@ -1,0 +1,19 @@
+# WebStorm
+.idea
+
+# OSX
+.DS_Store
+
+# Lerna
+lerna-debug.log
+
+# npm
+node_modules
+npm-debug.log
+
+# Build folders
+dist
+generators
+
+# Test
+coverage

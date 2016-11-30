@@ -1,0 +1,16 @@
+import {
+  GraphQLObjectType,
+  GraphQLString,
+} from 'graphql';
+
+export default new GraphQLObjectType({
+  name: '<%= name %>',
+  description: 'Represents <%= name %>',
+  fields: () => ({
+    example: {
+      type: GraphQLString,
+      description: 'My example field',
+      resolve: obj => obj.example,
+    },
+  }),
+});

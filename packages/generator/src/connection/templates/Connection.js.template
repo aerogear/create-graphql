@@ -1,0 +1,10 @@
+// @flow
+
+import { connectionDefinitions } from 'graphql-relay';
+
+import <%= name %>Type from '<%= relativeTypeDir %>/<%= name %>Type';
+
+export default connectionDefinitions({
+  name: '<%= name %>',
+  nodeType: <%= name %>Type,
+});

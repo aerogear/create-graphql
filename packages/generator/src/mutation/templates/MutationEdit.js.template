@@ -1,0 +1,71 @@
+// @flow
+
+import {
+  GraphQLID,
+  GraphQLString,
+  GraphQLNonNull,
+} from 'graphql';
+import {
+  mutationWithClientMutationId,
+  toGlobalId,
+} from 'graphql-relay';
+
+import <%= name %>Type from '<%= relativeTypeDir %>/<%= name %>Type';
+import <%= name %>Loader from '<%= relativeLoaderDir %>/<%= name %>Loader';
+import <%= name %>Connection from '<%= relativeConnectionDir %>/<%= name %>Connection';
+
+export default mutationWithClientMutationId({
+  name: '<%= name %>Edit',
+  inputFields: {
+    id: {
+      type: new GraphQLNonNull(GraphQLID),
+    },
+    example: {
+      type: GraphQLString,
+    },
+  },
+  mutateAndGetPayload: async ({ id, example }) => {
+    // TODO: mutation logic
+
+    return {
+      id: id,
+      error: null,
+    };
+  },
+  outputFields: {
+    <%= rawName %>Edge: {
+      type: <%= name %>Connection.edgeType,
+      resolve: async({ id }, args, { user }) => {
+        // TODO: load new edge from loader
+
+        const <%= rawName %> = await <%= name %>Loader.load(
+          user, id
+        );
+
+        // Returns null if no node was loaded
+        if (!<%= rawName %>) {
+          return null;
+        }
+
+        return {
+          cursor: toGlobalId('<%= rawName %>', <%= rawName %>),
+          node: <%= rawName %>,
+        };
+      },
+    },
+    <%= rawName %>: {
+      type: <%= name %>Type,
+      resolve: async ({ user, id }) => {
+        if (!user || !id) {
+          return null;
+        }
+
+        return await <%= name %>Loader.load(user, id);
+      },
+    },
+    error: {
+      type: GraphQLString,
+      resolve: ({ error }) => error,
+    },
+  },
+});

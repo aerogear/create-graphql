@@ -1,0 +1,55 @@
+import { graphql } from 'graphql';
+import { schema } from '../../schema';
+import { setupTest } from '../../../test/helper';
+import {
+  User,
+  <%= name %>,
+} from '../../model';
+
+beforeEach(async () => await setupTest());
+
+it('should not allow anonymous user', async () => {
+  const query = `
+    mutation M {
+      <%= mutationName %>(input: {
+        id: 'Example Id'
+        exampleField: 'Example field'
+      })
+    }
+  `;
+
+  const rootValue = {};
+  // No user should be passed to context since we are testing an anonymous session
+  const context = {};
+
+  const { errors } = await graphql(schema, query, rootValue, context);
+
+  expect(errors).not.toBe(undefined);
+});
+
+it('should create a record on database', async () => {
+  const user = new User({
+    name: 'user',
+    email: 'user@example.com',
+  });
+
+  await user.save();
+
+  const query = `
+    mutation M {
+      <%= mutationName %>(input: {
+        id: 'Example Id'
+        exampleField: 'Example field'
+      }) {
+        example: 'Example Field to retrieve after mutation'
+      }
+    }
+  `;
+
+  const rootValue = {};
+  const context = { user };
+
+  const { errors } = await graphql(schema, query, rootValue, context);
+
+  expect(errors).toBe(undefined);
+});

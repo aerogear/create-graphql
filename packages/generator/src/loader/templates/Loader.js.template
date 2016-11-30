@@ -1,0 +1,55 @@
+// @flow
+
+import DataLoader from 'dataloader';
+import ConnectionFromMongoCursor from '<%= connectionRelativeDir %>/ConnectionFromMongoCursor';
+import <%= name %>Model from '<%= modelRelativeDir %>/<%= name %>';
+
+type <%= name %>Type = {
+  id: string,
+  exampleField: string,
+}
+
+export default class <%= name %> {
+  id: string;
+  exampleField: string;
+
+  static <%= rawName %>Loader = new DataLoader(
+    ids => Promise.all(
+      ids.map(id =>
+        <%= name %>Model.findOne({ _id: id })
+      ),
+    ),
+  );
+
+  constructor(data: <%= name %>Type) {
+    this.id = data.id;
+    this.exampleField = data.exampleField;
+  }
+
+  static viewerCanSee(viewer, data) {
+    // TODO: handle security
+
+    return true;
+  }
+
+  static async load(viewer, id) {
+    const data = await <%= name %>.<%= rawName %>Loader.load(id);
+
+    return <%= name %>.viewerCanSee(viewer, data) ? new <%= name %>(data) : null;
+  }
+
+  static clearCache(id) {
+    return <%= name %>.<%= rawName %>Loader.clear(id);
+  }
+
+  static async load<%= name %>(viewer, args) {
+    // TODO: load multiple rows
+
+    const <%= rawName %> = [];
+
+    return ConnectionFromMongoCursor.connectionFromMongoCursor(
+      viewer, <%= rawName %>, args, <%= name %>.load
+    );
+  }
+
+}

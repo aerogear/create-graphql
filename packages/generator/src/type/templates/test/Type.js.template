@@ -1,0 +1,29 @@
+import { graphql } from 'graphql';
+import { schema } from '../../schema';
+import { setupTest } from '../../../../test/helper';
+import {
+  User,
+  <%= name %>,
+} from '../../../models';
+
+beforeEach(async () => await setupTest());
+
+it('should retrieve a record', async () => {
+  const user = await new User({
+    name: 'user',
+    email: 'user@example.com',
+  }).save();
+
+  const query = `
+    query Q {
+      // TODO: query to return a record
+    }
+  `;
+
+  const rootValue = {};
+  const context = { user };
+
+  const { errors } = await graphql(schema, query, rootValue, context);
+
+  expect(errors).toBe(undefined);
+});

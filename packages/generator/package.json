@@ -1,0 +1,61 @@
+{
+  "name": "generator-graphql",
+  "description": "Create production-ready GraphQL servers",
+  "version": "1.1.0-beta.4",
+  "author": {
+    "name": "Lucas Bento",
+    "email": "lucas.bsilva@outlook.com",
+    "url": "https://github.com/lucasbento"
+  },
+  "bugs": "https://github.com/lucasbento/create-graphql/issues",
+  "dependencies": {
+    "babel-polyfill": "^6.16.0",
+    "babylon": "^6.14.1",
+    "chalk": "^1.1.3",
+    "colors": "^1.1.2",
+    "ora": "^0.3.0",
+    "pkg-dir": "^1.0.0",
+    "ramda": "^0.22.1",
+    "recast": "^0.11.17",
+    "semver": "^5.1.0",
+    "shelljs": "^0.7.4",
+    "yeoman-generator": "^0.24.1"
+  },
+  "devDependencies": {},
+  "files": [
+    "generators/app",
+    "generators/type",
+    "generators/connection",
+    "generators/loader",
+    "generators/mutation",
+    "generators/test",
+    "generators/utils.js",
+    "generators/graphql-logo.js",
+    "generators/graphqlrc.json"
+  ],
+  "homepage": "https://github.com/lucasbento/create-graphql#readme",
+  "keywords": [
+    "apollo",
+    "create",
+    "generator",
+    "graphql",
+    "koa",
+    "relay",
+    "server",
+    "yeoman",
+    "yo",
+    "yeoman-generator"
+  ],
+  "license": "MIT",
+  "preferGlobal": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucasbento/create-graphql"
+  },
+  "scripts": {
+    "build": "npm run clear && babel -d ./generators ./src --copy-files",
+    "clear": "rimraf ./generators",
+    "test": "jest",
+    "watch": "babel -w -d ./generators ./src --copy-files"
+  }
+}

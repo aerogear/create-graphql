@@ -1,0 +1,35 @@
+{
+  "testEnvironment": "node",
+  "testPathIgnorePatterns": [
+    "/coverage/",
+    "/dist/",
+    "/generators/",
+    "/node_modules/"
+  ],
+  "moduleDirectories": [
+    "src",
+    "node_modules"
+  ],
+  "coveragePathIgnorePatterns": [
+    "/__tests__/",
+    "/coverage/",
+    "/dist/",
+    "/generators/",
+    "/node_modules/"
+  ],
+  "coverageDirectory": "./coverage/",
+  "coverageReporters": [
+    "lcov",
+    "html"
+  ],
+  "collectCoverage": true,
+  "collectCoverageFrom": [
+    "**/**/*.js"
+  ],
+  "testPathDirs": [
+    "generator/src",
+    "create-graphql/src"
+  ],
+  "rootDir": "./packages/",
+  "verbose": true
+}

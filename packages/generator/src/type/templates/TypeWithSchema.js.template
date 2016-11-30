@@ -1,0 +1,22 @@
+// @flow
+
+import {
+  GraphQLObjectType,
+  <%_ for (i in schema.dependencies) { -%>
+  <%= schema.dependencies[i] %>,
+  <%_ } -%>
+} from 'graphql';
+
+export default new GraphQLObjectType({
+  name: '<%= name %>',
+  description: 'Represents <%= name %>',
+  fields: () => ({
+    <%_ for (field of schema.fields) { -%>
+    <%- field.name %>: {
+      type: <%= field.type %>,
+      description: '<%= field.description %>',
+      resolve: obj => obj.<%= field.name %>,
+    },
+    <%_ } -%>
+  }),
+});

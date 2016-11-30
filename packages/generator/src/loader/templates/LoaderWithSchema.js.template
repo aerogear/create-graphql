@@ -1,0 +1,58 @@
+// @flow
+
+import DataLoader from 'dataloader';
+import ConnectionFromMongoCursor from '<%= connectionRelativeDir %>/ConnectionFromMongoCursor';
+import <%= name %>Model from '<%= modelRelativeDir %>/<%= name %>';
+
+type <%= name %>Type = {
+  <%_ for (field of schema.fields) { -%>
+  <%- field.name + ': ' + field.flowType -%>,
+  <%_ } -%>
+}
+
+export default class <%= name %> {
+  <%_ for (field of schema.fields) { -%>
+  <%- field.name + ': ' + field.flowType -%>;
+  <%_ } -%>
+
+  static <%= rawName %>Loader = new DataLoader(
+    ids => Promise.all(
+      ids.map(id =>
+        <%= name %>Model.findOne({ _id: id })
+      ),
+    ),
+  );
+
+  constructor(data: <%= name %>Type) {
+    <%_ for (field of schema.fields) { -%>
+    this.<%- field.name -%> = data.<%- field.name -%>;
+    <%_ } -%>
+  }
+
+  static viewerCanSee(viewer, data) {
+    // TODO: handle security
+
+    return true;
+  }
+
+  static async load(viewer, id) {
+    const data = await <%= name %>.<%= rawName %>Loader.load(id);
+
+    return <%= name %>.viewerCanSee(viewer, data) ? new <%= name %>(data) : null;
+  }
+
+  static clearCache(id) {
+    return <%= name %>.<%= rawName %>Loader.clear(id);
+  }
+
+  static async load<%= name %>s(viewer, args) {
+    // TODO: load multiple rows
+
+    const <%= rawName %> = [];
+
+    return ConnectionFromMongoCursor.connectionFromMongoCursor(
+      viewer, <%= rawName %>, args, <%= name %>.load
+    );
+  }
+
+}

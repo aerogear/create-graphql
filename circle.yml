@@ -1,0 +1,15 @@
+machine:
+  node:
+    version: 4.4.7
+  post:
+    - npm install -g yarn
+dependencies:
+  override:
+    - yarn
+    - npm run bootstrap
+test:
+  override:
+    - npm run lint
+    - npm test
+  post:
+    - bash <(curl -s https://codecov.io/bash)
