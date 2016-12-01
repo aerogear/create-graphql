@@ -5,7 +5,9 @@
     "loader": "loader",
     "model": "model",
     "mutation": "mutation",
-    "type": "type"
+    "mutation_test": "mutation/__tests__",
+    "type": "type",
+    "type_test": "type/__tests__"
   },
   "files": {
     "schema": "schema"

@@ -1,10 +1,9 @@
 import { graphql } from 'graphql';
 import { schema } from '../../schema';
 import { setupTest } from '../../../test/helper';
-import {
-  User,
-  <%= name %>,
-} from '../../model';
+
+import User from '<%= relativeModelDir %>/User';
+import <%= name %> from '<%= relativeModelDir %>/<%= name %>';
 
 beforeEach(async () => await setupTest());
 
@@ -42,9 +41,7 @@ it('should create a record on database', async () => {
         <%_ for (field of schema.fields) { -%>
         <%- field.name %>: 'Example value',
         <%_ } -%>
-      }) {
-        example: 'Example Field to retrieve after mutation'
-      }
+      })
     }
   `;
 

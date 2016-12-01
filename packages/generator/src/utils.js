@@ -151,6 +151,10 @@ const parseConfigFile = (filePath, opts) => {
  * @returns {*}
  */
 export const getCreateGraphQLConfig = (options) => {
+  const defaultFilePath = path.resolve(`${__dirname}/graphqlrc.json`);
+
+  const defaultConfig = parseConfigFile(defaultFilePath, options);
+
   try {
     return parseConfigFile(`${rootPath}/.graphqlrc`, options);
   } catch (err) {

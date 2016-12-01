@@ -1,10 +1,9 @@
 import { graphql } from 'graphql';
 import { schema } from '../../schema';
 import { setupTest } from '../../../test/helper';
-import {
-  <%= name %>,
-  User,
-} from '../../model';
+
+import User from '<%= relativeModelDir %>/User';
+import <%= name %> from '<%= relativeModelDir %>/<%= name %>';
 
 beforeEach(async () => await setupTest());
 
@@ -36,8 +35,11 @@ it('should edit a record on database', async () => {
 
   await user.save();
 
+  // TODO: specify fields to create a new <%= name %>
   const <%= camelCaseName %> = new <%= name %>({
-    // TODO: specify fields to create a new <%= name %>
+    <%_ for (field of schema.fields) { -%>
+    <%- field.name %>: 'Example value',
+    <%_ } -%>
   });
 
   await <%= camelCaseName %>.save();
