@@ -1,7 +1,6 @@
 // @flow
 
 import {
-  GraphQLID,
   GraphQLString,
   GraphQLNonNull,
 } from 'graphql';
@@ -17,11 +16,16 @@ export default mutationWithClientMutationId({
   name: '<%= name %>Add',
   inputFields: {
     example: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(GraphQLString),
       description: 'My example field',
     },
   },
-  mutateAndGetPayload: async ({ example }) => {
+  mutateAndGetPayload: async ({ example }, { user }) => {
+    // Verify if user is authorized
+    if (!user) {
+      throw new Error('Unauthorized user');
+    }
+
     // TODO: mutation logic
 
     return {
@@ -36,7 +40,7 @@ export default mutationWithClientMutationId({
         // TODO: load new edge from loader
 
         const <%= rawName %> = await <%= name %>Loader.load(
-          user, id
+          user, id,
         );
 
         // Returns null if no node was loaded

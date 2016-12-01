@@ -7,12 +7,13 @@ import {
 } from 'graphql';
 import {
   mutationWithClientMutationId,
-  toGlobalId,
+  fromGlobalId,
 } from 'graphql-relay';
+
+import <%= name %> from '<%= relativeModelDir %>/<%= name %>';
 
 import <%= name %>Type from '<%= relativeTypeDir %>/<%= name %>Type';
 import <%= name %>Loader from '<%= relativeLoaderDir %>/<%= name %>Loader';
-import <%= name %>Connection from '<%= relativeConnectionDir %>/<%= name %>Connection';
 
 export default mutationWithClientMutationId({
   name: '<%= name %>Edit',
@@ -24,44 +25,41 @@ export default mutationWithClientMutationId({
       type: GraphQLString,
     },
   },
-  mutateAndGetPayload: async ({ id, example }) => {
+  mutateAndGetPayload: async (args, { user }) => {
+    // Verify if user is authorized
+    if (!user) {
+      throw new Error('Unauthorized user');
+    }
+
+    const {
+      id,
+      example,
+    } = args;
+
+    // Check if the provided ID is valid
+    const <%= rawName %> = await <%= name %>.findOne({
+      _id: fromGlobalId(id).id,
+    });
+
+    // If not, throw an error
+    if (!<%= rawName %>) {
+      throw new Error('Invalid <%= rawName %>Id');
+    }
+
     // TODO: mutation logic
 
+    // Clear dataloader cache
+    <%= name %>Loader.clearCache(<%= rawName %>._id);
+
     return {
-      id: id,
+      id: <%= rawName %>._id,
       error: null,
     };
   },
   outputFields: {
-    <%= rawName %>Edge: {
-      type: <%= name %>Connection.edgeType,
-      resolve: async({ id }, args, { user }) => {
-        // TODO: load new edge from loader
-
-        const <%= rawName %> = await <%= name %>Loader.load(
-          user, id
-        );
-
-        // Returns null if no node was loaded
-        if (!<%= rawName %>) {
-          return null;
-        }
-
-        return {
-          cursor: toGlobalId('<%= rawName %>', <%= rawName %>),
-          node: <%= rawName %>,
-        };
-      },
-    },
     <%= rawName %>: {
       type: <%= name %>Type,
-      resolve: async ({ user, id }) => {
-        if (!user || !id) {
-          return null;
-        }
-
-        return await <%= name %>Loader.load(user, id);
-      },
+      resolve: (obj, args, { user }) => <%= name %>Loader.load(user, obj.id),
     },
     error: {
       type: GraphQLString,

@@ -64,6 +64,12 @@ class MutationGenerator extends Base {
         schema.dependencies.unshift('GraphQLID');
       }
 
+      // Remove GraphQLString dependency from import if it exists,
+      // it's already hard-coded on the template
+      if (schema.dependencies.indexOf('GraphQLString') !== -1) {
+        schema.dependencies.unshift('GraphQLString');
+      }
+
       // Map through the fields checking if any of them is required, if so, use GraphQLNonNull
       schema.fields = schema.fields.map((field) => {
         if (!field.required) {
@@ -102,6 +108,7 @@ class MutationGenerator extends Base {
     };
 
     const templateType = schema ? 'withSchema' : 'regular';
+    const relativeModelDir = getRelativeConfigDir('mutation', 'model');
     const relativeTypeDir = getRelativeConfigDir('mutation', 'type');
     const relativeLoaderDir = getRelativeConfigDir('mutation', 'loader');
     const relativeConnectionDir = getRelativeConfigDir('mutation', 'connection');
@@ -110,6 +117,7 @@ class MutationGenerator extends Base {
       name,
       rawName: this._camelCase(this.name),
       schema,
+      relativeModelDir,
       relativeTypeDir,
       relativeLoaderDir,
       relativeConnectionDir,

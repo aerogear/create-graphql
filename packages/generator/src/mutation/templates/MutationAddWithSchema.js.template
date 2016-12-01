@@ -1,6 +1,7 @@
 // @flow
 
 import {
+  GraphQLString,
   <%_ for (i in schema.dependencies) { -%>
   <%= schema.dependencies[i] %>,
   <%_ } -%>
@@ -22,7 +23,18 @@ export default mutationWithClientMutationId({
     },
     <%_ } -%>
   },
-  mutateAndGetPayload: async ({ example }) => {
+  mutateAndGetPayload: async (args, { user }) => {
+    // Verify if user is authorized
+    if (!user) {
+      throw new Error('Unauthorized user');
+    }
+
+    const {
+      <%_ for (field of schema.fields) { -%>
+      <%- field.name %>,
+      <%_ } -%>
+    } = args;
+
     // TODO: mutation logic
 
     return {
