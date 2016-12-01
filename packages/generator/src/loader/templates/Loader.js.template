@@ -39,7 +39,7 @@ export default class <%= name %> {
   }
 
   static clearCache(id) {
-    return <%= name %>.<%= rawName %>Loader.clear(id);
+    return <%= name %>.<%= rawName %>Loader.clear(id.toString());
   }
 
   static async load<%= name %>(viewer, args) {
