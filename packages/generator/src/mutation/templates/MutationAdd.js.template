@@ -9,6 +9,8 @@ import {
   toGlobalId,
 } from 'graphql-relay';
 
+import <%= name %> from '<%= relativeModelDir %>/<%= name %>';
+
 import <%= name %>Loader from '<%= relativeLoaderDir %>/<%= name %>Loader';
 import <%= name %>Connection from '<%= relativeConnectionDir %>/<%= name %>Connection';
 
