@@ -132,54 +132,81 @@ const parseConfigFile = (filePath, opts) => {
 
   const config = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
-  if (options.directory) {
-    const directory = Object.keys(config.directories).filter(configOpt =>
-      configOpt === options.directory,
-    );
+  const directories = Object.keys(config.directories).reduce((data, directory) => {
+    if (directory === 'source') {
+      return {
+        ...data,
+        [directory]: `${rootPath}/${config.directories[directory]}`,
+      };
+    }
 
-    return (options.withRootPath) ?
-      `${rootPath}/${config.directories.source}/${config.directories[directory]}` :
-      `${config.directories.source}/${config.directories[directory]}`;
-  }
+    if (options.withRootPath) {
+      return {
+        ...data,
+        [directory]: `${rootPath}/${config.directories.source}/${config.directories[directory]}`,
+      };
+    }
 
-  return config;
+    return {
+      ...data,
+      [directory]: `${config.directories.source}/${config.directories[directory]}`,
+    };
+  }, {});
+
+  return {
+    ...config,
+    ...directories,
+  };
 };
 
 /**
  * Get the `.graphqlrc` config file
  * @param options {object} What to retrieve from the config file
- * @returns {*}
+ * @returns {object} The content of the config
  */
 export const getCreateGraphQLConfig = (options) => {
+  // Use default config
   const defaultFilePath = path.resolve(`${__dirname}/graphqlrc.json`);
 
   const defaultConfig = parseConfigFile(defaultFilePath, options);
 
   try {
-    return parseConfigFile(`${rootPath}/.graphqlrc`, options);
-  } catch (err) {
-    const defaultFilePath = path.resolve(`${__dirname}/graphqlrc.json`);
+    // Check if there is a `.graphqlrc` file in the root path
+    const customConfig = parseConfigFile(`${rootPath}/.graphqlrc`, options);
 
-    return parseConfigFile(defaultFilePath, options);
+    // If it does, extend default config with it, so if the custom config has a missing line
+    // it won't throw errors
+    return {
+      ...defaultConfig,
+      ...customConfig,
+    };
+  } catch (err) {
+    // Return the default config if the custom doesn't exist
+    return defaultConfig;
   }
 };
 
+/**
+ * Get a directory from the configuration file
+ * @param name {string} The name of the directory, e.g. 'source'/'mutation'
+ * @returns {string} The directory path
+ */
+export const getConfigDir = (name) => getCreateGraphQLConfig().directories[name];
+
+/**
+ * Get the relative path directory between two directories specified on the config file
+ * @param from {string} The calling directory of the script
+ * @param to {string} The destination directory
+ * @returns {string} The relative path, e.g. '../../src'
+ */
 export const getRelativeConfigDir = (from, to) => {
-  const fromDir = getCreateGraphQLConfig({
-    directory: from,
-  });
+  const config = getCreateGraphQLConfig().directories;
 
-  const toDir = getCreateGraphQLConfig({
-    directory: to,
-  });
-
-  return path.relative(fromDir, toDir);
+  return path.relative(config[from], config[to]);
 };
 
 export const getMongooseModelSchema = (model) => {
-  const modelDir = getCreateGraphQLConfig({
-    directory: 'model',
-  });
+  const modelDir = getCreateGraphQLConfig().directories.model;
 
   const modelPath = path.resolve(`${modelDir}/${model}.js`);
 
