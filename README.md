@@ -628,53 +628,63 @@ You may customize the folders that the generated files will be created on by usi
 
 ## How to contribute
 
-1. Fork this repo
-2. Clone forked version of create-graphql
-```
-git clone git@github.com:<your_username>/create-graphql.git
-```
+1. Fork this repository;
+2. Clone the forked version of create-graphql:
+	```
+	git clone git@github.com:<your_username>/create-graphql.git
+	```
+
 3. Install [lerna/lerna](https://github.com/lerna/lerna)
-```
-npm install --global lerna@prerelease
-```
-4. Install main package dependency
-```
-yarn
-```
-or
-```
-npm i
-```
+	```
+	npm install --global lerna@prerelease
+	```
+
+4. Install the main package depencies
+	```
+	yarn
+	```
+	or
+	```
+	npm i
+	```
+
 5. Bootstrap all packages
-```
-lerna bootstrap
-```
-This will install all dependencies of all `subpackages` and link them properly
-6. Link `generator` package
-```
-cd packages/generator
-npm link
-```
-7. Watch all packages (create-graphql, generator)
-```
-npm run watch
-```
+	```
+	lerna bootstrap
+	```
+	This will install all dependencies of all `subpackages` and link them properly
+
+6. Link the `generator` package
+	```
+	cd packages/generator
+	npm link
+	```
+
+7. Watch all packages (create-graphql and generator)
+	```
+	npm run watch
+	```
+
 8. Create a new branch
-```
-git checkout -b feature/more_awesomeness
-```
+	```
+	git checkout -b feature/more_awesomeness
+	```
+
 9. Make your changes
 10. Run the CLI with your changes
-```
-node packages/create-graphql/dist --help
-```
+	```
+	node packages/create-graphql/dist --help
+	```
+
 11. Commit your changes and push your branch
-```
-git add .
-git commit -m 'more awesome for create-graphql'
-git push origin feature/more_awesomeness
-```
+	```
+	git add .
+	git commit -m 'more awesome for create-graphql'
+	git push origin feature/more_awesomeness
+	```
+
 12. Open your Pull Request
+13. Have your Pull Request merged! 😎
 
 ## Feedback?
 
