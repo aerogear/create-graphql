@@ -50,7 +50,7 @@ class TypeGenerator extends Base {
 
     const destinationPath = this.destinationPath(`${this.destinationDir}/${typeFileName}.js`);
     const templateVars = {
-      name: typeFileName,
+      name,
       schema,
     };
 
