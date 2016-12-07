@@ -14,16 +14,20 @@ it('should retrieve a record', async () => {
     email: 'user@example.com',
   }).save();
 
+  // TODO: query to return a record
   const query = `
     query Q {
-      // TODO: query to return a record
+      node(id:"123") {
+        id
+      }
     }
   `;
 
   const rootValue = {};
   const context = { user };
 
-  const { errors } = await graphql(schema, query, rootValue, context);
+  const { errors, data } = await graphql(schema, query, rootValue, context);
 
+  expect(data.node).toBe(null);
   expect(errors).toBe(undefined);
 });
