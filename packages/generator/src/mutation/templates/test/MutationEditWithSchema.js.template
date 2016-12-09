@@ -1,4 +1,5 @@
 import { graphql } from 'graphql';
+import { toGlobalId } from 'graphql-relay';
 import { schema } from '../../schema';
 import { setupTest } from '../../../test/helper';
 
@@ -8,12 +9,22 @@ import <%= name %> from '<%= relativeModelDir %>/<%= name %>';
 beforeEach(async () => await setupTest());
 
 it('should not allow anonymous user', async () => {
+  // TODO: specify fields to create a new <%= name %>
+  const <%= camelCaseName %> = new <%= name %>({
+    <%_ for (field of schema.fields) { -%>
+    <%- field.name %>: 'Example value',
+    <%_ } -%>
+  });
+
+  await <%= camelCaseName %>.save();
+
+  const <%= camelCaseName %>Id = toGlobalId('<%= name %>', <%= camelCaseName %>._id);
+
   const query = `
     mutation M {
       <%= mutationName %>(input: {
-        <%_ for (field of schema.fields) { -%>
-        <%- field.name %>: "Example value"
-        <%_ } -%>
+        id: "${<%= camelCaseName %>Id}"
+        example: "Example Field to Update"
       }) {
         <%= camelCaseName %> {
           node {
