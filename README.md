@@ -14,6 +14,9 @@
   <a href="https://github.com/lucasbento/create-graphql/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
 </p>
 
+## About
+[Check out the post on Medium!](https://medium.com/entria/announcing-create-graphql-17bdd81b9f96#.idrwtqa9k) 😉
+
 ## Install
 
 ```sh
