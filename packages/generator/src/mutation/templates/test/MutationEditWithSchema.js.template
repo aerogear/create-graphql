@@ -12,9 +12,17 @@ it('should not allow anonymous user', async () => {
     mutation M {
       <%= mutationName %>(input: {
         <%_ for (field of schema.fields) { -%>
-        <%- field.name %>: 'Example value',
+        <%- field.name %>: "Example value"
         <%_ } -%>
-      })
+      }) {
+        <%= camelCaseName %> {
+          node {
+            <%_ for (field of schema.fields) { -%>
+            <%- field.name %>
+            <%_ } -%>
+          }
+        }
+      }
     }
   `;
 
@@ -22,9 +30,9 @@ it('should not allow anonymous user', async () => {
   // No user should be passed to context since we are testing an anonymous session
   const context = {};
 
-  const { errors } = await graphql(schema, query, rootValue, context);
+  const result = await graphql(schema, query, rootValue, context);
 
-  expect(errors).not.toBe(undefined);
+  expect(result).toMatchSnapshot();
 });
 
 it('should edit a record on database', async () => {
@@ -49,11 +57,15 @@ it('should edit a record on database', async () => {
   const query = `
     mutation M {
       <%= mutationName %>(input: {
-        id: <%= camelCaseName %>Id
-        example: 'Example Field to Update'
+        id: "${<%= camelCaseName %>Id}"
+        example: "Example Field to Update"
       }) {
         <%= camelCaseName %> {
-          _id
+          node {
+            <%_ for (field of schema.fields) { -%>
+            <%- field.name %>
+            <%_ } -%>
+          }
         }
       }
     }
@@ -62,8 +74,7 @@ it('should edit a record on database', async () => {
   const rootValue = {};
   const context = { user };
 
-  const { data, errors } = await graphql(schema, query, rootValue, context);
+  const result = await graphql(schema, query, rootValue, context);
 
-  expect(errors).toBe(undefined);
-  expect(data.<%= mutationName %>.<%= camelCaseName %>._id).toBe(<%= camelCaseName %>._id.toString());
+  expect(result).toMatchSnapshot();
 });
