@@ -12,9 +12,11 @@ it('should not allow anonymous user', async () => {
   const query = `
     mutation M {
       <%= mutationName %>(input: {
-        id: 'Example Id'
-        exampleField: 'Example field'
-      })
+        id: "Example Id"
+        exampleField: "Example field"
+      }) {
+        exampleFieldToRetrieve
+      }
     }
   `;
 
@@ -22,9 +24,9 @@ it('should not allow anonymous user', async () => {
   // No user should be passed to context since we are testing an anonymous session
   const context = {};
 
-  const { errors } = await graphql(schema, query, rootValue, context);
+  const result = await graphql(schema, query, rootValue, context);
 
-  expect(errors).not.toBe(undefined);
+  expect(result).toMatchSnapshot();
 });
 
 it('should create a record on database', async () => {
@@ -38,10 +40,10 @@ it('should create a record on database', async () => {
   const query = `
     mutation M {
       <%= mutationName %>(input: {
-        id: 'Example Id'
-        exampleField: 'Example field'
+        id: "Example Id"
+        exampleField: "Example field"
       }) {
-        example: 'Example Field to retrieve after mutation'
+        exampleFieldToRetrieve
       }
     }
   `;
@@ -49,7 +51,7 @@ it('should create a record on database', async () => {
   const rootValue = {};
   const context = { user };
 
-  const { errors } = await graphql(schema, query, rootValue, context);
+  const result = await graphql(schema, query, rootValue, context);
 
-  expect(errors).toBe(undefined);
+  expect(result).toMatchSnapshot();
 });
