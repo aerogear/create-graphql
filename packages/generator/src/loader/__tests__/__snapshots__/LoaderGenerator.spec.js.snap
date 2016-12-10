@@ -8,11 +8,13 @@ import ExampleModel from \'../model/Example\';
 
 type ExampleType = {
   id: string,
+  _id: string,
   exampleField: string,
 }
 
 export default class Example {
   id: string;
+  _id: string;
   exampleField: string;
 
   static ExampleLoader = new DataLoader(
@@ -25,6 +27,7 @@ export default class Example {
 
   constructor(data: ExampleType) {
     this.id = data.id;
+    this._id = data._id;
     this.exampleField = data.exampleField;
   }
 

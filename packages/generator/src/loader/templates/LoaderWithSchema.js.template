@@ -5,12 +5,16 @@ import ConnectionFromMongoCursor from '<%= directories.connection %>/ConnectionF
 import <%= name %>Model from '<%= directories.model %>/<%= name %>';
 
 type <%= name %>Type = {
+  id: string,
+  _id: string,
   <%_ for (field of schema.fields) { -%>
   <%- field.name + ': ' + field.flowType -%>,
   <%_ } -%>
 }
 
 export default class <%= name %> {
+  id: string;
+  _id: string;
   <%_ for (field of schema.fields) { -%>
   <%- field.name + ': ' + field.flowType -%>;
   <%_ } -%>
@@ -24,6 +28,8 @@ export default class <%= name %> {
   );
 
   constructor(data: <%= name %>Type) {
+    this.id = data.id;
+    this._id = data._id;
     <%_ for (field of schema.fields) { -%>
     this.<%- field.name -%> = data.<%- field.name -%>;
     <%_ } -%>
