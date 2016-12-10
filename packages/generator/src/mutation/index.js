@@ -4,6 +4,7 @@ import {
   getConfigDir,
   getRelativeConfigDir,
   camelCaseText,
+  uppercaseFirstLetter,
 } from '../utils';
 
 class MutationGenerator extends Base {
@@ -64,15 +65,13 @@ class MutationGenerator extends Base {
   }
 
   generateMutation() {
-    let schema = this.model ?
-      getMongooseModelSchema(this.model, 'mutation')
-      : null;
-
-    if (schema) {
-      schema = this._parseSchema(schema);
+    let schema = null;
+    if (this.model) {
+      const modelSchema = getMongooseModelSchema(this.model, 'mutation');
+      schema = this._parseSchema(modelSchema);
     }
 
-    const name = `${this.name.charAt(0).toUpperCase()}${this.name.slice(1)}`;
+    const name = uppercaseFirstLetter(this.name);
 
     const mutations = {
       add: {
