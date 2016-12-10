@@ -1,0 +1,60 @@
+exports[`test generate a loader 1`] = `
+Object {
+  "loader": "// @flow
+
+import DataLoader from \'dataloader\';
+import ConnectionFromMongoCursor from \'../connection/ConnectionFromMongoCursor\';
+import ExampleModel from \'../model/Example\';
+
+type ExampleType = {
+  id: string,
+  exampleField: string,
+}
+
+export default class Example {
+  id: string;
+  exampleField: string;
+
+  static ExampleLoader = new DataLoader(
+    ids => Promise.all(
+      ids.map(id =>
+        ExampleModel.findOne({ _id: id })
+      ),
+    ),
+  );
+
+  constructor(data: ExampleType) {
+    this.id = data.id;
+    this.exampleField = data.exampleField;
+  }
+
+  static viewerCanSee(viewer, data) {
+    // TODO: handle security
+
+    return true;
+  }
+
+  static async load(viewer, id) {
+    const data = await Example.ExampleLoader.load(id);
+
+    return Example.viewerCanSee(viewer, data) ? new Example(data) : null;
+  }
+
+  static clearCache(id) {
+    return Example.ExampleLoader.clear(id.toString());
+  }
+
+  static async loadExample(viewer, args) {
+    // TODO: load multiple rows
+
+    const Example = [];
+
+    return ConnectionFromMongoCursor.connectionFromMongoCursor(
+      viewer, Example, args, Example.load
+    );
+  }
+
+}
+",
+}
+`;

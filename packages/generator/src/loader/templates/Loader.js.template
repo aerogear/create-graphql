@@ -1,8 +1,8 @@
 // @flow
 
 import DataLoader from 'dataloader';
-import ConnectionFromMongoCursor from '<%= connectionRelativeDir %>/ConnectionFromMongoCursor';
-import <%= name %>Model from '<%= modelRelativeDir %>/<%= name %>';
+import ConnectionFromMongoCursor from '<%= directories.connection %>/ConnectionFromMongoCursor';
+import <%= name %>Model from '<%= directories.model %>/<%= name %>';
 
 type <%= name %>Type = {
   id: string,

@@ -2,7 +2,7 @@
 
 import { connectionDefinitions } from 'graphql-relay';
 
-import <%= name %>Type from '<%= relativeTypeDir %>/<%= name %>Type';
+import <%= name %>Type from '<%= directories.type %>/<%= name %>Type';
 
 export default connectionDefinitions({
   name: '<%= name %>',

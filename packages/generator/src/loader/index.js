@@ -1,8 +1,9 @@
 import { Base } from 'yeoman-generator';
 import {
   getMongooseModelSchema,
-  getCreateGraphQLConfig,
+  getConfigDir,
   getRelativeConfigDir,
+  uppercaseFirstLetter,
 } from '../utils';
 
 class LoaderGenerator extends Base {
@@ -19,9 +20,11 @@ class LoaderGenerator extends Base {
       required: false,
     });
 
-    this.destinationDir = getCreateGraphQLConfig({
-      directory: 'loader',
-    });
+    this.destinationDir = getConfigDir('loader');
+  }
+
+  _getConfigDirectories() {
+    return getRelativeConfigDir('loader', ['model', 'connection']);
   }
 
   generateLoader() {
@@ -29,22 +32,20 @@ class LoaderGenerator extends Base {
       getMongooseModelSchema(this.model)
       : null;
 
-    const name = `${this.name.charAt(0).toUpperCase()}${this.name.slice(1)}`;
+    const name = uppercaseFirstLetter(this.name);
 
     const templatePath = schema ?
       this.templatePath('LoaderWithSchema.js.template')
       : this.templatePath('Loader.js.template');
 
-    const modelRelativeDir = getRelativeConfigDir('loader', 'model');
-    const connectionRelativeDir = getRelativeConfigDir('loader', 'connection');
+    const directories = this._getConfigDirectories();
 
     const destinationPath = this.destinationPath(`${this.destinationDir}/${name}Loader.js`);
     const templateVars = {
       name,
       rawName: this.name,
       schema,
-      modelRelativeDir,
-      connectionRelativeDir,
+      directories,
     };
 
     this.fs.copyTpl(templatePath, destinationPath, templateVars);
