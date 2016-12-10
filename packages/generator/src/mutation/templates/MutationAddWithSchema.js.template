@@ -11,10 +11,10 @@ import {
   toGlobalId,
 } from 'graphql-relay';
 
-import <%= name %> from '<%= relativeModelDir %>/<%= name %>';
+import <%= name %> from '<%= directories.model %>/<%= name %>';
 
-import <%= name %>Loader from '<%= relativeLoaderDir %>/<%= name %>Loader';
-import <%= name %>Connection from '<%= relativeConnectionDir %>/<%= name %>Connection';
+import <%= name %>Loader from '<%= directories.loader %>/<%= name %>Loader';
+import <%= name %>Connection from '<%= directories.connection %>/<%= name %>Connection';
 
 export default mutationWithClientMutationId({
   name: '<%= name %>Add',
@@ -45,23 +45,23 @@ export default mutationWithClientMutationId({
     };
   },
   outputFields: {
-    <%= rawName %>Edge: {
+    <%= camelCaseName %>Edge: {
       type: <%= name %>Connection.edgeType,
       resolve: async({ id }, args, { user }) => {
         // TODO: load new edge from loader
 
-        const <%= rawName %> = await <%= name %>Loader.load(
+        const <%= camelCaseName %> = await <%= name %>Loader.load(
           user, id
         );
 
         // Returns null if no node was loaded
-        if (!<%= rawName %>) {
+        if (!<%= camelCaseName %>) {
           return null;
         }
 
         return {
-          cursor: toGlobalId('<%= rawName %>', <%= rawName %>),
-          node: <%= rawName %>,
+          cursor: toGlobalId('<%= camelCaseName %>', <%= camelCaseName %>),
+          node: <%= camelCaseName %>,
         };
       },
     },

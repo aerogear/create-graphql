@@ -2,8 +2,8 @@ import { graphql } from 'graphql';
 import { schema } from '../../schema';
 import { setupTest } from '../../../test/helper';
 
-import User from '<%= relativeModelDir %>/User';
-import <%= name %> from '<%= relativeModelDir %>/<%= name %>';
+import User from '<%= directories.model %>/User';
+import <%= name %> from '<%= directories.model %>/<%= name %>';
 
 beforeEach(async () => await setupTest());
 

@@ -11,10 +11,10 @@ import {
   fromGlobalId,
 } from 'graphql-relay';
 
-import <%= name %> from '<%= relativeModelDir %>/<%= name %>';
+import <%= name %> from '<%= directories.model %>/<%= name %>';
 
-import <%= name %>Type from '<%= relativeTypeDir %>/<%= name %>Type';
-import <%= name %>Loader from '<%= relativeLoaderDir %>/<%= name %>Loader';
+import <%= name %>Type from '<%= directories.type %>/<%= name %>Type';
+import <%= name %>Loader from '<%= directories.loader %>/<%= name %>Loader';
 
 export default mutationWithClientMutationId({
   name: '<%= name %>Edit',
@@ -42,27 +42,27 @@ export default mutationWithClientMutationId({
     } = args;
 
     // Check if the provided ID is valid
-    const <%= rawName %> = await <%= name %>.findOne({
+    const <%= camelCaseName %> = await <%= name %>.findOne({
       _id: fromGlobalId(id).id,
     });
 
     // If not, throw an error
-    if (!<%= rawName %>) {
-      throw new Error('Invalid <%= rawName %>Id');
+    if (!<%= camelCaseName %>) {
+      throw new Error('Invalid <%= camelCaseName %>Id');
     }
 
     // TODO: mutation logic
 
     // Clear dataloader cache
-    <%= name %>Loader.clearCache(<%= rawName %>._id);
+    <%= name %>Loader.clearCache(<%= camelCaseName %>._id);
 
     return {
-      id: <%= rawName %>._id,
+      id: <%= camelCaseName %>._id,
       error: null,
     };
   },
   outputFields: {
-    <%= rawName %>: {
+    <%= camelCaseName %>: {
       type: <%= name %>Type,
       resolve: (obj, args, { user }) => <%= name %>Loader.load(user, obj.id),
     },

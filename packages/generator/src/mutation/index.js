@@ -1,8 +1,9 @@
 import { Base } from 'yeoman-generator';
 import {
   getMongooseModelSchema,
-  getCreateGraphQLConfig,
+  getConfigDir,
   getRelativeConfigDir,
+  camelCaseText,
 } from '../utils';
 
 class MutationGenerator extends Base {
@@ -19,73 +20,56 @@ class MutationGenerator extends Base {
       required: false,
     });
 
-    this.destinationDir = getCreateGraphQLConfig({
-      directory: 'mutation',
-    });
+    this.destinationDir = getConfigDir('mutation');
   }
 
   _mutationPath(name) {
     return `${this.destinationDir}/${name}Mutation.js`;
   }
 
-  _camelCase(text) {
-    return text.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) => {
-      if (+match === 0) {
-        return '';
+  _parseSchema(schema) {
+    // Add GraphQLID as a dependency to import if it's not listed yet
+    if (schema.dependencies.indexOf('GraphQLID') === -1) {
+      schema.dependencies.unshift('GraphQLID');
+    }
+
+    // Remove GraphQLString dependency from import if it exists,
+    // it's already hard-coded on the template
+    if (schema.dependencies.indexOf('GraphQLString') !== -1) {
+      schema.dependencies.unshift('GraphQLString');
+    }
+
+    // Map through the fields checking if any of them is required, if so, use GraphQLNonNull
+    schema.fields = schema.fields.map((field) => {
+      if (!field.required) {
+        return field;
       }
 
-      return index === 0 ? match.toLowerCase() : match.toUpperCase();
+      // Add `GraphQLNonNull` to dependencies import if it hasn't been added yet
+      if (schema.dependencies.indexOf('GraphQLNonNull') === -1) {
+        schema.dependencies.push('GraphQLNonNull');
+      }
+
+      return {
+        ...field,
+        type: `new GraphQLNonNull(${field.type})`,
+      };
     });
+
+    return schema;
   }
 
-  _generateMutationTest({ name, mutationName, template, schema }) {
-    const templatePath = this.templatePath(`test/${template}`);
-
-    const destinationPath = this.destinationPath(`${this.destinationDir}/__tests__/${mutationName}Mutation.spec.js`);
-
-    const templateVars = {
-      name,
-      camelCaseName: this._camelCase(name),
-      mutationName,
-      schema,
-    };
-
-    this.fs.copyTpl(templatePath, destinationPath, templateVars);
+  _getConfigDirectories() {
+    return getRelativeConfigDir('mutation', ['model', 'type', 'loader', 'connection']);
   }
 
   generateMutation() {
-    const schema = this.model ?
+    let schema = this.model ?
       getMongooseModelSchema(this.model, 'mutation')
       : null;
 
     if (schema) {
-      // Add GraphQLID as a dependency to import if it's not listed yet
-      if (schema.dependencies.indexOf('GraphQLID') === -1) {
-        schema.dependencies.unshift('GraphQLID');
-      }
-
-      // Remove GraphQLString dependency from import if it exists,
-      // it's already hard-coded on the template
-      if (schema.dependencies.indexOf('GraphQLString') !== -1) {
-        schema.dependencies.unshift('GraphQLString');
-      }
-
-      // Map through the fields checking if any of them is required, if so, use GraphQLNonNull
-      schema.fields = schema.fields.map((field) => {
-        if (!field.required) {
-          return field;
-        }
-
-        // Add `GraphQLNonNull` to dependencies import if it hasn't been added yet
-        if (schema.dependencies.indexOf('GraphQLNonNull') === -1) {
-          schema.dependencies.push('GraphQLNonNull');
-        }
-
-        return {
-          ...field,
-          type: `new GraphQLNonNull(${field.type})`,
-        };
-      });
+      schema = this._parseSchema(schema);
     }
 
     const name = `${this.name.charAt(0).toUpperCase()}${this.name.slice(1)}`;
@@ -108,19 +92,13 @@ class MutationGenerator extends Base {
     };
 
     const templateType = schema ? 'withSchema' : 'regular';
-    const relativeModelDir = getRelativeConfigDir('mutation', 'model');
-    const relativeTypeDir = getRelativeConfigDir('mutation', 'type');
-    const relativeLoaderDir = getRelativeConfigDir('mutation', 'loader');
-    const relativeConnectionDir = getRelativeConfigDir('mutation', 'connection');
+    const directories = this._getConfigDirectories();
 
     const templateVars = {
       name,
-      rawName: this._camelCase(this.name),
+      camelCaseName: camelCaseText(this.name),
       schema,
-      relativeModelDir,
-      relativeTypeDir,
-      relativeLoaderDir,
-      relativeConnectionDir,
+      directories,
     };
 
     Object.keys(mutations).forEach((mutationType) => {
@@ -137,6 +115,24 @@ class MutationGenerator extends Base {
         schema,
       });
     });
+  }
+
+  _generateMutationTest({ name, mutationName, template, schema }) {
+    const templatePath = this.templatePath(`test/${template}`);
+
+    const destinationPath = this.destinationPath(`${this.destinationDir}/__tests__/${mutationName}Mutation.spec.js`);
+
+    const directories = this._getConfigDirectories();
+
+    const templateVars = {
+      name,
+      camelCaseName: camelCaseText(name),
+      mutationName,
+      schema,
+      directories,
+    };
+
+    this.fs.copyTpl(templatePath, destinationPath, templateVars);
   }
 
   end() {
