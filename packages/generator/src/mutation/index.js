@@ -29,19 +29,12 @@ class MutationGenerator extends Base {
   }
 
   _parseSchema(schema) {
-    // Add GraphQLID as a dependency to import if it's not listed yet
-    if (schema.dependencies.indexOf('GraphQLID') === -1) {
-      schema.dependencies.unshift('GraphQLID');
-    }
-
-    // Remove GraphQLString dependency from import if it exists,
+    // Remove `GraphQLString` & `GraphQLID` dependencies from import if it exists,
     // it's already hard-coded on the template
-    if (schema.dependencies.indexOf('GraphQLString') !== -1) {
-      schema.dependencies.unshift('GraphQLString');
-    }
+    const dependencies = schema.dependencies.filter(dep => ['GraphQLID', 'GraphQLString'].indexOf(dep) === -1);
 
-    // Map through the fields checking if any of them is required, if so, use GraphQLNonNull
-    schema.fields = schema.fields.map((field) => {
+    // Map through the fields checking if any of them is required, if so, use `GraphQLNonNull`
+    const fields = schema.fields.map((field) => {
       if (!field.required) {
         return field;
       }
@@ -57,7 +50,11 @@ class MutationGenerator extends Base {
       };
     });
 
-    return schema;
+    return {
+      ...schema,
+      fields,
+      dependencies,
+    };
   }
 
   _getConfigDirectories() {
