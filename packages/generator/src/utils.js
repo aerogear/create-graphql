@@ -92,7 +92,20 @@ const getSchemaFieldsFromAst = (node) => {
 
 const getSchemaDefinition = (modelCode) => {
   const ast = recast.parse(modelCode, {
-    parser: require('babylon'),
+    parser: {
+      parse: source => require('babylon').parse(source, {
+        sourceType: 'module',
+        plugins: [
+          'asyncFunctions',
+          'asyncGenerators',
+          'classConstructorCall',
+          'classProperties',
+          'flow',
+          'objectRestSpread',
+          'trailingFunctionCommas',
+        ],
+      }),
+    },
   });
 
   let fields = null;
