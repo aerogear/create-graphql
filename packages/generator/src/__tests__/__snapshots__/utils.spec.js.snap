@@ -1,0 +1,6 @@
+exports[`test should get the correct relative path 1`] = `
+Object {
+  "mutation_test": "__tests__",
+  "type": "../type",
+}
+`;
