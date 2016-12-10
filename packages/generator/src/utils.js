@@ -140,12 +140,12 @@ const parseConfigFile = (filePath, opts) => {
       };
     }
 
-    if (options.withRootPath) {
-      return {
-        ...data,
-        [directory]: `${rootPath}/${config.directories.source}/${config.directories[directory]}`,
-      };
-    }
+    //if (options.withRootPath) {
+    //  return {
+    //    ...data,
+    //    [directory]: `${rootPath}/${config.directories.source}/${config.directories[directory]}`,
+    //  };
+    //}
 
     return {
       ...data,
