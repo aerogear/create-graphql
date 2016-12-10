@@ -1,7 +1,8 @@
 import helper from 'yeoman-test';
 import assert from 'yeoman-assert';
 import path from 'path';
-import fs from 'fs';
+
+import { getFileContent } from '../../../test/helpers';
 
 import { getConfigDir } from '../../utils';
 
@@ -11,14 +12,18 @@ it('generate a mutation file', async () => {
   const folder = await mutationGenerator.withArguments('Example').toPromise();
 
   const destinationDir = getConfigDir('mutation');
+  const destinationTestDir = getConfigDir('mutation_test');
 
   assert.file([
     `${destinationDir}/ExampleAddMutation.js`, `${destinationDir}/ExampleEditMutation.js`,
   ]);
 
-  const addMutationContent = fs.readFileSync(`${folder}/${destinationDir}/ExampleAddMutation.js`, 'utf8');
-  const editMutationContent = fs.readFileSync(`${folder}/${destinationDir}/ExampleEditMutation.js`, 'utf8');
+  const files = {
+    add: getFileContent(`${folder}/${destinationDir}/ExampleAddMutation.js`),
+    edit: getFileContent(`${folder}/${destinationDir}/ExampleEditMutation.js`),
+    addTest: getFileContent(`${folder}/${destinationTestDir}/ExampleAddMutation.spec.js`),
+    editTest: getFileContent(`${folder}/${destinationTestDir}/ExampleEditMutation.spec.js`),
+  };
 
-  expect(addMutationContent).toMatchSnapshot();
-  expect(editMutationContent).toMatchSnapshot();
+  expect(files).toMatchSnapshot();
 });
