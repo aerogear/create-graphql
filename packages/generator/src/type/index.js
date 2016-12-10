@@ -1,7 +1,8 @@
 import { Base } from 'yeoman-generator';
 import {
   getMongooseModelSchema,
-  getCreateGraphQLConfig,
+  getConfigDir,
+  uppercaseFirstLetter,
 } from '../utils';
 
 class TypeGenerator extends Base {
@@ -18,22 +19,7 @@ class TypeGenerator extends Base {
       required: false,
     });
 
-    this.destinationDir = getCreateGraphQLConfig({
-      directory: 'type',
-    });
-  }
-
-  _generateTypeTest({ name, schema }) {
-    const templatePath = this.templatePath('test/Type.js.template');
-
-    const destinationPath = this.destinationPath(`${this.destinationDir}/__tests__/${name}Type.spec.js`);
-
-    const templateVars = {
-      name,
-      schema,
-    };
-
-    this.fs.copyTpl(templatePath, destinationPath, templateVars);
+    this.destinationDir = getConfigDir('type');
   }
 
   generateType() {
@@ -41,7 +27,7 @@ class TypeGenerator extends Base {
       getMongooseModelSchema(this.model)
       : null;
 
-    const name = `${this.name.charAt(0).toUpperCase()}${this.name.slice(1)}`;
+    const name = uppercaseFirstLetter(this.name);
     const typeFileName = `${name}Type`;
 
     const templatePath = schema ?
@@ -58,6 +44,19 @@ class TypeGenerator extends Base {
       name,
       schema,
     });
+
+    this.fs.copyTpl(templatePath, destinationPath, templateVars);
+  }
+
+  _generateTypeTest({ name, schema }) {
+    const templatePath = this.templatePath('test/Type.js.template');
+
+    const destinationPath = this.destinationPath(`${this.destinationDir}/__tests__/${name}Type.spec.js`);
+
+    const templateVars = {
+      name,
+      schema,
+    };
 
     this.fs.copyTpl(templatePath, destinationPath, templateVars);
   }
