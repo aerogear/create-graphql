@@ -51,7 +51,7 @@ export default class <%= name %> {
     const <%= rawName %> = [];
 
     return ConnectionFromMongoCursor.connectionFromMongoCursor(
-      viewer, <%= rawName %>, args, <%= name %>.load
+      viewer, <%= rawName %>, args, <%= name %>.load,
     );
   }
 
