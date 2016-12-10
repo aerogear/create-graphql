@@ -6,10 +6,10 @@ import { getFileContent } from '../../../test/helpers';
 
 import { getConfigDir } from '../../utils';
 
-const mutationGenerator = helper.run(path.join(__dirname, '..'));
+const typeGenerator = helper.run(path.join(__dirname, '..'));
 
 it('generate a type', async () => {
-  const folder = await mutationGenerator.withArguments('Example').toPromise();
+  const folder = await typeGenerator.withArguments('Example').toPromise();
 
   const destinationDir = getConfigDir('type');
   const destinationTestDir = getConfigDir('type_test');
