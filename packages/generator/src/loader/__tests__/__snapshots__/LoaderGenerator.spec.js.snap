@@ -50,7 +50,7 @@ export default class Example {
     const Example = [];
 
     return ConnectionFromMongoCursor.connectionFromMongoCursor(
-      viewer, Example, args, Example.load
+      viewer, Example, args, Example.load,
     );
   }
 
