@@ -1,4 +1,4 @@
-exports[`test generate a mutation file 1`] = `
+exports[`test generate mutation files 1`] = `
 Object {
   "add": "// @flow
 

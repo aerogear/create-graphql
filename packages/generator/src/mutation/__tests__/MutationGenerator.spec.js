@@ -8,7 +8,7 @@ import { getConfigDir } from '../../utils';
 
 const mutationGenerator = helper.run(path.join(__dirname, '..'));
 
-it('generate a mutation file', async () => {
+it('generate mutation files', async () => {
   const folder = await mutationGenerator.withArguments('Example').toPromise();
 
   const destinationDir = getConfigDir('mutation');
