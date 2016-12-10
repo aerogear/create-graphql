@@ -121,7 +121,7 @@ const getSchemaDefinition = (modelCode) => {
 /**
  * Parse `.graphqlrc` config file and retrieve its contents
  * @param filePath {string} The path of the config file
- * @param options {object} What to retrieve from the config file
+ * @param opts {object} What to retrieve from the config file
  * @returns {*}
  */
 const parseConfigFile = (filePath, opts) => {
@@ -155,7 +155,10 @@ const parseConfigFile = (filePath, opts) => {
 
   return {
     ...config,
-    ...directories,
+    directories: {
+      ...config.directories,
+      ...directories,
+    },
   };
 };
 
@@ -168,7 +171,7 @@ export const getCreateGraphQLConfig = (options) => {
   // Use default config
   const defaultFilePath = path.resolve(`${__dirname}/graphqlrc.json`);
 
-  const defaultConfig = parseConfigFile(defaultFilePath, options);
+  const defaultConfig = parseConfigFile(defaultFilePath);
 
   try {
     // Check if there is a `.graphqlrc` file in the root path
@@ -188,21 +191,29 @@ export const getCreateGraphQLConfig = (options) => {
 
 /**
  * Get a directory from the configuration file
- * @param name {string} The name of the directory, e.g. 'source'/'mutation'
+ * @param directory {string} The name of the directory, e.g. 'source'/'mutation'
+ * @param opts {object} Optional params to be passed to `getCreateGraphQLConfig()`
  * @returns {string} The directory path
  */
-export const getConfigDir = (name) => getCreateGraphQLConfig().directories[name];
+export const getConfigDir = (directory, opts) => getCreateGraphQLConfig(opts).directories[directory];
 
 /**
  * Get the relative path directory between two directories specified on the config file
  * @param from {string} The calling directory of the script
- * @param to {string} The destination directory
+ * @param to {[string]} The destination directories
  * @returns {string} The relative path, e.g. '../../src'
  */
 export const getRelativeConfigDir = (from, to) => {
   const config = getCreateGraphQLConfig().directories;
 
-  return path.relative(config[from], config[to]);
+  return to.reduce((directories, dir) => {
+    const relativePath = path.relative(config[from], config[dir]);
+
+    return {
+      ...directories,
+      [dir]: relativePath,
+    };
+  }, {});
 };
 
 export const getMongooseModelSchema = (model) => {
@@ -213,4 +224,15 @@ export const getMongooseModelSchema = (model) => {
   const modelCode = getModelCode(modelPath);
 
   return getSchemaDefinition(modelCode);
+};
+
+
+export const camelCaseText = (text) => {
+  return text.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) => {
+    if (+match === 0) {
+      return '';
+    }
+
+    return index === 0 ? match.toLowerCase() : match.toUpperCase();
+  });
 };
