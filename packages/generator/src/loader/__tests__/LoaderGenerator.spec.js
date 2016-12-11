@@ -2,22 +2,24 @@ import helper from 'yeoman-test';
 import assert from 'yeoman-assert';
 import path from 'path';
 
-jest.mock('utils');
+import { getFileContent } from '../../../test/helpers';
 
-import { getCreateGraphQLConfig } from 'utils';
+import { getConfigDir } from '../../utils';
 
-beforeEach(async() => {
-  return await helper.run(
-    path.join(__dirname, '..')
-  )
-    .withArguments(['Example'])
-    .toPromise();
-});
+const loaderGenerator = helper.run(path.join(__dirname, '..'));
 
-it('generate a loader file', async () => {
-  const destinationDir = getCreateGraphQLConfig({
-    directory: 'loader',
-  });
+it('generate a loader', async () => {
+  const folder = await loaderGenerator.withArguments('Example').toPromise();
 
-  assert.file([`${destinationDir}/ExampleLoader.js`]);
+  const destinationDir = getConfigDir('loader');
+
+  assert.file([
+    `${destinationDir}/ExampleLoader.js`,
+  ]);
+
+  const files = {
+    loader: getFileContent(`${folder}/${destinationDir}/ExampleLoader.js`),
+  };
+
+  expect(files).toMatchSnapshot();
 });

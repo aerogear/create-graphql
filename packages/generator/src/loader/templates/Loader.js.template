@@ -1,16 +1,18 @@
 // @flow
 
 import DataLoader from 'dataloader';
-import ConnectionFromMongoCursor from '<%= connectionRelativeDir %>/ConnectionFromMongoCursor';
-import <%= name %>Model from '<%= modelRelativeDir %>/<%= name %>';
+import ConnectionFromMongoCursor from '<%= directories.connection %>/ConnectionFromMongoCursor';
+import <%= name %>Model from '<%= directories.model %>/<%= name %>';
 
 type <%= name %>Type = {
   id: string,
+  _id: string,
   exampleField: string,
 }
 
 export default class <%= name %> {
   id: string;
+  _id: string;
   exampleField: string;
 
   static <%= rawName %>Loader = new DataLoader(
@@ -23,6 +25,7 @@ export default class <%= name %> {
 
   constructor(data: <%= name %>Type) {
     this.id = data.id;
+    this._id = data._id;
     this.exampleField = data.exampleField;
   }
 
@@ -39,7 +42,7 @@ export default class <%= name %> {
   }
 
   static clearCache(id) {
-    return <%= name %>.<%= rawName %>Loader.clear(id);
+    return <%= name %>.<%= rawName %>Loader.clear(id.toString());
   }
 
   static async load<%= name %>(viewer, args) {
@@ -48,7 +51,7 @@ export default class <%= name %> {
     const <%= rawName %> = [];
 
     return ConnectionFromMongoCursor.connectionFromMongoCursor(
-      viewer, <%= rawName %>, args, <%= name %>.load
+      viewer, <%= rawName %>, args, <%= name %>.load,
     );
   }
 

@@ -1,0 +1,15 @@
+exports[`test generate a connection 1`] = `
+Object {
+  "connection": "// @flow
+
+import { connectionDefinitions } from \'graphql-relay\';
+
+import ExampleType from \'../type/ExampleType\';
+
+export default connectionDefinitions({
+  name: \'Example\',
+  nodeType: ExampleType,
+});
+",
+}
+`;

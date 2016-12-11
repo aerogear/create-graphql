@@ -1,7 +1,6 @@
 // @flow
 
 import {
-  GraphQLID,
   GraphQLString,
   GraphQLNonNull,
 } from 'graphql';
@@ -10,18 +9,25 @@ import {
   toGlobalId,
 } from 'graphql-relay';
 
-import <%= name %>Loader from '<%= relativeLoaderDir %>/<%= name %>Loader';
-import <%= name %>Connection from '<%= relativeConnectionDir %>/<%= name %>Connection';
+import <%= name %> from '<%= directories.model %>/<%= name %>';
+
+import <%= name %>Loader from '<%= directories.loader %>/<%= name %>Loader';
+import <%= name %>Connection from '<%= directories.connection %>/<%= name %>Connection';
 
 export default mutationWithClientMutationId({
   name: '<%= name %>Add',
   inputFields: {
     example: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(GraphQLString),
       description: 'My example field',
     },
   },
-  mutateAndGetPayload: async ({ example }) => {
+  mutateAndGetPayload: async ({ example }, { user }) => {
+    // Verify if user is authorized
+    if (!user) {
+      throw new Error('Unauthorized user');
+    }
+
     // TODO: mutation logic
 
     return {
@@ -30,23 +36,23 @@ export default mutationWithClientMutationId({
     };
   },
   outputFields: {
-    <%= rawName %>Edge: {
+    <%= camelCaseName %>Edge: {
       type: <%= name %>Connection.edgeType,
       resolve: async({ id }, args, { user }) => {
         // TODO: load new edge from loader
 
-        const <%= rawName %> = await <%= name %>Loader.load(
-          user, id
+        const <%= camelCaseName %> = await <%= name %>Loader.load(
+          user, id,
         );
 
         // Returns null if no node was loaded
-        if (!<%= rawName %>) {
+        if (!<%= camelCaseName %>) {
           return null;
         }
 
         return {
-          cursor: toGlobalId('<%= rawName %>', <%= rawName %>),
-          node: <%= rawName %>,
+          cursor: toGlobalId('<%= camelCaseName %>', <%= camelCaseName %>),
+          node: <%= camelCaseName %>,
         };
       },
     },

@@ -1,0 +1,54 @@
+exports[`test generate a type 1`] = `
+Object {
+  "type": "import {
+  GraphQLObjectType,
+  GraphQLString,
+} from \'graphql\';
+
+export default new GraphQLObjectType({
+  name: \'Example\',
+  description: \'Represents Example\',
+  fields: () => ({
+    example: {
+      type: GraphQLString,
+      description: \'My example field\',
+      resolve: obj => obj.example,
+    },
+  }),
+});",
+  "typeTest": "import { graphql } from \'graphql\';
+import { schema } from \'../../schema\';
+import { setupTest } from \'../../../../test/helper\';
+import {
+  User,
+  Example,
+} from \'../../../models\';
+
+beforeEach(async () => await setupTest());
+
+it(\'should retrieve a record\', async () => {
+  const user = await new User({
+    name: \'user\',
+    email: \'user@example.com\',
+  }).save();
+
+  // TODO: query to return a record
+  const query = \`
+    query Q {
+      node(id:\"123\") {
+        id
+      }
+    }
+  \`;
+
+  const rootValue = {};
+  const context = { user };
+
+  const { errors, data } = await graphql(schema, query, rootValue, context);
+
+  expect(data.node).toBe(null);
+  expect(errors).toBe(undefined);
+});
+",
+}
+`;

@@ -1,7 +1,8 @@
 import { Base } from 'yeoman-generator';
 import {
-  getCreateGraphQLConfig,
+  getConfigDir,
   getRelativeConfigDir,
+  uppercaseFirstLetter,
 } from '../utils';
 
 class ConnectionGenerator extends Base {
@@ -13,21 +14,19 @@ class ConnectionGenerator extends Base {
       required: true,
     });
 
-    this.destinationDir = getCreateGraphQLConfig({
-      directory: 'connection',
-    });
+    this.destinationDir = getConfigDir('connection');
   }
 
   generateConnection() {
-    const name = `${this.name.charAt(0).toUpperCase()}${this.name.slice(1)}`;
+    const name = uppercaseFirstLetter(this.name);
 
-    const relativeTypeDir = getRelativeConfigDir('connection', 'type');
+    const directories = getRelativeConfigDir('connection', ['type']);
 
     const templatePath = this.templatePath('Connection.js.template');
     const destinationPath = this.destinationPath(`${this.destinationDir}/${name}Connection.js`);
     const templateVars = {
       name,
-      relativeTypeDir,
+      directories,
     };
 
     this.fs.copyTpl(templatePath, destinationPath, templateVars);

@@ -2,22 +2,26 @@ import helper from 'yeoman-test';
 import assert from 'yeoman-assert';
 import path from 'path';
 
-jest.mock('utils');
+import { getFileContent } from '../../../test/helpers';
 
-import { getCreateGraphQLConfig } from 'utils';
+import { getConfigDir } from '../../utils';
 
-beforeEach(async() => {
-  return await helper.run(
-    path.join(__dirname, '..')
-  )
-    .withArguments(['Example'])
-    .toPromise();
-});
+const typeGenerator = helper.run(path.join(__dirname, '..'));
 
-it('generate a type file', async () => {
-  const destinationDir = getCreateGraphQLConfig({
-    directory: 'type',
-  });
+it('generate a type', async () => {
+  const folder = await typeGenerator.withArguments('Example').toPromise();
 
-  assert.file([`${destinationDir}/ExampleType.js`]);
+  const destinationDir = getConfigDir('type');
+  const destinationTestDir = getConfigDir('type_test');
+
+  assert.file([
+    `${destinationDir}/ExampleType.js`, `${destinationTestDir}/ExampleType.spec.js`,
+  ]);
+
+  const files = {
+    type: getFileContent(`${folder}/${destinationDir}/ExampleType.js`),
+    typeTest: getFileContent(`${folder}/${destinationTestDir}/ExampleType.spec.js`),
+  };
+
+  expect(files).toMatchSnapshot();
 });

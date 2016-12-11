@@ -2,28 +2,33 @@ import helper from 'yeoman-test';
 import assert from 'yeoman-assert';
 import path from 'path';
 
-jest.mock('utils');
+import { getFileContent } from '../../../test/helpers';
 
-import { getCreateGraphQLConfig } from 'utils';
+import { getConfigDir } from '../../utils';
 
-beforeEach(async() => {
-  return await helper.run(
-    path.join(__dirname, '..')
-  )
-    .withArguments(['Example'])
+beforeEach(async () => {
+  await helper.run(path.join(__dirname, '..'))
+    .withArguments('Example')
     .toPromise();
 });
 
-const destinationDir = getCreateGraphQLConfig({
-  directory: 'connection',
-});
+const destinationDir = getConfigDir('connection');
+const connectionFile = `${destinationDir}/ExampleConnection.js`;
 
-it('generate a connection file', () => {
-  assert.file([`${destinationDir}/ExampleConnection.js`]);
+it('generate a connection', async () => {
+  assert.file([
+    `${destinationDir}/ExampleConnection.js`,
+  ]);
+
+  const files = {
+    connection: getFileContent(connectionFile),
+  };
+
+  expect(files).toMatchSnapshot();
 });
 
 it('should always import connectionDefinitions', () => {
   assert.fileContent(
-    `${destinationDir}/ExampleConnection.js`, 'import { connectionDefinitions } from \'graphql-relay\';'
+    connectionFile, 'import { connectionDefinitions } from \'graphql-relay\';'
   );
 });

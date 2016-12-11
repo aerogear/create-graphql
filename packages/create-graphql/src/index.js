@@ -14,7 +14,7 @@ program
 
 program
   .command('init <project>')
-  .alias('c')
+  .alias('i')
   .description('Create a new GraphQL project')
   .action(async (project) => {
     await verifyYeoman();

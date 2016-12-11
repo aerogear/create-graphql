@@ -1,21 +1,39 @@
 import { graphql } from 'graphql';
+import { toGlobalId } from 'graphql-relay';
 import { schema } from '../../schema';
 import { setupTest } from '../../../test/helper';
-import {
-  <%= name %>,
-  User,
-} from '../../model';
+
+import User from '<%= directories.model %>/User';
+import <%= name %> from '<%= directories.model %>/<%= name %>';
 
 beforeEach(async () => await setupTest());
 
 it('should not allow anonymous user', async () => {
+  // TODO: specify fields to create a new <%= name %>
+  const <%= camelCaseName %> = new <%= name %>({
+    <%_ for (field of schema.fields) { -%>
+    <%- field.name %>: 'Example value',
+    <%_ } -%>
+  });
+
+  await <%= camelCaseName %>.save();
+
+  const <%= camelCaseName %>Id = toGlobalId('<%= name %>', <%= camelCaseName %>._id);
+
   const query = `
     mutation M {
       <%= mutationName %>(input: {
-        <%_ for (field of schema.fields) { -%>
-        <%- field.name %>: 'Example value',
-        <%_ } -%>
-      })
+        id: "${<%= camelCaseName %>Id}"
+        example: "Example Field to Update"
+      }) {
+        <%= camelCaseName %> {
+          node {
+            <%_ for (field of schema.fields) { -%>
+            <%- field.name %>
+            <%_ } -%>
+          }
+        }
+      }
     }
   `;
 
@@ -23,9 +41,9 @@ it('should not allow anonymous user', async () => {
   // No user should be passed to context since we are testing an anonymous session
   const context = {};
 
-  const { errors } = await graphql(schema, query, rootValue, context);
+  const result = await graphql(schema, query, rootValue, context);
 
-  expect(errors).not.toBe(undefined);
+  expect(result).toMatchSnapshot();
 });
 
 it('should edit a record on database', async () => {
@@ -36,8 +54,11 @@ it('should edit a record on database', async () => {
 
   await user.save();
 
+  // TODO: specify fields to create a new <%= name %>
   const <%= camelCaseName %> = new <%= name %>({
-    // TODO: specify fields to create a new <%= name %>
+    <%_ for (field of schema.fields) { -%>
+    <%- field.name %>: 'Example value',
+    <%_ } -%>
   });
 
   await <%= camelCaseName %>.save();
@@ -47,11 +68,15 @@ it('should edit a record on database', async () => {
   const query = `
     mutation M {
       <%= mutationName %>(input: {
-        id: <%= camelCaseName %>Id
-        example: 'Example Field to Update'
+        id: "${<%= camelCaseName %>Id}"
+        example: "Example Field to Update"
       }) {
         <%= camelCaseName %> {
-          _id
+          node {
+            <%_ for (field of schema.fields) { -%>
+            <%- field.name %>
+            <%_ } -%>
+          }
         }
       }
     }
@@ -60,8 +85,7 @@ it('should edit a record on database', async () => {
   const rootValue = {};
   const context = { user };
 
-  const { data, errors } = await graphql(schema, query, rootValue, context);
+  const result = await graphql(schema, query, rootValue, context);
 
-  expect(errors).toBe(undefined);
-  expect(data.<%= mutationName %>.<%= camelCaseName %>._id).toBe(<%= camelCaseName %>._id.toString());
+  expect(result).toMatchSnapshot();
 });

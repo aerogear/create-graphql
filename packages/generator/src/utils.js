@@ -92,7 +92,20 @@ const getSchemaFieldsFromAst = (node) => {
 
 const getSchemaDefinition = (modelCode) => {
   const ast = recast.parse(modelCode, {
-    parser: require('babylon'),
+    parser: {
+      parse: source => require('babylon').parse(source, {
+        sourceType: 'module',
+        plugins: [
+          'asyncFunctions',
+          'asyncGenerators',
+          'classConstructorCall',
+          'classProperties',
+          'flow',
+          'objectRestSpread',
+          'trailingFunctionCommas',
+        ],
+      }),
+    },
   });
 
   let fields = null;
@@ -121,61 +134,88 @@ const getSchemaDefinition = (modelCode) => {
 /**
  * Parse `.graphqlrc` config file and retrieve its contents
  * @param filePath {string} The path of the config file
- * @param options {object} What to retrieve from the config file
  * @returns {*}
  */
-const parseConfigFile = (filePath, opts) => {
-  const options = {
-    withRootPath: true, // Whether this should return with `rootPath` or not
-    ...opts,
-  };
-
+const parseConfigFile = (filePath) => {
   const config = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
-  if (options.directory) {
-    const directory = Object.keys(config.directories).filter(configOpt =>
-      configOpt === options.directory,
-    );
+  const directories = Object.keys(config.directories).reduce((data, directory) => {
+    if (directory === 'source') {
+      return {
+        ...data,
+        [directory]: `${rootPath}/${config.directories[directory]}`,
+      };
+    }
 
-    return (options.withRootPath) ?
-      `${rootPath}/${config.directories.source}/${config.directories[directory]}` :
-      `${config.directories.source}/${config.directories[directory]}`;
-  }
+    return {
+      ...data,
+      [directory]: `${config.directories.source}/${config.directories[directory]}`,
+    };
+  }, {});
 
-  return config;
+  return {
+    ...config,
+    directories: {
+      ...config.directories,
+      ...directories,
+    },
+  };
 };
 
 /**
  * Get the `.graphqlrc` config file
- * @param options {object} What to retrieve from the config file
- * @returns {*}
+ * @returns {object} The content of the config
  */
-export const getCreateGraphQLConfig = (options) => {
-  try {
-    return parseConfigFile(`${rootPath}/.graphqlrc`, options);
-  } catch (err) {
-    const defaultFilePath = path.resolve(`${__dirname}/graphqlrc.json`);
+export const getCreateGraphQLConfig = () => {
+  // Use default config
+  const defaultFilePath = path.resolve(`${__dirname}/graphqlrc.json`);
 
-    return parseConfigFile(defaultFilePath, options);
+  const defaultConfig = parseConfigFile(defaultFilePath);
+
+  try {
+    // Check if there is a `.graphqlrc` file in the root path
+    const customConfig = parseConfigFile(`${rootPath}/.graphqlrc`);
+
+    // If it does, extend default config with it, so if the custom config has a missing line
+    // it won't throw errors
+    return {
+      ...defaultConfig,
+      ...customConfig,
+    };
+  } catch (err) {
+    // Return the default config if the custom doesn't exist
+    return defaultConfig;
   }
 };
 
+/**
+ * Get a directory from the configuration file
+ * @param directory {string} The name of the directory, e.g. 'source'/'mutation'
+ * @returns {string} The directory path
+ */
+export const getConfigDir = (directory) => getCreateGraphQLConfig().directories[directory];
+
+/**
+ * Get the relative path directory between two directories specified on the config file
+ * @param from {string} The calling directory of the script
+ * @param to {[string]} The destination directories
+ * @returns {string} The relative path, e.g. '../../src'
+ */
 export const getRelativeConfigDir = (from, to) => {
-  const fromDir = getCreateGraphQLConfig({
-    directory: from,
-  });
+  const config = getCreateGraphQLConfig().directories;
 
-  const toDir = getCreateGraphQLConfig({
-    directory: to,
-  });
+  return to.reduce((directories, dir) => {
+    const relativePath = path.relative(config[from], config[dir]);
 
-  return path.relative(fromDir, toDir);
+    return {
+      ...directories,
+      [dir]: relativePath,
+    };
+  }, {});
 };
 
 export const getMongooseModelSchema = (model) => {
-  const modelDir = getCreateGraphQLConfig({
-    directory: 'model',
-  });
+  const modelDir = getCreateGraphQLConfig().directories.model;
 
   const modelPath = path.resolve(`${modelDir}/${model}.js`);
 
@@ -183,3 +223,25 @@ export const getMongooseModelSchema = (model) => {
 
   return getSchemaDefinition(modelCode);
 };
+
+/**
+ * Camel cases text
+ * @param text {string} Text to be camel-cased
+ * @returns {string} Camel-cased text
+ */
+export const camelCaseText = (text) => {
+  return text.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) => {
+    if (+match === 0) {
+      return '';
+    }
+
+    return index === 0 ? match.toLowerCase() : match.toUpperCase();
+  });
+};
+
+/**
+ * Uppercase the first letter of a text
+ * @param text {string}
+ * @returns {string}
+ */
+export const uppercaseFirstLetter = text => `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
