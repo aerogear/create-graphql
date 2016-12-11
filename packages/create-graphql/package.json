@@ -1,7 +1,7 @@
 {
   "name": "create-graphql",
   "description": "Create production-ready GraphQL servers",
-  "version": "1.1.3",
+  "version": "1.1.5",
   "author": {
     "name": "Lucas Bento",
     "email": "lucas.bsilva@outlook.com",
