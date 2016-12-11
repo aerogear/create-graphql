@@ -1,4 +1,14 @@
 {
   "lerna": "2.0.0-beta.30",
-  "version": "1.1.4"
+  "version": "1.1.4",
+  "changelog": {
+    "repo": "lucasbento/create-graphql",
+    "labels": {
+      "new feature": ":rocket: New Feature",
+      "bug fix": ":bug: Bug Fix",
+      "polish": ":nail_care: Polish",
+      "documentation": ":memo: Documentation",
+      "internal": ":house: Internal"
+    }
+  }
 }
