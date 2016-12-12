@@ -23,6 +23,11 @@
 npm install --global create-graphql
 ```
 
+## Update
+```sh
+npm update --global create-graphql
+```
+
 ## Usage
 
 It can generate:
