@@ -72,11 +72,9 @@ it('should edit a record on database', async () => {
         example: "Example Field to Update"
       }) {
         <%= camelCaseName %> {
-          node {
-            <%_ for (field of schema.fields) { -%>
-            <%- field.name %>
-            <%_ } -%>
-          }
+          <%_ for (field of schema.fields) { -%>
+          <%- field.name %>
+          <%_ } -%>
         }
       }
     }
