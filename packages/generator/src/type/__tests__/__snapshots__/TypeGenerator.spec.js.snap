@@ -52,3 +52,72 @@ it(\'should retrieve a record\', async () => {
 ",
 }
 `;
+
+exports[`test generate a type with Schema 1`] = `
+Object {
+  "type": "// @flow
+
+import {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLID,
+} from \'graphql\';
+
+export default new GraphQLObjectType({
+  name: \'Post\',
+  description: \'Represents Post\',
+  fields: () => ({
+    title: {
+      type: GraphQLString,
+      description: \'\',
+      resolve: obj => obj.title,
+    },
+    user: {
+      type: GraphQLID,
+      description: \'User that created this post\',
+      resolve: obj => obj.user,
+    },
+    slug: {
+      type: GraphQLString,
+      description: \'Used for SEO\',
+      resolve: obj => obj.slug,
+    },
+  }),
+});
+",
+  "typeTest": "import { graphql } from \'graphql\';
+import { schema } from \'../../schema\';
+import { setupTest } from \'../../../../test/helper\';
+import {
+  User,
+  Post,
+} from \'../../../models\';
+
+beforeEach(async () => await setupTest());
+
+it(\'should retrieve a record\', async () => {
+  const user = await new User({
+    name: \'user\',
+    email: \'user@example.com\',
+  }).save();
+
+  // TODO: query to return a record
+  const query = \`
+    query Q {
+      node(id:\"123\") {
+        id
+      }
+    }
+  \`;
+
+  const rootValue = {};
+  const context = { user };
+
+  const { errors, data } = await graphql(schema, query, rootValue, context);
+
+  expect(data.node).toBe(null);
+  expect(errors).toBe(undefined);
+});
+",
+}
+`;
