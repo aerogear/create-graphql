@@ -61,3 +61,73 @@ export default class Example {
 ",
 }
 `;
+
+exports[`test generate a loader with Schema 1`] = `
+Object {
+  "loader": "// @flow
+
+import DataLoader from \'dataloader\';
+import ConnectionFromMongoCursor from \'../connection/ConnectionFromMongoCursor\';
+import PostModel from \'../model/Post\';
+
+type PostType = {
+  id: string,
+  _id: string,
+  title: string,
+  user: string,
+  slug: string,
+}
+
+export default class Post {
+  id: string;
+  _id: string;
+  title: string;
+  user: string;
+  slug: string;
+
+  static PostLoader = new DataLoader(
+    ids => Promise.all(
+      ids.map(id =>
+        PostModel.findOne({ _id: id })
+      ),
+    ),
+  );
+
+  constructor(data: PostType) {
+    this.id = data.id;
+    this._id = data._id;
+    this.title = data.title;
+    this.user = data.user;
+    this.slug = data.slug;
+  }
+
+  static viewerCanSee(viewer, data) {
+    // TODO: handle security
+
+    return true;
+  }
+
+  static async load(viewer, id) {
+    const data = await Post.PostLoader.load(id);
+
+    return Post.viewerCanSee(viewer, data) ? new Post(data) : null;
+  }
+
+  static clearCache(id) {
+    return Post.PostLoader.clear(id.toString());
+  }
+
+  static async loadPosts(viewer, args) {
+    // TODO: load multiple rows
+
+    const Post = [];
+
+    return ConnectionFromMongoCursor.connectionFromMongoCursor(
+      viewer, Post, args, Post.load,
+    );
+  }
+
+}
+",
+}
+`;
