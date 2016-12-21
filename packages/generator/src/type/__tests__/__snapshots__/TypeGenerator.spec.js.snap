@@ -3,39 +3,39 @@ Object {
   "type": "import {
   GraphQLObjectType,
   GraphQLString,
-} from 'graphql';
+} from \'graphql\';
 
 export default new GraphQLObjectType({
-  name: 'Example',
-  description: 'Represents Example',
+  name: \'Example\',
+  description: \'Represents Example\',
   fields: () => ({
     example: {
       type: GraphQLString,
-      description: 'My example field',
+      description: \'My example field\',
       resolve: obj => obj.example,
     },
   }),
 });",
-  "typeTest": "import { graphql } from 'graphql';
-import { schema } from '../../schema';
-import { setupTest } from '../../../../test/helper';
+  "typeTest": "import { graphql } from \'graphql\';
+import { schema } from \'../../schema\';
+import { setupTest } from \'../../../../test/helper\';
 import {
   User,
   Example,
-} from '../../../models';
+} from \'../../../models\';
 
 beforeEach(async () => await setupTest());
 
-it('should retrieve a record', async () => {
+it(\'should retrieve a record\', async () => {
   const user = await new User({
-    name: 'user',
-    email: 'user@example.com',
+    name: \'user\',
+    email: \'user@example.com\',
   }).save();
 
   // TODO: query to return a record
   const query = \`
     query Q {
-      node(id:"123") {
+      node(id:\"123\") {
         id
       }
     }

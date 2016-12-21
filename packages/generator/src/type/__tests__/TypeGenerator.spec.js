@@ -3,14 +3,19 @@ import assert from 'yeoman-assert';
 import path from 'path';
 import fs from 'fs-extra';
 
-import { getFileContent } from '../../../test/helpers';
+import {
+  getFileContent,
+  getFixturePath,
+} from '../../../test/helpers';
 
 import { getConfigDir } from '../../utils';
 
-const typeGenerator = helper.run(path.join(__dirname, '..'));
+const typeGenerator = path.join(__dirname, '..');
 
 it('generate a type', async () => {
-  const folder = await typeGenerator.withArguments('Example').toPromise();
+  const folder = await helper.run(typeGenerator)
+    .withArguments('Example')
+    .toPromise();
 
   const destinationDir = getConfigDir('type');
   const destinationTestDir = getConfigDir('type_test');
@@ -28,11 +33,14 @@ it('generate a type', async () => {
 });
 
 it('generate a type with Schema', async () => {
-  const folder = await typeGenerator
-    .inTmpDir((dir) => {
-      fs.copySync(path.join(__dirname, '../fixtures/Post.js'), path.join(dir, 'src/model/Post.js'));
-    })
-    .withArguments('Post --schema Post')
+  const folder = await helper.run(typeGenerator)
+    .inTmpDir(dir =>
+      fs.copySync(
+        getFixturePath('Post'),
+        path.join(dir, 'src/model/Post.js'),
+      ),
+    )
+    .withArguments('Post Post')
     .toPromise();
 
   const destinationDir = getConfigDir('type');
