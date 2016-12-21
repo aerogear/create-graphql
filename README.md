@@ -8,8 +8,8 @@
   Create production-ready GraphQL servers
 </p>
 <p align="center">
-  <a href="https://circleci.com/gh/lucasbento/create-graphql"><img src="https://circleci.com/gh/lucasbento/create-graphql.svg?style=shield&circle-token=27caedb86b7343a4057ea165584b8b846b3037f4"></a>
-  <a href="https://codecov.io/gh/lucasbento/create-graphql"><img src="https://codecov.io/gh/lucasbento/create-graphql/branch/master/graph/badge.svg?token=IfbNvREYGx"></a>
+  <a href="https://travis-ci.org/lucasbento/create-graphql"><img src="https://travis-ci.org/lucasbento/create-graphql.svg?branch=master"></a>
+  <a href="https://codecov.io/gh/lucasbento/create-graphql"><img src="https://codecov.io/gh/lucasbento/create-graphql/branch/master/graph/badge.svg"></a>
   <a href="https://github.com/airbnb/javascript"><img src="https://img.shields.io/badge/code%20style-airbnb-blue.svg"></a>
   <a href="https://github.com/lucasbento/create-graphql/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
 </p>
