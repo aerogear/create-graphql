@@ -10,6 +10,4 @@ dependencies:
 test:
   override:
     - npm run lint
-    - npm test
-  post:
-    - bash <(curl -s https://codecov.io/bash)
+    - npm run test
