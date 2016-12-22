@@ -250,3 +250,318 @@ it(\'should create a record on database\', async () => {
 ",
 }
 `;
+
+exports[`test generate mutation files with Schema 1`] = `
+Object {
+  "add": "// @flow
+
+import {
+  GraphQLString,
+} from \'graphql\';
+import {
+  mutationWithClientMutationId,
+  toGlobalId,
+} from \'graphql-relay\';
+
+import Post from \'../model/Post\';
+
+import PostLoader from \'../loader/PostLoader\';
+import PostConnection from \'../connection/PostConnection\';
+
+export default mutationWithClientMutationId({
+  name: \'PostAdd\',
+  inputFields: {
+    title: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    user: {
+      type: new GraphQLNonNull(GraphQLID),
+    },
+    slug: {
+      type: GraphQLString,
+    },
+  },
+  mutateAndGetPayload: async (args, { user }) => {
+    // Verify if user is authorized
+    if (!user) {
+      throw new Error(\'Unauthorized user\');
+    }
+
+    const {
+      title,
+      user,
+      slug,
+    } = args;
+
+    // TODO: mutation logic
+
+    return {
+      // id: id, // ID of the newly created row
+      error: null,
+    };
+  },
+  outputFields: {
+    postEdge: {
+      type: PostConnection.edgeType,
+      resolve: async({ id }, args, { user }) => {
+        // TODO: load new edge from loader
+
+        const post = await PostLoader.load(
+          user, id
+        );
+
+        // Returns null if no node was loaded
+        if (!post) {
+          return null;
+        }
+
+        return {
+          cursor: toGlobalId(\'post\', post),
+          node: post,
+        };
+      },
+    },
+    error: {
+      type: GraphQLString,
+      resolve: ({ error }) => error,
+    },
+  },
+});
+",
+  "addTest": "import { graphql } from \'graphql\';
+import { schema } from \'../../schema\';
+import { setupTest } from \'../../../test/helper\';
+
+import User from \'../model/User\';
+import Post from \'../model/Post\';
+
+beforeEach(async () => await setupTest());
+
+it(\'should not allow anonymous user\', async () => {
+  const query = \`
+    mutation M {
+      PostAdd(input: {
+        title: \"Example value\"
+        user: \"Example value\"
+        slug: \"Example value\"
+      }) {
+        postEdge {
+          node {
+            title
+            user
+            slug
+          }
+        }
+      }
+    }
+  \`;
+
+  const rootValue = {};
+  // No user should be passed to context since we are testing an anonymous session
+  const context = {};
+
+  const result = await graphql(schema, query, rootValue, context);
+
+  expect(result).toMatchSnapshot();
+});
+
+it(\'should create a record on database\', async () => {
+  const user = new User({
+    name: \'user\',
+    email: \'user@example.com\',
+  });
+
+  await user.save();
+
+  const query = \`
+    mutation M {
+      PostAdd(input: {
+        title: \"Example value\"
+        user: \"Example value\"
+        slug: \"Example value\"
+      }) {
+        postEdge {
+          node {
+            title
+            user
+            slug
+          }
+        }
+      }
+    }
+  \`;
+
+  const rootValue = {};
+  const context = { user };
+
+  const result = await graphql(schema, query, rootValue, context);
+
+  expect(result).toMatchSnapshot();
+});
+",
+  "edit": "// @flow
+
+import {
+  GraphQLString,
+} from \'graphql\';
+import {
+  mutationWithClientMutationId,
+  fromGlobalId,
+} from \'graphql-relay\';
+
+import Post from \'../model/Post\';
+
+import PostType from \'../type/PostType\';
+import PostLoader from \'../loader/PostLoader\';
+
+export default mutationWithClientMutationId({
+  name: \'PostEdit\',
+  inputFields: {
+    id: {
+      type: new GraphQLNonNull(GraphQLID),
+    },
+    title: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    user: {
+      type: new GraphQLNonNull(GraphQLID),
+    },
+    slug: {
+      type: GraphQLString,
+    },
+  },
+  mutateAndGetPayload: async (args, { user }) => {
+    // Verify if user is authorized
+    if (!user) {
+      throw new Error(\'Unauthorized user\');
+    }
+
+    const {
+      id,
+      title,
+      user,
+      slug,
+    } = args;
+
+    // Check if the provided ID is valid
+    const post = await Post.findOne({
+      _id: fromGlobalId(id).id,
+    });
+
+    // If not, throw an error
+    if (!post) {
+      throw new Error(\'Invalid postId\');
+    }
+
+    // TODO: mutation logic
+
+    // Clear dataloader cache
+    PostLoader.clearCache(post._id);
+
+    return {
+      id: post._id,
+      error: null,
+    };
+  },
+  outputFields: {
+    post: {
+      type: PostType,
+      resolve: (obj, args, { user }) => PostLoader.load(user, obj.id),
+    },
+    error: {
+      type: GraphQLString,
+      resolve: ({ error }) => error,
+    },
+  },
+});
+",
+  "editTest": "import { graphql } from \'graphql\';
+import { toGlobalId } from \'graphql-relay\';
+import { schema } from \'../../schema\';
+import { setupTest } from \'../../../test/helper\';
+
+import User from \'../model/User\';
+import Post from \'../model/Post\';
+
+beforeEach(async () => await setupTest());
+
+it(\'should not allow anonymous user\', async () => {
+  // TODO: specify fields to create a new Post
+  const post = new Post({
+    title: \'Example value\',
+    user: \'Example value\',
+    slug: \'Example value\',
+  });
+
+  await post.save();
+
+  const postId = toGlobalId(\'Post\', post._id);
+
+  const query = \`
+    mutation M {
+      PostEdit(input: {
+        id: \"\${postId}\"
+        example: \"Example Field to Update\"
+      }) {
+        post {
+          title
+          user
+          slug
+        }
+      }
+    }
+  \`;
+
+  const rootValue = {};
+  // No user should be passed to context since we are testing an anonymous session
+  const context = {};
+
+  const result = await graphql(schema, query, rootValue, context);
+
+  expect(result).toMatchSnapshot();
+});
+
+it(\'should edit a record on database\', async () => {
+  const user = new User({
+    name: \'user\',
+    email: \'user@example.com\',
+  });
+
+  await user.save();
+
+  // TODO: specify fields to create a new Post
+  const post = new Post({
+    title: \'Example value\',
+    user: \'Example value\',
+    slug: \'Example value\',
+  });
+
+  await post.save();
+
+  const postId = toGlobalId(\'Post\', post._id);
+
+  const query = \`
+    mutation M {
+      PostEdit(input: {
+        id: \"\${postId}\"
+        example: \"Example Field to Update\"
+      }) {
+        post {
+          title
+          user
+          slug
+        }
+      }
+    }
+  \`;
+
+  const rootValue = {};
+  const context = { user };
+
+  const result = await graphql(schema, query, rootValue, context);
+
+  expect(result).toMatchSnapshot();
+});
+",
+}
+`;

@@ -1,15 +1,20 @@
 import helper from 'yeoman-test';
 import assert from 'yeoman-assert';
 import path from 'path';
+import fs from 'fs-extra';
 
-import { getFileContent } from '../../../test/helpers';
-
+import {
+  getFileContent,
+  getFixturePath,
+} from '../../../test/helpers';
 import { getConfigDir } from '../../utils';
 
-const loaderGenerator = helper.run(path.join(__dirname, '..'));
+const loaderGenerator = path.join(__dirname, '..');
 
 it('generate a loader', async () => {
-  const folder = await loaderGenerator.withArguments('Example').toPromise();
+  const folder = await helper.run(loaderGenerator)
+    .withArguments('Example')
+    .toPromise();
 
   const destinationDir = getConfigDir('loader');
 
@@ -19,6 +24,30 @@ it('generate a loader', async () => {
 
   const files = {
     loader: getFileContent(`${folder}/${destinationDir}/ExampleLoader.js`),
+  };
+
+  expect(files).toMatchSnapshot();
+});
+
+it('generate a loader with Schema', async () => {
+  const folder = await helper.run(loaderGenerator)
+    .inTmpDir(dir =>
+      fs.copySync(
+        getFixturePath('Post'),
+        path.join(dir, 'src/model/Post.js'),
+      ),
+    )
+    .withArguments('Post Post')
+    .toPromise();
+
+  const destinationDir = getConfigDir('loader');
+
+  assert.file([
+    `${destinationDir}/PostLoader.js`,
+  ]);
+
+  const files = {
+    loader: getFileContent(`${folder}/${destinationDir}/PostLoader.js`),
   };
 
   expect(files).toMatchSnapshot();
