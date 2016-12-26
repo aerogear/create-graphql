@@ -38,9 +38,8 @@ export default mutationWithClientMutationId({
   outputFields: {
     <%= camelCaseName %>Edge: {
       type: <%= name %>Connection.edgeType,
-      resolve: async({ id }, args, { user }) => {
-        // TODO: load new edge from loader
-
+      resolve: async ({ id }, args, { user }) => {
+        // Load new edge from loader
         const <%= camelCaseName %> = await <%= name %>Loader.load(
           user, id,
         );
@@ -51,7 +50,7 @@ export default mutationWithClientMutationId({
         }
 
         return {
-          cursor: toGlobalId('<%= camelCaseName %>', <%= camelCaseName %>),
+          cursor: toGlobalId('<%= name %>', <%= camelCaseName %>),
           node: <%= camelCaseName %>,
         };
       },
