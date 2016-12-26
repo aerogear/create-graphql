@@ -19,7 +19,8 @@
     "recast": "^0.11.17",
     "semver": "^5.1.0",
     "shelljs": "^0.7.4",
-    "yeoman-generator": "^0.24.1"
+    "yeoman-generator": "^0.24.1",
+    "pluralize": "^3.1.0"
   },
   "devDependencies": {},
   "files": [
