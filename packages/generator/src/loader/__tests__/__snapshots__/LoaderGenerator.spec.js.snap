@@ -115,7 +115,7 @@ export default class Post {
     return Post.PostLoader.clear(id.toString());
   }
 
-  static async loadPostss(viewer, args) {
+  static async loadPosts(viewer, args) {
     // TODO: specify conditions
     const posts = PostModel.find({});
 
