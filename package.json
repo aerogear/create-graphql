@@ -35,5 +35,8 @@
     "prepublish": "npm run build",
     "test": "jest --runInBand --config jest.json",
     "watch": "lerna exec -- npm run watch"
+  },
+  "dependencies": {
+    "pluralize": "^3.1.0"
   }
 }

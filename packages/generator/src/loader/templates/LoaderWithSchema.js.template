@@ -42,7 +42,7 @@ export default class <%= name %> {
   }
 
   static async load(viewer, id) {
-    const data = await <%= name %>.<%= rawName %>Loader.load(id);
+    const data = await <%= name %>.<%= rawName %>Loader.load(id.toString());
 
     return <%= name %>.viewerCanSee(viewer, data) ? new <%= name %>(data) : null;
   }
@@ -51,14 +51,12 @@ export default class <%= name %> {
     return <%= name %>.<%= rawName %>Loader.clear(id.toString());
   }
 
-  static async load<%= name %>s(viewer, args) {
-    // TODO: load multiple rows
-
-    const <%= rawName %> = [];
+  static async load<%= pluralName %>s(viewer, args) {
+    // TODO: specify conditions
+    const <%= pluralCamelCaseName %> = <%= name %>Model.find({});
 
     return ConnectionFromMongoCursor.connectionFromMongoCursor(
-      viewer, <%= rawName %>, args, <%= name %>.load,
+      viewer, <%= pluralCamelCaseName %>, args, <%= name %>.load,
     );
   }
-
 }

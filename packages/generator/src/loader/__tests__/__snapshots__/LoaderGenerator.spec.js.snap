@@ -38,7 +38,7 @@ export default class Example {
   }
 
   static async load(viewer, id) {
-    const data = await Example.ExampleLoader.load(id);
+    const data = await Example.ExampleLoader.load(id.toString());
 
     return Example.viewerCanSee(viewer, data) ? new Example(data) : null;
   }
@@ -47,16 +47,14 @@ export default class Example {
     return Example.ExampleLoader.clear(id.toString());
   }
 
-  static async loadExample(viewer, args) {
-    // TODO: load multiple rows
-
-    const Example = [];
+  static async loadExamples(viewer, args) {
+    // TODO: specify conditions
+    const examples = ExampleModel.find({});
 
     return ConnectionFromMongoCursor.connectionFromMongoCursor(
-      viewer, Example, args, Example.load,
+      viewer, examples, args, Example.load,
     );
   }
-
 }
 ",
 }
@@ -108,7 +106,7 @@ export default class Post {
   }
 
   static async load(viewer, id) {
-    const data = await Post.PostLoader.load(id);
+    const data = await Post.PostLoader.load(id.toString());
 
     return Post.viewerCanSee(viewer, data) ? new Post(data) : null;
   }
@@ -117,16 +115,14 @@ export default class Post {
     return Post.PostLoader.clear(id.toString());
   }
 
-  static async loadPosts(viewer, args) {
-    // TODO: load multiple rows
-
-    const Post = [];
+  static async loadPostss(viewer, args) {
+    // TODO: specify conditions
+    const posts = PostModel.find({});
 
     return ConnectionFromMongoCursor.connectionFromMongoCursor(
-      viewer, Post, args, Post.load,
+      viewer, posts, args, Post.load,
     );
   }
-
 }
 ",
 }
