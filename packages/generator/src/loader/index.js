@@ -1,8 +1,10 @@
 import { Base } from 'yeoman-generator';
+import pluralize from 'pluralize';
 import {
   getMongooseModelSchema,
   getConfigDir,
   getRelativeConfigDir,
+  camelCaseText,
   uppercaseFirstLetter,
 } from '../utils';
 
@@ -40,10 +42,14 @@ class LoaderGenerator extends Base {
 
     const directories = this._getConfigDirectories();
 
+    const pluralName = pluralize(this.name);
+
     const destinationPath = this.destinationPath(`${this.destinationDir}/${name}Loader.js`);
     const templateVars = {
       name,
       rawName: this.name,
+      pluralName,
+      pluralCamelCaseName: camelCaseText(pluralName),
       schema,
       directories,
     };

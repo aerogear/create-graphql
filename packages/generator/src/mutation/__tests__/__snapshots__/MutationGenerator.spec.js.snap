@@ -40,9 +40,8 @@ export default mutationWithClientMutationId({
   outputFields: {
     exampleEdge: {
       type: ExampleConnection.edgeType,
-      resolve: async({ id }, args, { user }) => {
-        // TODO: load new edge from loader
-
+      resolve: async ({ id }, args, { user }) => {
+        // Load new edge from loader
         const example = await ExampleLoader.load(
           user, id,
         );
@@ -53,7 +52,7 @@ export default mutationWithClientMutationId({
         }
 
         return {
-          cursor: toGlobalId(\'example\', example),
+          cursor: toGlobalId(\'Example\', example),
           node: example,
         };
       },
@@ -303,11 +302,10 @@ export default mutationWithClientMutationId({
   outputFields: {
     postEdge: {
       type: PostConnection.edgeType,
-      resolve: async({ id }, args, { user }) => {
-        // TODO: load new edge from loader
-
+      resolve: async ({ id }, args, { user }) => {
+        // Load new edge from loader
         const post = await PostLoader.load(
-          user, id
+          user, id,
         );
 
         // Returns null if no node was loaded
@@ -316,7 +314,7 @@ export default mutationWithClientMutationId({
         }
 
         return {
-          cursor: toGlobalId(\'post\', post),
+          cursor: toGlobalId(\'Post\', post),
           node: post,
         };
       },
