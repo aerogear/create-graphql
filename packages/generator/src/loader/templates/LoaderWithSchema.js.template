@@ -51,7 +51,7 @@ export default class <%= name %> {
     return <%= name %>.<%= rawName %>Loader.clear(id.toString());
   }
 
-  static async load<%= pluralName %>s(viewer, args) {
+  static async load<%= pluralName %>(viewer, args) {
     // TODO: specify conditions
     const <%= pluralCamelCaseName %> = <%= name %>Model.find({});
 
