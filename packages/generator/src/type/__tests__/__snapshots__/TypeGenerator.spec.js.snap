@@ -3,39 +3,39 @@ Object {
   "type": "import {
   GraphQLObjectType,
   GraphQLString,
-} from \'graphql\';
+} from 'graphql';
 
 export default new GraphQLObjectType({
-  name: \'Example\',
-  description: \'Represents Example\',
+  name: 'Example',
+  description: 'Represents Example',
   fields: () => ({
     example: {
       type: GraphQLString,
-      description: \'My example field\',
+      description: 'My example field',
       resolve: obj => obj.example,
     },
   }),
 });",
-  "typeTest": "import { graphql } from \'graphql\';
-import { schema } from \'../../schema\';
-import { setupTest } from \'../../../../test/helper\';
+  "typeTest": "import { graphql } from 'graphql';
+import { schema } from '../../schema';
+import { setupTest } from '../../../../test/helper';
 import {
   User,
   Example,
-} from \'../../../models\';
+} from '../../../models';
 
 beforeEach(async () => await setupTest());
 
-it(\'should retrieve a record\', async () => {
+it('should retrieve a record', async () => {
   const user = await new User({
-    name: \'user\',
-    email: \'user@example.com\',
+    name: 'user',
+    email: 'user@example.com',
   }).save();
 
   // TODO: query to return a record
   const query = \`
     query Q {
-      node(id:\"123\") {
+      node(id:"123") {
         id
       }
     }
@@ -85,12 +85,12 @@ export default new GraphQLObjectType({
     createdAt: {
       type: GraphQLString,
       description: \'\',
-      resolve: obj => obj.createdAt,
+      resolve: obj => obj.createdAt.toISOString(),
     },
     updatedAt: {
       type: GraphQLString,
       description: \'\',
-      resolve: obj => obj.updatedAt,
+      resolve: obj => obj.updatedAt.toISOString(),
     },
   }),
 });
@@ -140,55 +140,55 @@ import {
   GraphQLObjectType,
   GraphQLString,
   GraphQLBoolean,
-} from \'graphql\';
+} from 'graphql';
 
 export default new GraphQLObjectType({
-  name: \'User\',
-  description: \'Represents User\',
+  name: 'User',
+  description: 'Represents User',
   fields: () => ({
     name: {
       type: GraphQLString,
-      description: \'\',
+      description: '',
       resolve: obj => obj.name,
     },
     password: {
       type: GraphQLString,
-      description: \'\',
+      description: '',
       resolve: obj => obj.password,
     },
     email: {
       type: GraphQLString,
-      description: \'\',
+      description: '',
       resolve: obj => obj.email,
     },
     active: {
       type: GraphQLBoolean,
-      description: \'\',
+      description: '',
       resolve: obj => obj.active,
     },
   }),
 });
 ",
-  "typeTest": "import { graphql } from \'graphql\';
-import { schema } from \'../../schema\';
-import { setupTest } from \'../../../../test/helper\';
+  "typeTest": "import { graphql } from 'graphql';
+import { schema } from '../../schema';
+import { setupTest } from '../../../../test/helper';
 import {
   User,
   User,
-} from \'../../../models\';
+} from '../../../models';
 
 beforeEach(async () => await setupTest());
 
-it(\'should retrieve a record\', async () => {
+it('should retrieve a record', async () => {
   const user = await new User({
-    name: \'user\',
-    email: \'user@example.com\',
+    name: 'user',
+    email: 'user@example.com',
   }).save();
 
   // TODO: query to return a record
   const query = \`
     query Q {
-      node(id:\"123\") {
+      node(id:"123") {
         id
       }
     }

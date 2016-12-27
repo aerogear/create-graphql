@@ -12,6 +12,7 @@ const parseFieldToGraphQL = (field) => {
     name: field.name,
     description: field.description,
     required: !!field.required,
+    originalType: field.type,
   };
 
   switch (field.type) {

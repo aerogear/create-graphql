@@ -23,9 +23,13 @@ class TypeGenerator extends Base {
   }
 
   generateType() {
-    const schema = this.model ?
+    let schema = this.model ?
       getMongooseModelSchema(this.model, true)
       : null;
+
+    if (schema) {
+      schema = this._parseSchemaResolvers(schema);
+    }
 
     const name = uppercaseFirstLetter(this.name);
     const typeFileName = `${name}Type`;
@@ -46,6 +50,32 @@ class TypeGenerator extends Base {
     });
 
     this.fs.copyTpl(templatePath, destinationPath, templateVars);
+  }
+
+  /**
+   * Parse schema resolvers checking if the fields need different resolvers.
+   * @param schema {Array} The parsed Mongoose schema
+   * @returns {Array} The parsed schema with resolvers
+   */
+  _parseSchemaResolvers(schema) {
+    const fields = schema.fields.map((field) => {
+      if (field.originalType === 'Date') {
+        return {
+          ...field,
+          resolve: `obj.${field.name}.toISOString()`
+        };
+      }
+
+      return {
+        ...field,
+        resolve: `obj.${field.name}`
+      };
+    });
+
+    return {
+      ...schema,
+      fields,
+    };
   }
 
   _generateTypeTest({ name, schema }) {
