@@ -62,13 +62,13 @@ class TypeGenerator extends Base {
       if (field.originalType === 'Date') {
         return {
           ...field,
-          resolve: `obj.${field.name}.toISOString()`
+          resolve: `obj.${field.name}.toISOString()`,
         };
       }
 
       return {
         ...field,
-        resolve: `obj.${field.name}`
+        resolve: `obj.${field.name}`,
       };
     });
 

@@ -35,7 +35,9 @@ class MutationGenerator extends Base {
 
     // Also remove `GraphQLString`, `GraphQLNonNull` & `GraphQLID` dependencies
     // from import if they exist, they are already hard-coded on `MutationEdit` template.
-    const editDependencies = schema.dependencies.filter(dep => ['GraphQLString', 'GraphQLNonNull', 'GraphQLID'].indexOf(dep) === -1);
+    const editDependencies = schema.dependencies.filter(dep =>
+      ['GraphQLString', 'GraphQLNonNull', 'GraphQLID'].indexOf(dep) === -1,
+    );
 
     // Map through the fields checking if any of them is `required: true`, if so, use `GraphQLNonNull`
     const fields = schema.fields.map((field) => {
