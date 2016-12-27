@@ -15,7 +15,7 @@ export default new GraphQLObjectType({
     <%- field.name %>: {
       type: <%= field.type %>,
       description: '<%= field.description %>',
-      resolve: obj => obj.<%= field.name %>,
+      resolve: obj => <%= field.resolve %>,
     },
     <%_ } -%>
   }),

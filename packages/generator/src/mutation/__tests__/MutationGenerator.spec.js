@@ -34,7 +34,7 @@ it('generate mutation files', async () => {
   expect(files).toMatchSnapshot();
 });
 
-it('generate mutation files with Schema', async () => {
+it('generate mutation files with schema', async () => {
   const folder = await helper.run(mutationGenerator)
     .inTmpDir(dir =>
       fs.copySync(

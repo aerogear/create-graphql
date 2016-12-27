@@ -30,7 +30,7 @@ it('generate a connection', async () => {
   expect(files).toMatchSnapshot();
 });
 
-it('generate a connection with Schema', async () => {
+it('generate a connection with schema', async () => {
   const folder = await helper.run(connectionGenerator)
     .inTmpDir(dir =>
       fs.copySync(

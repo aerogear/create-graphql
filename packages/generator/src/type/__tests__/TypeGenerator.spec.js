@@ -32,7 +32,7 @@ it('generate a type', async () => {
   expect(files).toMatchSnapshot();
 });
 
-it('generate a type with Schema', async () => {
+it('generate a type with schema', async () => {
   const folder = await helper.run(typeGenerator)
     .inTmpDir(dir =>
       fs.copySync(
@@ -53,6 +53,32 @@ it('generate a type with Schema', async () => {
   const files = {
     type: getFileContent(`${folder}/${destinationDir}/PostType.js`),
     typeTest: getFileContent(`${folder}/${destinationTestDir}/PostType.spec.js`),
+  };
+
+  expect(files).toMatchSnapshot();
+});
+
+it('generate a type with schema and without timestamps', async () => {
+  const folder = await helper.run(typeGenerator)
+    .inTmpDir(dir =>
+      fs.copySync(
+        getFixturePath('User'),
+        path.join(dir, 'src/model/User.js'),
+      ),
+    )
+    .withArguments('User User')
+    .toPromise();
+
+  const destinationDir = getConfigDir('type');
+  const destinationTestDir = getConfigDir('type_test');
+
+  assert.file([
+    `${destinationDir}/UserType.js`, `${destinationTestDir}/UserType.spec.js`,
+  ]);
+
+  const files = {
+    type: getFileContent(`${folder}/${destinationDir}/UserType.js`),
+    typeTest: getFileContent(`${folder}/${destinationTestDir}/UserType.spec.js`),
   };
 
   expect(files).toMatchSnapshot();

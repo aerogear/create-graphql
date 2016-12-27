@@ -20,10 +20,6 @@ const Schema = new mongoose.Schema({
     default: true,
   },
 }, {
-  timestamps: {
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-  },
   collection: 'user',
 });
 

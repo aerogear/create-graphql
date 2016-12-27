@@ -2,19 +2,19 @@ exports[`test generate a connection 1`] = `
 Object {
   "connection": "// @flow
 
-import { connectionDefinitions } from 'graphql-relay';
+import { connectionDefinitions } from \'graphql-relay\';
 
-import ExampleType from '../type/ExampleType';
+import ExampleType from \'../type/ExampleType\';
 
 export default connectionDefinitions({
-  name: 'Example',
+  name: \'Example\',
   nodeType: ExampleType,
 });
 ",
 }
 `;
 
-exports[`test generate a connection with Schema 1`] = `
+exports[`test generate a connection with schema 1`] = `
 Object {
   "connection": "// @flow
 
