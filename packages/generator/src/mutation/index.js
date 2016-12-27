@@ -29,19 +29,24 @@ class MutationGenerator extends Base {
   }
 
   _parseSchema(schema) {
-    // Remove `GraphQLString` & `GraphQLID` dependencies from import if it exists,
-    // it's already hard-coded on the template
-    const dependencies = schema.dependencies.filter(dep => ['GraphQLID', 'GraphQLString'].indexOf(dep) === -1);
+    // Remove `GraphQLString` dependency from import if it exists,
+    // it's already hard-coded on `MutationAdd` template.
+    const addDependencies = schema.dependencies.filter(dep => ['GraphQLString'].indexOf(dep) === -1);
 
-    // Map through the fields checking if any of them is required, if so, use `GraphQLNonNull`
+    // Also remove `GraphQLString`, `GraphQLNonNull` & `GraphQLID` dependencies
+    // from import if they exist, they are already hard-coded on `MutationEdit` template.
+    const editDependencies = schema.dependencies.filter(dep => ['GraphQLString', 'GraphQLNonNull', 'GraphQLID'].indexOf(dep) === -1);
+
+    // Map through the fields checking if any of them is `required: true`, if so, use `GraphQLNonNull`
     const fields = schema.fields.map((field) => {
       if (!field.required) {
         return field;
       }
 
-      // Add `GraphQLNonNull` to dependencies import if it hasn't been added yet
-      if (schema.dependencies.indexOf('GraphQLNonNull') === -1) {
-        schema.dependencies.push('GraphQLNonNull');
+      // Add `GraphQLNonNull` to `addDependencies` import if it hasn't been added yet.
+      // Won't push to `editDependencies` because it's already specified on the template file.
+      if (addDependencies.indexOf('GraphQLNonNull') === -1) {
+        addDependencies.push('GraphQLNonNull');
       }
 
       return {
@@ -53,7 +58,8 @@ class MutationGenerator extends Base {
     return {
       ...schema,
       fields,
-      dependencies,
+      addDependencies,
+      editDependencies,
     };
   }
 
