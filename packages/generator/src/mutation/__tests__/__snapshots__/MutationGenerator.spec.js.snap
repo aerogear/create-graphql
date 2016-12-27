@@ -257,6 +257,7 @@ Object {
 import {
   GraphQLString,
   GraphQLID,
+  GraphQLNonNull,
 } from \'graphql\';
 import {
   mutationWithClientMutationId,
@@ -272,10 +273,10 @@ export default mutationWithClientMutationId({
   name: \'PostAdd\',
   inputFields: {
     title: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(GraphQLString),
     },
     user: {
-      type: GraphQLID,
+      type: new GraphQLNonNull(GraphQLID),
     },
     slug: {
       type: GraphQLString,
@@ -422,10 +423,10 @@ export default mutationWithClientMutationId({
       type: new GraphQLNonNull(GraphQLID),
     },
     title: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(GraphQLString),
     },
     user: {
-      type: GraphQLID,
+      type: new GraphQLNonNull(GraphQLID),
     },
     slug: {
       type: GraphQLString,
