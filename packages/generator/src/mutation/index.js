@@ -70,7 +70,7 @@ class MutationGenerator extends Base {
   generateMutation() {
     let schema = null;
     if (this.model) {
-      const modelSchema = getMongooseModelSchema(this.model, 'mutation');
+      const modelSchema = getMongooseModelSchema(this.model);
       schema = this._parseSchema(modelSchema);
     }
 

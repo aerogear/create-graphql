@@ -7,8 +7,6 @@ const { visit } = recast.types;
 
 const rootPath = pkgDir.sync('.') || '.';
 
-const getModelCode = modelPath => fs.readFileSync(modelPath, 'utf8');
-
 const parseFieldToGraphQL = (field) => {
   const graphQLField = {
     name: field.name,
@@ -63,23 +61,20 @@ const parseGraphQLSchema = (mongooseFields) => {
   };
 };
 
-const getSchemaFieldsFromAst = (node) => {
+const getSchemaFieldsFromAst = (node, withTimestamps) => {
   const astSchemaFields = node.arguments[0].properties;
 
   const fields = [];
   astSchemaFields.forEach((field) => {
     const name = field.key.name;
+
     const fieldDefinition = {};
 
     if (field.value.type === 'ArrayExpression') {
       return;
     }
 
-    field.value.properties.forEach(({ key, value }) => {
-      const fieldName = key.name;
-
-      fieldDefinition[fieldName] = value.name || value.value;
-    });
+    field.value.properties.forEach(({ key, value }) => fieldDefinition[key.name] = value.name || value.value);
 
     fields[name] = {
       name,
@@ -87,10 +82,44 @@ const getSchemaFieldsFromAst = (node) => {
     };
   });
 
+  if (withTimestamps) {
+    const astSchemaTimestamp = getSchemaTimestampsFromAst(node.arguments[1].properties);
+
+    return {
+      ...astSchemaTimestamp,
+      ...fields,
+    };
+  }
+
   return fields;
 };
 
-const getSchemaDefinition = (modelCode) => {
+/**
+ * Parse the _options_ argument of a Mongoose model and check if it has a `timestamps` entry,
+ * parse its content if it does
+ * @param nodes {Array} The _options_ argument of `new mongoose.Schema()`
+ * @returns {Array} The parsed value of timestamps with the provided field name
+ */
+const getSchemaTimestampsFromAst = (nodes) => {
+  const timestampFields = [];
+
+  nodes.forEach((node) => {
+    if (node.key.name === 'timestamps') {
+      node.value.properties.forEach((timestampProperty) => {
+        const fieldName = timestampProperty.value.value;
+
+        timestampFields[fieldName] = {
+          name: fieldName,
+          type: 'Date',
+        };
+      })
+    }
+  });
+
+  return timestampFields;
+};
+
+const getSchemaDefinition = (modelCode, withTimestamps) => {
   const ast = recast.parse(modelCode, {
     parser: {
       parse: source => require('babylon').parse(source, {
@@ -119,7 +148,7 @@ const getSchemaDefinition = (modelCode) => {
         node.callee.object.name === 'mongoose' &&
         node.callee.property.name === 'Schema'
       ) {
-        fields = getSchemaFieldsFromAst(node);
+        fields = getSchemaFieldsFromAst(node, withTimestamps);
 
         this.abort();
       }
@@ -214,15 +243,22 @@ export const getRelativeConfigDir = (from, to) => {
   }, {});
 };
 
-export const getMongooseModelSchema = (model) => {
+export const getMongooseModelSchema = (model, withTimestamps = false) => {
   const modelDir = getCreateGraphQLConfig().directories.model;
 
   const modelPath = path.resolve(`${modelDir}/${model}.js`);
 
   const modelCode = getModelCode(modelPath);
 
-  return getSchemaDefinition(modelCode);
+  return getSchemaDefinition(modelCode, withTimestamps);
 };
+
+/**
+ * Get the Mongoose model schema code
+ * @param modelPath {string} The path of the Mongoose model
+ * @returns {string} The code of the Mongoose model
+ */
+const getModelCode = modelPath => fs.readFileSync(modelPath, 'utf8');
 
 /**
  * Camel cases text

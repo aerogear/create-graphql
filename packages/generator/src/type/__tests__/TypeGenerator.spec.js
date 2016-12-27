@@ -57,3 +57,29 @@ it('generate a type with Schema', async () => {
 
   expect(files).toMatchSnapshot();
 });
+
+it('generate a type with Schema and without timestamps', async () => {
+  const folder = await helper.run(typeGenerator)
+    .inTmpDir(dir =>
+      fs.copySync(
+        getFixturePath('User'),
+        path.join(dir, 'src/model/User.js'),
+      ),
+    )
+    .withArguments('User User')
+    .toPromise();
+
+  const destinationDir = getConfigDir('type');
+  const destinationTestDir = getConfigDir('type_test');
+
+  assert.file([
+    `${destinationDir}/UserType.js`, `${destinationTestDir}/UserType.spec.js`,
+  ]);
+
+  const files = {
+    type: getFileContent(`${folder}/${destinationDir}/UserType.js`),
+    typeTest: getFileContent(`${folder}/${destinationTestDir}/UserType.spec.js`),
+  };
+
+  expect(files).toMatchSnapshot();
+});

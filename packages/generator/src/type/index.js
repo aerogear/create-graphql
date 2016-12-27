@@ -24,7 +24,7 @@ class TypeGenerator extends Base {
 
   generateType() {
     const schema = this.model ?
-      getMongooseModelSchema(this.model)
+      getMongooseModelSchema(this.model, true)
       : null;
 
     const name = uppercaseFirstLetter(this.name);

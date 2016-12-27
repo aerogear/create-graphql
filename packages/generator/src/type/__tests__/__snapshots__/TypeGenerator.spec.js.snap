@@ -67,6 +67,16 @@ export default new GraphQLObjectType({
   name: \'Post\',
   description: \'Represents Post\',
   fields: () => ({
+    createdAt: {
+      type: GraphQLString,
+      description: \'\',
+      resolve: obj => obj.createdAt,
+    },
+    updatedAt: {
+      type: GraphQLString,
+      description: \'\',
+      resolve: obj => obj.updatedAt,
+    },
     title: {
       type: GraphQLString,
       description: \'\',
@@ -91,6 +101,80 @@ import { setupTest } from \'../../../../test/helper\';
 import {
   User,
   Post,
+} from \'../../../models\';
+
+beforeEach(async () => await setupTest());
+
+it(\'should retrieve a record\', async () => {
+  const user = await new User({
+    name: \'user\',
+    email: \'user@example.com\',
+  }).save();
+
+  // TODO: query to return a record
+  const query = \`
+    query Q {
+      node(id:\"123\") {
+        id
+      }
+    }
+  \`;
+
+  const rootValue = {};
+  const context = { user };
+
+  const { errors, data } = await graphql(schema, query, rootValue, context);
+
+  expect(data.node).toBe(null);
+  expect(errors).toBe(undefined);
+});
+",
+}
+`;
+
+exports[`test generate a type with Schema and without timestamps 1`] = `
+Object {
+  "type": "// @flow
+
+import {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLBoolean,
+} from \'graphql\';
+
+export default new GraphQLObjectType({
+  name: \'User\',
+  description: \'Represents User\',
+  fields: () => ({
+    name: {
+      type: GraphQLString,
+      description: \'\',
+      resolve: obj => obj.name,
+    },
+    password: {
+      type: GraphQLString,
+      description: \'\',
+      resolve: obj => obj.password,
+    },
+    email: {
+      type: GraphQLString,
+      description: \'\',
+      resolve: obj => obj.email,
+    },
+    active: {
+      type: GraphQLBoolean,
+      description: \'\',
+      resolve: obj => obj.active,
+    },
+  }),
+});
+",
+  "typeTest": "import { graphql } from \'graphql\';
+import { schema } from \'../../schema\';
+import { setupTest } from \'../../../../test/helper\';
+import {
+  User,
+  User,
 } from \'../../../models\';
 
 beforeEach(async () => await setupTest());
