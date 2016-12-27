@@ -86,8 +86,8 @@ const getSchemaFieldsFromAst = (node, withTimestamps) => {
     const astSchemaTimestamp = getSchemaTimestampsFromAst(node.arguments[1].properties);
 
     return {
-      ...astSchemaTimestamp,
       ...fields,
+      ...astSchemaTimestamp,
     };
   }
 

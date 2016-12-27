@@ -67,16 +67,6 @@ export default new GraphQLObjectType({
   name: \'Post\',
   description: \'Represents Post\',
   fields: () => ({
-    createdAt: {
-      type: GraphQLString,
-      description: \'\',
-      resolve: obj => obj.createdAt,
-    },
-    updatedAt: {
-      type: GraphQLString,
-      description: \'\',
-      resolve: obj => obj.updatedAt,
-    },
     title: {
       type: GraphQLString,
       description: \'\',
@@ -91,6 +81,16 @@ export default new GraphQLObjectType({
       type: GraphQLString,
       description: \'Used for SEO\',
       resolve: obj => obj.slug,
+    },
+    createdAt: {
+      type: GraphQLString,
+      description: \'\',
+      resolve: obj => obj.createdAt,
+    },
+    updatedAt: {
+      type: GraphQLString,
+      description: \'\',
+      resolve: obj => obj.updatedAt,
     },
   }),
 });
