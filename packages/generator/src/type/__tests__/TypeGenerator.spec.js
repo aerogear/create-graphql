@@ -32,7 +32,7 @@ it('generate a type', async () => {
   expect(files).toMatchSnapshot();
 });
 
-it('generate a type with Schema', async () => {
+it('generate a type with schema', async () => {
   const folder = await helper.run(typeGenerator)
     .inTmpDir(dir =>
       fs.copySync(
@@ -58,7 +58,7 @@ it('generate a type with Schema', async () => {
   expect(files).toMatchSnapshot();
 });
 
-it('generate a type with Schema and without timestamps', async () => {
+it('generate a type with schema and without timestamps', async () => {
   const folder = await helper.run(typeGenerator)
     .inTmpDir(dir =>
       fs.copySync(

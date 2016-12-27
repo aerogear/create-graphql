@@ -53,7 +53,7 @@ it(\'should retrieve a record\', async () => {
 }
 `;
 
-exports[`test generate a type with Schema 1`] = `
+exports[`test generate a type with schema 1`] = `
 Object {
   "type": "// @flow
 
@@ -132,7 +132,7 @@ it(\'should retrieve a record\', async () => {
 }
 `;
 
-exports[`test generate a type with Schema and without timestamps 1`] = `
+exports[`test generate a type with schema and without timestamps 1`] = `
 Object {
   "type": "// @flow
 

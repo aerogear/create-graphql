@@ -250,7 +250,7 @@ it(\'should create a record on database\', async () => {
 }
 `;
 
-exports[`test generate mutation files with Schema 1`] = `
+exports[`test generate mutation files with schema 1`] = `
 Object {
   "add": "// @flow
 
