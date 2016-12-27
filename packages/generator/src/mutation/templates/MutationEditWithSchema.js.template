@@ -2,8 +2,10 @@
 
 import {
   GraphQLString,
-  <%_ for (i in schema.dependencies) { -%>
-  <%= schema.dependencies[i] %>,
+  GraphQLNonNull,
+  GraphQLID,
+  <%_ for (i in schema.editDependencies) { -%>
+  <%= schema.editDependencies[i] %>,
   <%_ } -%>
 } from 'graphql';
 import {
