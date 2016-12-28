@@ -31,7 +31,7 @@ class LoaderGenerator extends Generator {
 
   generateLoader() {
     const schema = this.options.model ?
-      getMongooseModelSchema(this.options.model)
+      getMongooseModelSchema(this.options.model, true)
       : null;
 
     const name = uppercaseFirstLetter(this.options.name);
