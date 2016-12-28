@@ -71,12 +71,12 @@ class MutationGenerator extends Generator {
 
   generateMutation() {
     let schema = null;
-    if (this.options['model']) {
-      const modelSchema = getMongooseModelSchema(this.options['model']);
+    if (this.options.model) {
+      const modelSchema = getMongooseModelSchema(this.options.model);
       schema = this._parseSchema(modelSchema);
     }
 
-    const name = uppercaseFirstLetter(this.options['name']);
+    const name = uppercaseFirstLetter(this.options.name);
 
     const mutations = {
       add: {
@@ -100,7 +100,7 @@ class MutationGenerator extends Generator {
 
     const templateVars = {
       name,
-      camelCaseName: camelCaseText(this.options['name']),
+      camelCaseName: camelCaseText(this.options.name),
       schema,
       directories,
     };

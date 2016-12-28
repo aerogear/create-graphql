@@ -30,11 +30,11 @@ class LoaderGenerator extends Generator {
   }
 
   generateLoader() {
-    const schema = this.options['model'] ?
-      getMongooseModelSchema(this.options['model'])
+    const schema = this.options.model ?
+      getMongooseModelSchema(this.options.model)
       : null;
 
-    const name = uppercaseFirstLetter(this.options['name']);
+    const name = uppercaseFirstLetter(this.options.name);
 
     const templatePath = schema ?
       this.templatePath('LoaderWithSchema.js.template')
@@ -42,12 +42,12 @@ class LoaderGenerator extends Generator {
 
     const directories = this._getConfigDirectories();
 
-    const pluralName = pluralize(this.options['name']);
+    const pluralName = pluralize(this.options.name);
 
     const destinationPath = this.destinationPath(`${this.destinationDir}/${name}Loader.js`);
     const templateVars = {
       name,
-      rawName: this.options['name'],
+      rawName: this.options.name,
       pluralName,
       pluralCamelCaseName: camelCaseText(pluralName),
       schema,

@@ -18,7 +18,7 @@ class ConnectionGenerator extends Generator {
   }
 
   generateConnection() {
-    const name = uppercaseFirstLetter(this.options['name']);
+    const name = uppercaseFirstLetter(this.options.name);
 
     const directories = getRelativeConfigDir('connection', ['type']);
 

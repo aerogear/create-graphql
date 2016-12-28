@@ -23,15 +23,15 @@ class TypeGenerator extends Generator {
   }
 
   generateType() {
-    let schema = this.options['model'] ?
-      getMongooseModelSchema(this.options['model'], true)
+    let schema = this.options.model ?
+      getMongooseModelSchema(this.options.model, true)
       : null;
 
     if (schema) {
       schema = this._parseSchemaResolvers(schema);
     }
 
-    const name = uppercaseFirstLetter(this.options['name']);
+    const name = uppercaseFirstLetter(this.options.name);
     const typeFileName = `${name}Type`;
 
     const templatePath = schema ?

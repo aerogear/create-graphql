@@ -19,7 +19,7 @@ class AppGenerator extends Generator {
       required: true,
     });
 
-    this.dir = path.resolve(this.options['name']);
+    this.dir = path.resolve(this.options.name);
   }
 
   initializing() {
@@ -45,7 +45,7 @@ class AppGenerator extends Generator {
       .on('close', () => {
         this.spinner.stop();
 
-        this.log(`${tic} GraphQL project ${this.options['name']} created.`);
+        this.log(`${tic} GraphQL project ${this.options.name} created.`);
 
         done();
       });
@@ -60,7 +60,8 @@ class AppGenerator extends Generator {
       fs.lstatSync(this.dir).isDirectory();
 
       this._logAndExit(
-        `${tac} Directory "${this.options['name']}" already exists, please enter a new directory name or delete "${this.options['name']}"!`,
+        `${tac} Directory "${this.options.name}" already exists,
+        please enter a new directory name or delete "${this.options.name}"!`,
       );
 
       return false;
