@@ -1,11 +1,11 @@
-import { Base } from 'yeoman-generator';
+import Generator from 'yeoman-generator';
 import {
   getMongooseModelSchema,
   getConfigDir,
   uppercaseFirstLetter,
 } from '../utils';
 
-class TypeGenerator extends Base {
+class TypeGenerator extends Generator {
   constructor(args, options) {
     super(args, options);
 
@@ -23,15 +23,15 @@ class TypeGenerator extends Base {
   }
 
   generateType() {
-    let schema = this.model ?
-      getMongooseModelSchema(this.model, true)
+    let schema = this.options.model ?
+      getMongooseModelSchema(this.options.model, true)
       : null;
 
     if (schema) {
       schema = this._parseSchemaResolvers(schema);
     }
 
-    const name = uppercaseFirstLetter(this.name);
+    const name = uppercaseFirstLetter(this.options.name);
     const typeFileName = `${name}Type`;
 
     const templatePath = schema ?
