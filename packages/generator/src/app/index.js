@@ -1,4 +1,4 @@
-import { Base } from 'yeoman-generator';
+import Generator from 'yeoman-generator';
 import shell from 'shelljs';
 import chalk from 'chalk';
 import ora from 'ora';
@@ -10,7 +10,7 @@ import logo from '../graphql-logo';
 const tic = chalk.green('✓');
 const tac = chalk.red('✗');
 
-class AppGenerator extends Base {
+class AppGenerator extends Generator {
   constructor(args, options) {
     super(args, options);
 
@@ -19,7 +19,7 @@ class AppGenerator extends Base {
       required: true,
     });
 
-    this.dir = path.resolve(this.name);
+    this.dir = path.resolve(this.options['name']);
   }
 
   initializing() {
@@ -45,7 +45,7 @@ class AppGenerator extends Base {
       .on('close', () => {
         this.spinner.stop();
 
-        this.log(`${tic} GraphQL project ${this.name} created.`);
+        this.log(`${tic} GraphQL project ${this.options['name']} created.`);
 
         done();
       });
@@ -60,7 +60,7 @@ class AppGenerator extends Base {
       fs.lstatSync(this.dir).isDirectory();
 
       this._logAndExit(
-        `${tac} Directory "${this.name}" already exists, please enter a new directory name or delete "${this.name}"!`,
+        `${tac} Directory "${this.options['name']}" already exists, please enter a new directory name or delete "${this.options['name']}"!`,
       );
 
       return false;

@@ -1,4 +1,4 @@
-import { Base } from 'yeoman-generator';
+import Generator from 'yeoman-generator';
 import pluralize from 'pluralize';
 import {
   getMongooseModelSchema,
@@ -8,7 +8,7 @@ import {
   uppercaseFirstLetter,
 } from '../utils';
 
-class LoaderGenerator extends Base {
+class LoaderGenerator extends Generator {
   constructor(args, options) {
     super(args, options);
 
@@ -30,11 +30,11 @@ class LoaderGenerator extends Base {
   }
 
   generateLoader() {
-    const schema = this.model ?
-      getMongooseModelSchema(this.model)
+    const schema = this.options['model'] ?
+      getMongooseModelSchema(this.options['model'])
       : null;
 
-    const name = uppercaseFirstLetter(this.name);
+    const name = uppercaseFirstLetter(this.options['name']);
 
     const templatePath = schema ?
       this.templatePath('LoaderWithSchema.js.template')
@@ -42,12 +42,12 @@ class LoaderGenerator extends Base {
 
     const directories = this._getConfigDirectories();
 
-    const pluralName = pluralize(this.name);
+    const pluralName = pluralize(this.options['name']);
 
     const destinationPath = this.destinationPath(`${this.destinationDir}/${name}Loader.js`);
     const templateVars = {
       name,
-      rawName: this.name,
+      rawName: this.options['name'],
       pluralName,
       pluralCamelCaseName: camelCaseText(pluralName),
       schema,

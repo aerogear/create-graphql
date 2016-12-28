@@ -1,4 +1,4 @@
-import { Base } from 'yeoman-generator';
+import Generator from 'yeoman-generator';
 import {
   getMongooseModelSchema,
   getConfigDir,
@@ -7,7 +7,7 @@ import {
   uppercaseFirstLetter,
 } from '../utils';
 
-class MutationGenerator extends Base {
+class MutationGenerator extends Generator {
   constructor(args, options) {
     super(args, options);
 
@@ -71,12 +71,12 @@ class MutationGenerator extends Base {
 
   generateMutation() {
     let schema = null;
-    if (this.model) {
-      const modelSchema = getMongooseModelSchema(this.model);
+    if (this.options['model']) {
+      const modelSchema = getMongooseModelSchema(this.options['model']);
       schema = this._parseSchema(modelSchema);
     }
 
-    const name = uppercaseFirstLetter(this.name);
+    const name = uppercaseFirstLetter(this.options['name']);
 
     const mutations = {
       add: {
@@ -100,7 +100,7 @@ class MutationGenerator extends Base {
 
     const templateVars = {
       name,
-      camelCaseName: camelCaseText(this.name),
+      camelCaseName: camelCaseText(this.options['name']),
       schema,
       directories,
     };

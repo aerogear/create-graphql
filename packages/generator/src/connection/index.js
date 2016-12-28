@@ -1,11 +1,11 @@
-import { Base } from 'yeoman-generator';
+import Generator from 'yeoman-generator';
 import {
   getConfigDir,
   getRelativeConfigDir,
   uppercaseFirstLetter,
 } from '../utils';
 
-class ConnectionGenerator extends Base {
+class ConnectionGenerator extends Generator {
   constructor(args, options) {
     super(args, options);
 
@@ -18,7 +18,7 @@ class ConnectionGenerator extends Base {
   }
 
   generateConnection() {
-    const name = uppercaseFirstLetter(this.name);
+    const name = uppercaseFirstLetter(this.options['name']);
 
     const directories = getRelativeConfigDir('connection', ['type']);
 
