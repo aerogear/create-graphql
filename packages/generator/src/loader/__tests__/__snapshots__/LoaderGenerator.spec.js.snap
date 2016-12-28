@@ -60,7 +60,7 @@ export default class Example {
 }
 `;
 
-exports[`test generate a loader with Schema 1`] = `
+exports[`test generate a loader with schema 1`] = `
 Object {
   "loader": "// @flow
 
@@ -74,6 +74,8 @@ type PostType = {
   title: string,
   user: string,
   slug: string,
+  createdAt: string,
+  updatedAt: string,
 }
 
 export default class Post {
@@ -82,6 +84,8 @@ export default class Post {
   title: string;
   user: string;
   slug: string;
+  createdAt: string;
+  updatedAt: string;
 
   static PostLoader = new DataLoader(
     ids => Promise.all(
@@ -97,6 +101,8 @@ export default class Post {
     this.title = data.title;
     this.user = data.user;
     this.slug = data.slug;
+    this.createdAt = data.createdAt;
+    this.updatedAt = data.updatedAt;
   }
 
   static viewerCanSee(viewer, data) {
@@ -121,6 +127,77 @@ export default class Post {
 
     return ConnectionFromMongoCursor.connectionFromMongoCursor(
       viewer, posts, args, Post.load,
+    );
+  }
+}
+",
+}
+`;
+
+exports[`test generate a loader with schema and without timestamps 1`] = `
+Object {
+  "loader": "// @flow
+
+import DataLoader from \'dataloader\';
+import ConnectionFromMongoCursor from \'../connection/ConnectionFromMongoCursor\';
+import UserModel from \'../model/User\';
+
+type UserType = {
+  id: string,
+  _id: string,
+  name: string,
+  password: string,
+  email: string,
+  active: boolean,
+}
+
+export default class User {
+  id: string;
+  _id: string;
+  name: string;
+  password: string;
+  email: string;
+  active: boolean;
+
+  static UserLoader = new DataLoader(
+    ids => Promise.all(
+      ids.map(id =>
+        UserModel.findOne({ _id: id })
+      ),
+    ),
+  );
+
+  constructor(data: UserType) {
+    this.id = data.id;
+    this._id = data._id;
+    this.name = data.name;
+    this.password = data.password;
+    this.email = data.email;
+    this.active = data.active;
+  }
+
+  static viewerCanSee(viewer, data) {
+    // TODO: handle security
+
+    return true;
+  }
+
+  static async load(viewer, id) {
+    const data = await User.UserLoader.load(id.toString());
+
+    return User.viewerCanSee(viewer, data) ? new User(data) : null;
+  }
+
+  static clearCache(id) {
+    return User.UserLoader.clear(id.toString());
+  }
+
+  static async loadUsers(viewer, args) {
+    // TODO: specify conditions
+    const users = UserModel.find({});
+
+    return ConnectionFromMongoCursor.connectionFromMongoCursor(
+      viewer, users, args, User.load,
     );
   }
 }
