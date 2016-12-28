@@ -29,7 +29,7 @@ it('generate a loader', async () => {
   expect(files).toMatchSnapshot();
 });
 
-it('generate a loader with Schema', async () => {
+it('generate a loader with schema', async () => {
   const folder = await helper.run(loaderGenerator)
     .inTmpDir(dir =>
       fs.copySync(
@@ -48,6 +48,30 @@ it('generate a loader with Schema', async () => {
 
   const files = {
     loader: getFileContent(`${folder}/${destinationDir}/PostLoader.js`),
+  };
+
+  expect(files).toMatchSnapshot();
+});
+
+it('generate a loader with schema and without timestamps', async () => {
+  const folder = await helper.run(loaderGenerator)
+    .inTmpDir(dir =>
+      fs.copySync(
+        getFixturePath('User'),
+        path.join(dir, 'src/model/User.js'),
+      ),
+    )
+    .withArguments('User User')
+    .toPromise();
+
+  const destinationDir = getConfigDir('loader');
+
+  assert.file([
+    `${destinationDir}/UserLoader.js`,
+  ]);
+
+  const files = {
+    loader: getFileContent(`${folder}/${destinationDir}/UserLoader.js`),
   };
 
   expect(files).toMatchSnapshot();
