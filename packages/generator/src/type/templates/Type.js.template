@@ -2,11 +2,13 @@ import {
   GraphQLObjectType,
   GraphQLString,
 } from 'graphql';
+import { globalIdField } from 'graphql-relay';
 
 export default new GraphQLObjectType({
   name: '<%= name %>',
   description: 'Represents <%= name %>',
   fields: () => ({
+    id: globalIdField('<%= name %>'),
     example: {
       type: GraphQLString,
       description: 'My example field',
