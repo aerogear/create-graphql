@@ -462,7 +462,7 @@ export default mutationWithClientMutationId({
       throw new Error(\'Invalid postId\');
     }
 
-    // Edit model
+    // Edit record
     await post.update({
       title,
       user,

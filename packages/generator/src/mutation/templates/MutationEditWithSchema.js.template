@@ -53,7 +53,7 @@ export default mutationWithClientMutationId({
       throw new Error('Invalid <%= camelCaseName %>Id');
     }
 
-    // Edit model
+    // Edit record
     await <%= camelCaseName %>.update({
       <%_ for (field of schema.fields) { -%>
       <%- field.name %>,
