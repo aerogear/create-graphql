@@ -6,11 +6,13 @@ import {
   <%= schema.dependencies[i] %>,
   <%_ } -%>
 } from 'graphql';
+import { globalIdField } from 'graphql-relay';
 
 export default new GraphQLObjectType({
   name: '<%= name %>',
   description: 'Represents <%= name %>',
   fields: () => ({
+    id: globalIdField('<%= name %>'),
     <%_ for (field of schema.fields) { -%>
     <%- field.name %>: {
       type: <%= field.type %>,
