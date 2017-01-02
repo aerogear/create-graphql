@@ -55,9 +55,9 @@ export default mutationWithClientMutationId({
 
     // Edit model
     await <%= camelCaseName %>.update({
-        <%_ for (field of schema.fields) { -%>
-        <%- field.name %>,
-        <%_ } -%>
+      <%_ for (field of schema.fields) { -%>
+      <%- field.name %>,
+      <%_ } -%>
     });
 
     // TODO: mutation logic

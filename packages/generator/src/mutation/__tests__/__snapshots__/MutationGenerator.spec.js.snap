@@ -296,9 +296,9 @@ export default mutationWithClientMutationId({
 
     // Create new model
     const post = await new Post({
-        title,
-        user,
-        slug,
+      title,
+      user,
+      slug,
     }).save();
 
     // TODO: mutation logic
@@ -464,9 +464,9 @@ export default mutationWithClientMutationId({
 
     // Edit model
     await post.update({
-        title,
-        user,
-        slug,
+      title,
+      user,
+      slug,
     });
 
     // TODO: mutation logic

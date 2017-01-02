@@ -39,9 +39,9 @@ export default mutationWithClientMutationId({
 
     // Create new model
     const <%= camelCaseName %> = await new <%= name %>({
-        <%_ for (field of schema.fields) { -%>
-        <%- field.name %>,
-        <%_ } -%>
+      <%_ for (field of schema.fields) { -%>
+      <%- field.name %>,
+      <%_ } -%>
     }).save();
 
     // TODO: mutation logic
