@@ -294,7 +294,7 @@ export default mutationWithClientMutationId({
       slug,
     } = args;
 
-    // Create new model
+    // Create new record
     const post = await new Post({
       title,
       user,
