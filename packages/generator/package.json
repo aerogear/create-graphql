@@ -32,6 +32,10 @@
     "generators/mutation",
     "generators/test",
     "generators/utils.js",
+    "generators/frontend/add",
+    "generators/frontend/edit",
+    "generators/frontend/list",
+    "generators/frontend/view",
     "generators/graphql-logo.js",
     "generators/graphqlrc.json"
   ],

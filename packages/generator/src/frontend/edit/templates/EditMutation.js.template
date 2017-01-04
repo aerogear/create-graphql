@@ -2,7 +2,7 @@ import Relay from 'react-relay';
 
 export default class <%= name %>EditMutation extends Relay.Mutation {
   static fragments = {
-    <%= rawName %>: () => Relay.QL`
+    <%= camelCasedName %>: () => Relay.QL`
       fragment on <%= name %> {
         id
       }
@@ -17,7 +17,7 @@ export default class <%= name %>EditMutation extends Relay.Mutation {
 
   getVariables() {
     const {
-      <%= rawName %>: {
+      <%= camelCasedName %>: {
         id,
       },
       // Todo add more mutation input fields here
@@ -25,14 +25,14 @@ export default class <%= name %>EditMutation extends Relay.Mutation {
 
     return {
       id,
-      // Todo add more mutation input fields here
+      // TODO add more mutation input fields here
     };
   }
 
   getFatQuery() {
     return Relay.QL`
-      fragment on FlightEditPayload {
-        <%= rawName %>
+      fragment on <%= name %>EditPayload {
+        <%= camelCasedName %>
       }
     `;
   }
@@ -41,7 +41,7 @@ export default class <%= name %>EditMutation extends Relay.Mutation {
     return [{
       type: 'FIELDS_CHANGE',
       fieldIDs: {
-      <%= rawName %>: this.props.<%= rawName %>.id,
+      <%= camelCasedName %>: this.props.<%= camelCasedName %>.id,
       },
     }];
   }

@@ -22,9 +22,9 @@ class <%= name %>Edit extends Component {
   ];
 
   onSubmit = (data) => {
-    const { company } = this.props;
+    const { <%= camelCasedName %> } = this.props;
 
-    const mutation = new <%= rawName %>EditMutation({
+    const mutation = new <%= name %>EditMutation({
       ...data,
     });
 
@@ -47,13 +47,13 @@ class <%= name %>Edit extends Component {
   };
 
   render() {
-    const { <%= rawName %> } = this.props;
+    const { <%= camelCasedName %> } = this.props;
 
     return (
       <Form
         fields={this.fields}
         onSubmit={this.onSubmit}
-        value={<%= rawName %>}
+        value={<%= camelCasedName %>}
       />
     );
   }
@@ -91,7 +91,7 @@ export default Relay.createContainer(withRouter(<%= name %>Edit), {
     id: null,
   },
   fragments: {
-    <%= rawName %>: () => Relay.QL`
+    <%= camelCasedName %>: () => Relay.QL`
       fragment on <%= name %> {
         id
         ${<%= name %>EditMutation.getFragment('<%= rawName %>')}

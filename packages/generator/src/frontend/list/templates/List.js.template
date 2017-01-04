@@ -77,7 +77,7 @@ class <%= name %>List extends Component {
     return (
       <div>
         <Toolbar
-          title=<%= pluralName %>
+          title="<%= pluralName %>"
           primaryActionLabel="New <%= name %>"
           primaryActionOnClick={this._handleNew}
           onRefresh={this._handleRefreshList}
@@ -86,7 +86,7 @@ class <%= name %>List extends Component {
         <Table
           name="<%= name %>"
           columns={this.tableColumns}
-          rows={this.props.viewer.<%= pluralName %>}
+          rows={this.props.viewer.<%= pluralCamelCaseName %>}
           router={this.props.router}
           onLoadMore={this._handleLoadMore}
           isLoading={isLoading}
@@ -103,7 +103,7 @@ export default Relay.createContainer(withRouter(<%= name %>List), {
   fragments: {
     viewer: () => Relay.QL`
       fragment on Viewer {
-        <%= pluralName %>(first: $count) {
+        <%= pluralCamelCaseName %>(first: $count) {
           pageInfo {
             hasNextPage
           }
