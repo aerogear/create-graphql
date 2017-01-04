@@ -1,0 +1,63 @@
+import Relay from 'react-relay';
+
+export default class <%= name %>AddMutation extends Relay.Mutation {
+  static fragments = {
+    viewer: () => Relay.QL`
+      fragment on Viewer {
+        id
+      }
+    `,
+  };
+
+  getMutation() {
+    return Relay.QL`mutation {
+      <%= name %>Add
+    }`;
+  }
+
+  getVariables() {
+    const {
+      id
+      // TODO - add mutation input fields here
+    } = this.props;
+
+    return {
+      id
+      // TODO - add mutation input fields here
+    };
+  }
+
+  getFatQuery() {
+    return Relay.QL`
+      fragment on <%= name %>AddPayload {
+        <%= rawName %>Edge
+        viewer {
+          <%= pluralName %>
+        }
+      }
+    `;
+  }
+
+  getConfigs() {
+    return [
+      {
+        type: 'RANGE_ADD',
+        parentName: 'viewer',
+        parentID: this.props.viewer.id,
+        connectionName: '<%= pluralName %>',
+        edgeName: '<%= rawName %>Edge',
+        rangeBehaviors: {
+          '': 'prepend',
+        },
+      },
+      {
+        type: 'REQUIRED_CHILDREN',
+        children: [Relay.QL`
+          fragment on <%= name %>AddPayload {
+            <%= rawName %>Edge
+          }
+        `],
+      },
+    ];
+  }
+}

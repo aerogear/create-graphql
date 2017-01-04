@@ -1,0 +1,120 @@
+// @flow
+
+import React, { Component } from 'react';
+import Relay from 'react-relay';
+import { withRouter } from 'react-router';
+
+import Table from '../common/Table';
+import Toolbar from '../common/Toolbar';
+
+class <%= name %>List extends Component {
+  state = {
+    isLoading: true,
+  };
+
+  tableColumns = [
+    {
+      property: '',
+      header: {
+        label: 'Actions',
+      },
+      icon: 'mode_edit',
+      type: 'icon',
+      clickPath: '/<%= pluralName %>/view/:id',
+    },
+    {
+      property: 'id',
+      header: {
+        label: 'ID',
+      },
+    },
+    // TODO - add more fields to table
+  ];
+
+  componentDidMount = () => {
+    this.setState({
+      isLoading: false,
+    });
+  };
+
+  _handleNew = () => this.props.router.push('/<%= pluralName %>/new');
+
+  _handleRefreshList = () => {
+    this.setState({
+      isLoading: true,
+    });
+
+    this.props.relay.forceFetch({}, ({ done }) => {
+      if (done) {
+        this.setState({
+          isLoading: false,
+        });
+      }
+    });
+  };
+
+  _handleLoadMore = () => {
+    const { relay } = this.props;
+
+    this.setState({
+      isLoading: true,
+    });
+
+    relay.setVariables({
+      count: relay.variables.count + 10,
+    }, ({ done }) => {
+      if (done) {
+        this.setState({
+          isLoading: false,
+        });
+      }
+    });
+  };
+
+  render() {
+    const { isLoading } = this.state;
+
+    return (
+      <div>
+        <Toolbar
+          title=<%= pluralName %>
+          primaryActionLabel="New <%= name %>"
+          primaryActionOnClick={this._handleNew}
+          onRefresh={this._handleRefreshList}
+        />
+
+        <Table
+          name="<%= name %>"
+          columns={this.tableColumns}
+          rows={this.props.viewer.<%= pluralName %>}
+          router={this.props.router}
+          onLoadMore={this._handleLoadMore}
+          isLoading={isLoading}
+        />
+      </div>
+    );
+  }
+}
+
+export default Relay.createContainer(withRouter(<%= name %>List), {
+  initialVariables: {
+    count: 20,
+  },
+  fragments: {
+    viewer: () => Relay.QL`
+      fragment on Viewer {
+        <%= pluralName %>(first: $count) {
+          pageInfo {
+            hasNextPage
+          }
+          edges {
+            node {
+              id
+              // TODO - add relay fields
+            }
+          }
+        }
+      }
+    `,
+  },
+});

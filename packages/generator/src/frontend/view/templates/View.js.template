@@ -1,0 +1,57 @@
+import React, { Component } from 'react';
+import Relay from 'react-relay';
+import { withRouter } from 'react-router';
+
+import <%= name %>Edit from './<%= name %>Edit';
+
+import Tabs from '../../common/Tabs';
+
+class <%= name %>View extends Component {
+  render() {
+    const { viewer } = this.props;
+    const { <%= rawName %> } = viewer;
+
+    const tabs = [{
+      label: 'Details',
+      component: (
+        <FlightEdit
+          <%= rawName %>={<%= rawName %>}
+          viewer={viewer}
+        />
+      ),
+      icon: 'assignment',
+    }];
+
+    return (
+      <div>
+        <h1 style={styles.title}><%= name %>: {<%= rawName %>.id}</h1>
+
+        <Tabs tabs={tabs} />
+      </div>
+    );
+  }
+}
+
+const styles = {
+  title: {
+    fontSize: 25,
+    fontWeight: 300,
+  },
+};
+
+export default Relay.createContainer(withRouter(<%= name %>View), {
+  initialVariables: {
+    id: null,
+  },
+  fragments: {
+    viewer: ({ id }) => Relay.QL`
+      fragment on Viewer {
+        <%= rawName %>(id: $id) {
+          id
+          ${<%= name %>Edit.getFragment('<%= rawName %>')}
+        }
+        ${<%= name %>Edit.getFragment('viewer')}
+      }
+    `,
+  },
+});
