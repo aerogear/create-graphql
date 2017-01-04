@@ -8,7 +8,7 @@ import {
   uppercaseFirstLetter,
 } from '../../utils';
 
-class ListGenerator extends Generator {
+class EditGenerator extends Generator {
   constructor(args, options) {
     super(args, options);
 
@@ -19,7 +19,7 @@ class ListGenerator extends Generator {
 
     // TODO read schema.json
 
-    this.destinationDir = getConfigDir('list');
+    this.destinationDir = getConfigDir('edit');
   }
 
   _getConfigDirectories() {
@@ -33,7 +33,7 @@ class ListGenerator extends Generator {
 
     const name = uppercaseFirstLetter(this.options.name);
 
-    const templatePath = this.templatePath('List.js.template');
+    const templatePath = this.templatePath('Edit.js.template');
 
     // const templatePath = schema ?
     //   this.templatePath('LoaderWithSchema.js.template')
@@ -43,7 +43,7 @@ class ListGenerator extends Generator {
 
     const pluralName = pluralize(this.options.name);
 
-    const destinationPath = this.destinationPath(`${this.destinationDir}/${name}List.js`);
+    const destinationPath = this.destinationPath(`${this.destinationDir}/${name}Edit.js`);
     const templateVars = {
       name,
       rawName: this.options.name,
@@ -56,8 +56,8 @@ class ListGenerator extends Generator {
   }
 
   end() {
-    this.log('🔥 List created!');
+    this.log('🔥 Edit created!');
   }
 }
 
-module.exports = ListGenerator;
+module.exports = EditGenerator;

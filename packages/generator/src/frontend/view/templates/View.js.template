@@ -9,13 +9,13 @@ import Tabs from '../../common/Tabs';
 class <%= name %>View extends Component {
   render() {
     const { viewer } = this.props;
-    const { <%= rawName %> } = viewer;
+    const { <%= camelCaseName %> } = viewer;
 
     const tabs = [{
       label: 'Details',
       component: (
-        <FlightEdit
-          <%= rawName %>={<%= rawName %>}
+        <<%= name %>Edit
+          <%= camelCaseName %>={<%= camelCaseName %>}
           viewer={viewer}
         />
       ),
@@ -24,7 +24,7 @@ class <%= name %>View extends Component {
 
     return (
       <div>
-        <h1 style={styles.title}><%= name %>: {<%= rawName %>.id}</h1>
+        <h1 style={styles.title}><%= name %>: {<%= camelCaseName %>.id}</h1>
 
         <Tabs tabs={tabs} />
       </div>
@@ -46,9 +46,9 @@ export default Relay.createContainer(withRouter(<%= name %>View), {
   fragments: {
     viewer: ({ id }) => Relay.QL`
       fragment on Viewer {
-        <%= rawName %>(id: $id) {
+        <%= camelCaseName %>(id: $id) {
           id
-          ${<%= name %>Edit.getFragment('<%= rawName %>')}
+          ${<%= name %>Edit.getFragment('<%= camelCaseName %>')}
         }
         ${<%= name %>Edit.getFragment('viewer')}
       }
