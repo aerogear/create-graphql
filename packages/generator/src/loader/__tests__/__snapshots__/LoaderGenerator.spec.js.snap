@@ -38,7 +38,9 @@ export default class Example {
   }
 
   static async load(viewer, id) {
-    if (!id) return null;
+    if (!id) {
+      return null;
+    }
 
     const data = await Example.ExampleLoader.load(id.toString());
 
@@ -114,7 +116,9 @@ export default class Post {
   }
 
   static async load(viewer, id) {
-    if (!id) return null;
+    if (!id) {
+      return null;
+    }
 
     const data = await Post.PostLoader.load(id.toString());
 
@@ -187,7 +191,9 @@ export default class User {
   }
 
   static async load(viewer, id) {
-    if (!id) return null;
+    if (!id) {
+      return null;
+    }
 
     const data = await User.UserLoader.load(id.toString());
 

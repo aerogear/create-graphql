@@ -36,7 +36,9 @@ export default class <%= name %> {
   }
 
   static async load(viewer, id) {
-    if (!id) return null;
+    if (!id) {
+      return null;
+    }
 
     const data = await <%= name %>.<%= rawName %>Loader.load(id.toString());
 
