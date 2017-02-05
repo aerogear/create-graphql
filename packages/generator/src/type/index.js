@@ -3,6 +3,7 @@ import {
   getMongooseModelSchema,
   getConfigDir,
   uppercaseFirstLetter,
+  getRelativeConfigDir,
 } from '../utils';
 
 class TypeGenerator extends Generator {
@@ -24,12 +25,10 @@ class TypeGenerator extends Generator {
 
   generateType() {
     let schema = this.options.model ?
-      getMongooseModelSchema(this.options.model, true)
+      getMongooseModelSchema({ model: this.options.model, withTimestamps: true, ref: true })
       : null;
 
-    if (schema) {
-      schema = this._parseSchemaResolvers(schema);
-    }
+    const directories = this._getConfigDirectories();
 
     const name = uppercaseFirstLetter(this.options.name);
     const typeFileName = `${name}Type`;
@@ -42,6 +41,7 @@ class TypeGenerator extends Generator {
     const templateVars = {
       name,
       schema,
+      directories,
     };
 
     this._generateTypeTest({
@@ -49,33 +49,13 @@ class TypeGenerator extends Generator {
       schema,
     });
 
+    // TODO - generate types and loaders that do not exist yet
+
     this.fs.copyTpl(templatePath, destinationPath, templateVars);
   }
 
-  /**
-   * Parse schema resolvers checking if the fields need different resolvers.
-   * @param schema {Array} The parsed Mongoose schema
-   * @returns {Array} The parsed schema with resolvers
-   */
-  _parseSchemaResolvers(schema) {
-    const fields = schema.fields.map((field) => {
-      if (field.originalType === 'Date') {
-        return {
-          ...field,
-          resolve: `obj.${field.name}.toISOString()`,
-        };
-      }
-
-      return {
-        ...field,
-        resolve: `obj.${field.name}`,
-      };
-    });
-
-    return {
-      ...schema,
-      fields,
-    };
+  _getConfigDirectories() {
+    return getRelativeConfigDir('type', ['model', 'type', 'loader', 'connection']);
   }
 
   _generateTypeTest({ name, schema }) {
@@ -83,9 +63,12 @@ class TypeGenerator extends Generator {
 
     const destinationPath = this.destinationPath(`${this.destinationDir}/__tests__/${name}Type.spec.js`);
 
+    const directories = this._getConfigDirectories();
+
     const templateVars = {
       name,
       schema,
+      directories,
     };
 
     this.fs.copyTpl(templatePath, destinationPath, templateVars);

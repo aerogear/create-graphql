@@ -62,9 +62,11 @@ Object {
 import {
   GraphQLObjectType,
   GraphQLString,
-  GraphQLID,
 } from \'graphql\';
 import { globalIdField } from \'graphql-relay\';
+
+import UserType from \'./UserType\';
+import UserLoader from \'./UserType\';
 
 export default new GraphQLObjectType({
   name: \'Post\',
@@ -77,9 +79,9 @@ export default new GraphQLObjectType({
       resolve: obj => obj.title,
     },
     user: {
-      type: GraphQLID,
+      type: UserType,
       description: \'User that created this post\',
-      resolve: obj => obj.user,
+      resolve: async (obj, args, { user }) => await UserLoader.load(user, obj.user),
     },
     slug: {
       type: GraphQLString,
@@ -146,6 +148,7 @@ import {
   GraphQLBoolean,
 } from \'graphql\';
 import { globalIdField } from \'graphql-relay\';
+
 
 export default new GraphQLObjectType({
   name: \'User\',

@@ -8,6 +8,13 @@ import {
 } from 'graphql';
 import { globalIdField } from 'graphql-relay';
 
+<%_ for (i in schema.typeDependencies) { -%>
+import <%= schema.typeDependencies[i] %> from '<%= directories.type %>/<%=schema.typeDependencies[i]%>';
+<%_ } -%>
+<%_ for (i in schema.loaderDependencies) { -%>
+import <%= schema.loaderDependencies[i] %> from '<%= directories.type %>/<%=schema.typeDependencies[i]%>';
+<%_ } -%>
+
 export default new GraphQLObjectType({
   name: '<%= name %>',
   description: 'Represents <%= name %>',
@@ -17,7 +24,7 @@ export default new GraphQLObjectType({
     <%- field.name %>: {
       type: <%= field.type %>,
       description: '<%= field.description %>',
-      resolve: obj => <%= field.resolve %>,
+      resolve: <%if(field.resolveArgs){%><%=field.resolveArgs%><%}else{ %>obj<%} %> => <%= field.resolve %>,
     },
     <%_ } -%>
   }),

@@ -72,7 +72,7 @@ class MutationGenerator extends Generator {
   generateMutation() {
     let schema = null;
     if (this.options.model) {
-      const modelSchema = getMongooseModelSchema(this.options.model);
+      const modelSchema = getMongooseModelSchema({ model: this.options.model });
       schema = this._parseSchema(modelSchema);
     }
 
@@ -104,6 +104,8 @@ class MutationGenerator extends Generator {
       schema,
       directories,
     };
+
+    // TODO - generate type and loader that do not exist yet
 
     Object.keys(mutations).forEach((mutationType) => {
       const { template, fileName } = mutations[mutationType];

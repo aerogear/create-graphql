@@ -7,50 +7,87 @@ const { visit } = recast.types;
 
 const rootPath = pkgDir.sync('.') || '.';
 
-const parseFieldToGraphQL = (field) => {
+const parseFieldToGraphQL = (field, ref) => {
   const graphQLField = {
     name: field.name,
     description: field.description,
     required: !!field.required,
     originalType: field.type,
+    resolve: `obj.${field.name}`,
   };
+
+  const name = uppercaseFirstLetter(field.name);
+  const typeFileName = `${name}Type`;
+  const loaderFileName = `${name}Loader`;
 
   switch (field.type) {
     case 'Number':
       return {
+        ...graphQLField,
         type: 'GraphQLInt',
         flowType: 'number',
-        ...graphQLField,
       };
     case 'Boolean':
       return {
+        ...graphQLField,
         type: 'GraphQLBoolean',
         flowType: 'boolean',
-        ...graphQLField,
       };
-    case 'ObjectId': {
+    case 'ObjectId':
+      if (ref) {
+        return {
+          ...graphQLField,
+          type: typeFileName,
+          flowType: 'string',
+          resolve: `await ${loaderFileName}.load(user, obj.${field.name})`,
+          resolveArgs: 'async (obj, args, { user })',
+          graphqlType: typeFileName,
+          graphqlLoader: loaderFileName,
+        };
+      } else {
+        return {
+          ...graphQLField,
+          type: 'GraphQLID',
+          flowType: 'string',
+        }
+      }
+    case 'Date':
       return {
-        type: 'GraphQLID',
-        flowType: 'string',
         ...graphQLField,
-      };
-    }
-    default:
-      return {
         type: 'GraphQLString',
         flowType: 'string',
+        resolve: `obj.${field.name}.toISOString()`,
+      };
+    default:
+      return {
         ...graphQLField,
+        type: 'GraphQLString',
+        flowType: 'string',
       };
   }
 };
 
-const parseGraphQLSchema = (mongooseFields) => {
+const parseGraphQLSchema = (mongooseFields, ref) => {
   const dependencies = [];
-  const fields = Object.keys(mongooseFields).map((name) => {
-    const field = parseFieldToGraphQL(mongooseFields[name]);
+  const typeDependencies = [];
+  const loaderDependencies = [];
 
-    if (dependencies.indexOf(field.type) === -1) {
-      dependencies.push(field.type);
+  const fields = Object.keys(mongooseFields).map((name) => {
+    const field = parseFieldToGraphQL(mongooseFields[name], ref);
+
+    if (field.graphqlType) {
+      if (typeDependencies.indexOf(field.graphqlType) === -1) {
+        typeDependencies.push(field.graphqlType);
+      }
+
+      if (loaderDependencies.indexOf(field.graphqlLoader) === -1) {
+        loaderDependencies.push(field.graphqlLoader);
+      }
+
+    } else {
+      if (dependencies.indexOf(field.type) === -1) {
+        dependencies.push(field.type);
+      }
     }
 
     return field;
@@ -59,6 +96,8 @@ const parseGraphQLSchema = (mongooseFields) => {
   return {
     fields,
     dependencies,
+    typeDependencies,
+    loaderDependencies,
   };
 };
 
@@ -120,7 +159,7 @@ const getSchemaTimestampsFromAst = (nodes) => {
   return timestampFields;
 };
 
-const getSchemaDefinition = (modelCode, withTimestamps) => {
+const getSchemaDefinition = (modelCode, withTimestamps, ref) => {
   const ast = recast.parse(modelCode, {
     parser: {
       parse: source => require('babylon').parse(source, {
@@ -158,7 +197,7 @@ const getSchemaDefinition = (modelCode, withTimestamps) => {
     },
   });
 
-  return parseGraphQLSchema(fields);
+  return parseGraphQLSchema(fields, ref);
 };
 
 /**
@@ -239,19 +278,23 @@ export const getRelativeConfigDir = (from, to) => {
 
     return {
       ...directories,
-      [dir]: relativePath,
+      [dir]: relativePath === '' ? '.' : relativePath,
     };
   }, {});
 };
 
-export const getMongooseModelSchema = (model, withTimestamps = false) => {
+export const getMongooseModelSchema = ({
+  model,
+  withTimestamps = false,
+  ref = false
+}) => {
   const modelDir = getCreateGraphQLConfig().directories.model;
 
   const modelPath = path.resolve(`${modelDir}/${model}.js`);
 
   const modelCode = getModelCode(modelPath);
 
-  return getSchemaDefinition(modelCode, withTimestamps);
+  return getSchemaDefinition(modelCode, withTimestamps, ref);
 };
 
 /**
