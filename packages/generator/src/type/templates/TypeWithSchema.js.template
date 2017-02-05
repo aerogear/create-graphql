@@ -11,6 +11,7 @@ import { globalIdField } from 'graphql-relay';
 <%_ for (i in schema.typeDependencies) { -%>
 import <%= schema.typeDependencies[i] %> from '<%= directories.type %>/<%=schema.typeDependencies[i]%>';
 <%_ } -%>
+  
 <%_ for (i in schema.loaderDependencies) { -%>
 import <%= schema.loaderDependencies[i] %> from '<%= directories.type %>/<%=schema.typeDependencies[i]%>';
 <%_ } -%>
