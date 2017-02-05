@@ -55,7 +55,7 @@ class TypeGenerator extends Generator {
   }
 
   _getConfigDirectories() {
-    return getRelativeConfigDir('type', ['model', 'type', 'loader', 'connection']);
+    return getRelativeConfigDir('type', ['model', 'type', 'loader', 'connection', 'interface']);
   }
 
   _generateTypeTest({ name, schema }) {

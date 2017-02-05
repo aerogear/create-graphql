@@ -65,8 +65,10 @@ import {
 } from \'graphql\';
 import { globalIdField } from \'graphql-relay\';
 
+import { NodeInterface } from \'../interface/NodeInterface\';
+
 import UserType from \'./UserType\';
-  
+
 import UserLoader from \'./UserType\';
 
 export default new GraphQLObjectType({
@@ -99,6 +101,7 @@ export default new GraphQLObjectType({
       description: \'\',
       resolve: obj => obj.updatedAt.toISOString(),
     },
+    interfaces: () => [NodeInterface],
   }),
 });
 ",
@@ -150,7 +153,9 @@ import {
 } from \'graphql\';
 import { globalIdField } from \'graphql-relay\';
 
-  
+import { NodeInterface } from \'../interface/NodeInterface\';
+
+
 
 export default new GraphQLObjectType({
   name: \'User\',
@@ -177,6 +182,7 @@ export default new GraphQLObjectType({
       description: \'\',
       resolve: obj => obj.active,
     },
+    interfaces: () => [NodeInterface],
   }),
 });
 ",
