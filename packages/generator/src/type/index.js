@@ -24,7 +24,7 @@ class TypeGenerator extends Generator {
   }
 
   generateType() {
-    let schema = this.options.model ?
+    const schema = this.options.model ?
       getMongooseModelSchema({ model: this.options.model, withTimestamps: true, ref: true })
       : null;
 
