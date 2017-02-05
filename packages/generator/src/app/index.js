@@ -35,7 +35,7 @@ class AppGenerator extends Generator {
 
     this.spinner.text = 'Creating a new GraphQL project...';
 
-    const repository = 'https://github.com/sibelius/graphql-dataloader-boilerplate.git';
+    const repository = 'https://github.com/entria/graphql-dataloader-boilerplate.git';
 
     const done = this.async();
     const command = 'git';

@@ -78,7 +78,7 @@ create-graphql init AwesomeProject
   <img src="https://github.com/lucasbento/create-graphql/raw/master/content/create-graphql-init.gif">
 </p>
 
-Provides an easy way to create a GraphQL server based on [@sibelius/graphql-dataloader-boilerplate](https://github.com/sibelius/graphql-dataloader-boilerplate) which is a production-ready server.
+Provides an easy way to create a GraphQL server based on [@entria/graphql-dataloader-boilerplate](https://github.com/entria/graphql-dataloader-boilerplate) which is a production-ready server.
 
 > We are currently using the same boilerplate on three applications running on production at [@entria](https://github.com/entria).
 
