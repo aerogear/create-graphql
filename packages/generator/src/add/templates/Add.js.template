@@ -33,7 +33,7 @@ class <%= name %>Add extends Component {
           message: '<%= rawName %> created successfully!',
         });
 
-        this.props.router.push(`/<%= pluralName %>/view/${<%= name %>Add.<%= rawName %>Edge.node.id}`);
+        this.props.router.push(`/<%= pluralCamelCaseName %>/view/${<%= name %>Add.<%= camelCaseName %>Edge.node.id}`);
       },
       onFailure: (failureResponse) => {
         this.context.showSnackbar({

@@ -25,6 +25,7 @@ class <%= name %>Edit extends Component {
     const { <%= camelCaseName %> } = this.props;
 
     const mutation = new <%= name %>EditMutation({
+      <%= camelCaseName %>,
       ...data,
     });
 

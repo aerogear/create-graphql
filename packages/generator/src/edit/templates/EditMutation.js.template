@@ -41,7 +41,7 @@ export default class <%= name %>EditMutation extends Relay.Mutation {
     return [{
       type: 'FIELDS_CHANGE',
       fieldIDs: {
-      <%= camelCaseName %>: this.props.<%= camelCaseName %>.id,
+        <%= camelCaseName %>: this.props.<%= camelCaseName %>.id,
       },
     }];
   }

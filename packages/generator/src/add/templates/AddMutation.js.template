@@ -30,9 +30,9 @@ export default class <%= name %>AddMutation extends Relay.Mutation {
   getFatQuery() {
     return Relay.QL`
       fragment on <%= name %>AddPayload {
-        <%= rawName %>Edge
+        <%= camelCaseName %>Edge
         viewer {
-          <%= pluralName %>
+          <%= pluralCamelCaseName %>
         }
       }
     `;
@@ -54,7 +54,7 @@ export default class <%= name %>AddMutation extends Relay.Mutation {
         type: 'REQUIRED_CHILDREN',
         children: [Relay.QL`
           fragment on <%= name %>AddPayload {
-            <%= rawName %>Edge
+            <%= camelCaseName %>Edge
           }
         `],
       },
