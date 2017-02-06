@@ -94,7 +94,7 @@ export default Relay.createContainer(withRouter(<%= name %>Edit), {
     <%= camelCaseName %>: () => Relay.QL`
       fragment on <%= name %> {
         id
-        ${<%= name %>EditMutation.getFragment('<%= rawName %>')}
+        ${<%= name %>EditMutation.getFragment('<%= camelCaseName %>')}
       }
     `,
     viewer: () => Relay.QL`
