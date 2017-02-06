@@ -25,7 +25,11 @@ class TypeGenerator extends Generator {
 
   generateType() {
     const schema = this.options.model ?
-      getMongooseModelSchema({ model: this.options.model, withTimestamps: true, ref: true })
+      getMongooseModelSchema({
+        model: this.options.model,
+        withTimestamps: true,
+        ref: true,
+      })
       : null;
 
     const directories = this._getConfigDirectories();
@@ -49,7 +53,7 @@ class TypeGenerator extends Generator {
       schema,
     });
 
-    // TODO - generate types and loaders that do not exist yet
+    // TODO: generate types and loaders that do not exist yet
 
     this.fs.copyTpl(templatePath, destinationPath, templateVars);
   }
