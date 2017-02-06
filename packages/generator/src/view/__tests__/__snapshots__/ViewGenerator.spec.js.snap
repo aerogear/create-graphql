@@ -1,0 +1,62 @@
+exports[`test generate view files 1`] = `
+Object {
+  "view": "import React, { Component } from \'react\';
+import Relay from \'react-relay\';
+import { withRouter } from \'react-router\';
+
+import ExampleEdit from \'./ExampleEdit\';
+
+import Tabs from \'../../common/Tabs\';
+
+class ExampleView extends Component {
+  render() {
+    const { viewer } = this.props;
+    const { example } = viewer;
+
+    const tabs = [{
+      label: \'Details\',
+      component: (
+        <ExampleEdit
+          example={example}
+          viewer={viewer}
+        />
+      ),
+      icon: \'assignment\',
+    }];
+
+    return (
+      <div>
+        <h1 style={styles.title}>Example: {example.id}</h1>
+
+        <Tabs tabs={tabs} />
+      </div>
+    );
+  }
+}
+
+const styles = {
+  title: {
+    fontSize: 25,
+    fontWeight: 300,
+  },
+};
+
+export default Relay.createContainer(withRouter(ExampleView), {
+  initialVariables: {
+    id: null,
+  },
+  fragments: {
+    viewer: ({ id }) => Relay.QL\`
+      fragment on Viewer {
+        example(id: $id) {
+          id
+          \${ExampleEdit.getFragment(\'example\')}
+        }
+        \${ExampleEdit.getFragment(\'viewer\')}
+      }
+    \`,
+  },
+});
+",
+}
+`;
