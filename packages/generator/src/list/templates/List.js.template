@@ -20,7 +20,7 @@ class <%= name %>List extends Component {
       },
       icon: 'mode_edit',
       type: 'icon',
-      clickPath: '/<%= pluralName %>/view/:id',
+      clickPath: '/<%= pluralCamelCaseName %>/view/:id',
     },
     {
       property: 'id',
