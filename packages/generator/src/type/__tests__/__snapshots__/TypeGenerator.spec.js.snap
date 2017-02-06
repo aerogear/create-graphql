@@ -69,9 +69,7 @@ import {
 import { globalIdField } from \'graphql-relay\';
 
 import { NodeInterface } from \'../interface/NodeInterface\';
-
 import UserType from \'./UserType\';
-
 import UserLoader from \'../loader/UserLoader\';
 
 export default new GraphQLObjectType({
@@ -157,8 +155,6 @@ import {
 import { globalIdField } from \'graphql-relay\';
 
 import { NodeInterface } from \'../interface/NodeInterface\';
-
-
 
 export default new GraphQLObjectType({
   name: \'User\',
