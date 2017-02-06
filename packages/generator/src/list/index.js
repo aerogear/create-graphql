@@ -1,14 +1,13 @@
 import Generator from 'yeoman-generator';
 import pluralize from 'pluralize';
 import {
-  getMongooseModelSchema,
   getConfigDir,
   getRelativeConfigDir,
   camelCaseText,
   uppercaseFirstLetter,
-} from '../../utils';
+} from '../utils';
 
-class EditGenerator extends Generator {
+class ListGenerator extends Generator {
   constructor(args, options) {
     super(args, options);
 
@@ -19,7 +18,7 @@ class EditGenerator extends Generator {
 
     // TODO read schema.json
 
-    this.destinationDir = getConfigDir('edit');
+    this.destinationDir = getConfigDir('list');
   }
 
   _getConfigDirectories() {
@@ -33,7 +32,7 @@ class EditGenerator extends Generator {
 
     const name = uppercaseFirstLetter(this.options.name);
 
-    const templatePath = this.templatePath('Edit.js.template');
+    const templatePath = this.templatePath('List.js.template');
 
     // const templatePath = schema ?
     //   this.templatePath('LoaderWithSchema.js.template')
@@ -43,7 +42,7 @@ class EditGenerator extends Generator {
 
     const pluralName = pluralize(this.options.name);
 
-    const destinationPath = this.destinationPath(`${this.destinationDir}/${name}Edit.js`);
+    const destinationPath = this.destinationPath(`${this.destinationDir}/${name}List.js`);
     const templateVars = {
       name,
       rawName: this.options.name,
@@ -56,8 +55,8 @@ class EditGenerator extends Generator {
   }
 
   end() {
-    this.log('🔥 Edit created!');
+    this.log('🔥 List created!');
   }
 }
 
-module.exports = EditGenerator;
+module.exports = ListGenerator;

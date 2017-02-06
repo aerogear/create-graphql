@@ -1,14 +1,13 @@
 import Generator from 'yeoman-generator';
 import pluralize from 'pluralize';
 import {
-  getMongooseModelSchema,
   getConfigDir,
   getRelativeConfigDir,
   camelCaseText,
   uppercaseFirstLetter,
-} from '../../utils';
+} from '../utils';
 
-class ListGenerator extends Generator {
+class AddGenerator extends Generator {
   constructor(args, options) {
     super(args, options);
 
@@ -19,7 +18,7 @@ class ListGenerator extends Generator {
 
     // TODO read schema.json
 
-    this.destinationDir = getConfigDir('list');
+    this.destinationDir = getConfigDir('add');
   }
 
   _getConfigDirectories() {
@@ -33,8 +32,6 @@ class ListGenerator extends Generator {
 
     const name = uppercaseFirstLetter(this.options.name);
 
-    const templatePath = this.templatePath('List.js.template');
-
     // const templatePath = schema ?
     //   this.templatePath('LoaderWithSchema.js.template')
     //   : this.templatePath('Loader.js.template');
@@ -43,7 +40,6 @@ class ListGenerator extends Generator {
 
     const pluralName = pluralize(this.options.name);
 
-    const destinationPath = this.destinationPath(`${this.destinationDir}/${name}List.js`);
     const templateVars = {
       name,
       rawName: this.options.name,
@@ -52,12 +48,29 @@ class ListGenerator extends Generator {
       pluralCamelCaseName: camelCaseText(pluralName),
     };
 
-    this.fs.copyTpl(templatePath, destinationPath, templateVars);
+    const files = {
+      add: {
+        filename: `${name}Add.js`,
+        template: 'Add.js.template',
+      },
+      addMutation: {
+        filename: `${name}AddMutation.js`,
+        template: 'AddMutation.js.template',
+      },
+    };
+
+    Object.keys(files).forEach((file) => {
+      const { filename, template } = files[file];
+
+      this.fs.copyTpl(
+        this.templatePath(template), `${this.destinationDir}/${filename}`, templateVars,
+      );
+    });
   }
 
   end() {
-    this.log('🔥 List created!');
+    this.log('🔥 Add created!');
   }
 }
 
-module.exports = ListGenerator;
+module.exports = AddGenerator;

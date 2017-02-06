@@ -1,14 +1,13 @@
 import Generator from 'yeoman-generator';
 import pluralize from 'pluralize';
 import {
-  getMongooseModelSchema,
   getConfigDir,
   getRelativeConfigDir,
   camelCaseText,
   uppercaseFirstLetter,
-} from '../../utils';
+} from '../utils';
 
-class AddGenerator extends Generator {
+class EditGenerator extends Generator {
   constructor(args, options) {
     super(args, options);
 
@@ -18,8 +17,7 @@ class AddGenerator extends Generator {
     });
 
     // TODO read schema.json
-
-    this.destinationDir = getConfigDir('add');
+    this.destinationDir = getConfigDir('edit');
   }
 
   _getConfigDirectories() {
@@ -33,8 +31,6 @@ class AddGenerator extends Generator {
 
     const name = uppercaseFirstLetter(this.options.name);
 
-    const templatePath = this.templatePath('Add.js.template');
-
     // const templatePath = schema ?
     //   this.templatePath('LoaderWithSchema.js.template')
     //   : this.templatePath('Loader.js.template');
@@ -43,7 +39,6 @@ class AddGenerator extends Generator {
 
     const pluralName = pluralize(this.options.name);
 
-    const destinationPath = this.destinationPath(`${this.destinationDir}/${name}Add.js`);
     const templateVars = {
       name,
       rawName: this.options.name,
@@ -52,12 +47,29 @@ class AddGenerator extends Generator {
       pluralCamelCaseName: camelCaseText(pluralName),
     };
 
-    this.fs.copyTpl(templatePath, destinationPath, templateVars);
+    const files = {
+      edit: {
+        filename: `${name}Edit.js`,
+        template: 'Edit.js.template',
+      },
+      editMutation: {
+        filename: `${name}EditMutation.js`,
+        template: 'EditMutation.js.template',
+      },
+    };
+
+    Object.keys(files).forEach((file) => {
+      const { filename, template } = files[file];
+
+      this.fs.copyTpl(
+        this.templatePath(template), `${this.destinationDir}/${filename}`, templateVars,
+      );
+    });
   }
 
   end() {
-    this.log('🔥 Add created!');
+    this.log('🔥 Edit created!');
   }
 }
 
-module.exports = AddGenerator;
+module.exports = EditGenerator;

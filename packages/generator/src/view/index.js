@@ -1,12 +1,11 @@
 import Generator from 'yeoman-generator';
 import pluralize from 'pluralize';
 import {
-  getMongooseModelSchema,
   getConfigDir,
   getRelativeConfigDir,
   camelCaseText,
   uppercaseFirstLetter,
-} from '../../utils';
+} from '../utils';
 
 class ViewGenerator extends Generator {
   constructor(args, options) {
