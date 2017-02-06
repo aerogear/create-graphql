@@ -28,6 +28,6 @@ export default new GraphQLObjectType({
       resolve: <%if(field.resolveArgs){%><%=field.resolveArgs%><%}else{ %>obj<%} %> => <%= field.resolve %>,
     },
     <%_ } -%>
-    interfaces: () => [NodeInterface],
   }),
+  interfaces: () => [NodeInterface],
 });

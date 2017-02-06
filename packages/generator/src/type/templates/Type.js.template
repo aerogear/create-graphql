@@ -16,6 +16,6 @@ export default new GraphQLObjectType({
       description: 'My example field',
       resolve: obj => obj.example,
     },
-    interfaces: () => [NodeInterface],
   }),
+  interfaces: () => [NodeInterface],
 });
