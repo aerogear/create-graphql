@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import recast from 'recast';
 import pkgDir from 'pkg-dir';
+import merge from 'lodash.merge';
 
 const { visit } = recast.types;
 
@@ -239,21 +240,22 @@ export const getCreateGraphQLConfig = () => {
   // Use default config
   const defaultFilePath = path.resolve(`${__dirname}/graphqlrc.json`);
 
-  const defaultConfig = parseConfigFile(defaultFilePath);
+  let config = parseConfigFile(defaultFilePath);
 
   try {
     // Check if there is a `.graphqlrc` file in the root path
     const customConfig = parseConfigFile(`${rootPath}/.graphqlrc`);
 
+    merge(config, customConfig);
+
     // If it does, extend default config with it, so if the custom config has a missing line
     // it won't throw errors
-    return {
-      ...defaultConfig,
-      ...customConfig,
-    };
+    return config;
   } catch (err) {
+    console.error('Error while trying to parse config file', err);
+
     // Return the default config if the custom doesn't exist
-    return defaultConfig;
+    return config;
   }
 };
 
