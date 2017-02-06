@@ -105,7 +105,7 @@ class MutationGenerator extends Generator {
       directories,
     };
 
-    // TODO - generate type and loader that do not exist yet
+    // TODO: generate type and loader that do not exist yet
 
     Object.keys(mutations).forEach((mutationType) => {
       const { template, fileName } = mutations[mutationType];
