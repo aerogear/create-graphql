@@ -15,7 +15,7 @@ import <%= schema.typeDependencies[i] %> from '<%= directories.type %>/<%=schema
 <%_ } -%>
 
 <%_ for (i in schema.loaderDependencies) { -%>
-import <%= schema.loaderDependencies[i] %> from '<%= directories.type %>/<%=schema.typeDependencies[i]%>';
+import <%= schema.loaderDependencies[i] %> from '<%= directories.loader %>/<%=schema.loaderDependencies[i]%>';
 <%_ } -%>
 
 export default new GraphQLObjectType({

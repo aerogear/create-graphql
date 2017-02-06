@@ -6,6 +6,8 @@ Object {
 } from \'graphql\';
 import { globalIdField } from \'graphql-relay\';
 
+import { NodeInterface } from \'../interface/NodeInterface\';
+
 export default new GraphQLObjectType({
   name: \'Example\',
   description: \'Represents Example\',
@@ -16,6 +18,7 @@ export default new GraphQLObjectType({
       description: \'My example field\',
       resolve: obj => obj.example,
     },
+    interfaces: () => [NodeInterface],
   }),
 });",
   "typeTest": "import { graphql } from \'graphql\';
@@ -69,7 +72,7 @@ import { NodeInterface } from \'../interface/NodeInterface\';
 
 import UserType from \'./UserType\';
 
-import UserLoader from \'./UserType\';
+import UserLoader from \'../loader/UserLoader\';
 
 export default new GraphQLObjectType({
   name: \'Post\',
