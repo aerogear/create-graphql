@@ -18,7 +18,7 @@ class ViewGenerator extends Generator {
 
     // TODO read schema.json
 
-    this.destinationDir = getConfigDir('add');
+    this.destinationDir = getConfigDir('view');
   }
 
   _getConfigDirectories() {
