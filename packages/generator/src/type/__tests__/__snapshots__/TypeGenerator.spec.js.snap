@@ -18,9 +18,10 @@ export default new GraphQLObjectType({
       description: \'My example field\',
       resolve: obj => obj.example,
     },
-    interfaces: () => [NodeInterface],
   }),
-});",
+  interfaces: () => [NodeInterface],
+});
+",
   "typeTest": "import { graphql } from \'graphql\';
 import { schema } from \'../../schema\';
 import { setupTest } from \'../../../../test/helper\';
@@ -102,8 +103,8 @@ export default new GraphQLObjectType({
       description: \'\',
       resolve: obj => obj.updatedAt.toISOString(),
     },
-    interfaces: () => [NodeInterface],
   }),
+  interfaces: () => [NodeInterface],
 });
 ",
   "typeTest": "import { graphql } from \'graphql\';
@@ -181,8 +182,8 @@ export default new GraphQLObjectType({
       description: \'\',
       resolve: obj => obj.active,
     },
-    interfaces: () => [NodeInterface],
   }),
+  interfaces: () => [NodeInterface],
 });
 ",
   "typeTest": "import { graphql } from \'graphql\';
