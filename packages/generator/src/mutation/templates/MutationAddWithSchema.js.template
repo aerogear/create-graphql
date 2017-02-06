@@ -16,6 +16,8 @@ import <%= name %> from '<%= directories.model %>/<%= name %>';
 import <%= name %>Loader from '<%= directories.loader %>/<%= name %>Loader';
 import <%= name %>Connection from '<%= directories.connection %>/<%= name %>Connection';
 
+import ViewerType from '<%= directories.type %>/ViewerType';
+
 export default mutationWithClientMutationId({
   name: '<%= name %>Add',
   inputFields: {
@@ -70,6 +72,10 @@ export default mutationWithClientMutationId({
           node: <%= camelCaseName %>,
         };
       },
+    },
+    viewer: {
+      type: ViewerType,
+      resolve: async (obj, args, { user }) => user,
     },
     error: {
       type: GraphQLString,
