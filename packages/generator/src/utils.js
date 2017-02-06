@@ -252,8 +252,6 @@ export const getCreateGraphQLConfig = () => {
     // it won't throw errors
     return config;
   } catch (err) {
-    console.error('Error while trying to parse config file', err);
-
     // Return the default config if the custom doesn't exist
     return config;
   }
