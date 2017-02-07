@@ -81,7 +81,7 @@ class AppGenerator extends Generator {
     let command = 'yarn';
     let args = [];
 
-    if (!shell.which('npm')) {
+    if (!shell.which('yarn')) {
       command = 'npm';
       args = ['install'];
     }
