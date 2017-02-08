@@ -3,15 +3,18 @@ environment:
     - node_version: "6"
     - node_version: "4"
 
-cache:
-  - "%LOCALAPPDATA%\\Yarn"
-
 install:
   - ps: Install-Product node $env:nodejs_version
   - yarn install
+
+build: off
 
 test_script:
   - node --version
   - yarn --version
   - yarn lint
   - yarn test -- --runInBand
+
+cache:
+  - node_modules
+  - "%LOCALAPPDATA%\\Yarn"
