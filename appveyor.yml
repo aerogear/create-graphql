@@ -18,5 +18,4 @@ test_script:
   - yarn test -- --runInBand
 
 cache:
-  - node_modules
   - "%LOCALAPPDATA%\\Yarn"
