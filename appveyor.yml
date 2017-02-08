@@ -4,10 +4,9 @@ environment:
     - node_version: "4"
 
 install:
-  - ps: Install-Product node $env:nodejs_version
+  - ps: Install-Product node $env:node_version
   - yarn global add npm@3.x
   - set PATH=%APPDATA%\npm;%PATH%
-  - npm cache clean
   - yarn install
   - yarn run bootstrap
 
