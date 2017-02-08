@@ -1,14 +1,15 @@
 environment:
   matrix:
-    - node_version: "6"
     - node_version: "4"
+    - node_version: "6"
+    - node_version: "7"
 
 install:
   - ps: Install-Product node $env:node_version
   - npm install -g npm@2.x
   - set PATH=%APPDATA%\npm;%PATH%
-  - npm install
-  - npm run bootstrap
+  - yarn install
+  - yarn run bootstrap
 
 build: off
 
@@ -16,9 +17,8 @@ test_script:
   - node --version
   - npm --version
   - yarn --version
-  - ./node_modules/.bin/eslint --version
-  - npm run lint
-  - npm run test -- --runInBand
+  - yarn run lint
+  - yarn run test -- --runInBand
 
 cache:
   - "%LOCALAPPDATA%\\Yarn"
