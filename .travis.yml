@@ -15,12 +15,16 @@ before_install:
   - export PATH=$HOME/.yarn/bin:$PATH
 
 install:
-  - yarn
-  - yarn bootstrap
+  - yarn install
+  - yarn run bootstrap
 
 script:
-  - yarn lint
-  - yarn test -- --runInBand
+  - node --version
+  - npm --version
+  - yarn --version
+  - ./node_modules/.bin/eslint --version
+  - yarn run lint
+  - yarn run test -- --runInBand
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
