@@ -5,10 +5,10 @@ environment:
 
 install:
   - ps: Install-Product node $env:node_version
-  - npm install -g npm@3.x
+  - npm install -g npm@2.x
   - set PATH=%APPDATA%\npm;%PATH%
-  - yarn install
-  - yarn run bootstrap
+  - npm install
+  - npm run bootstrap
 
 build: off
 
@@ -17,8 +17,8 @@ test_script:
   - npm --version
   - yarn --version
   - ./node_modules/.bin/eslint --version
-  - yarn run lint
-  - yarn run test -- --runInBand
+  - npm run lint
+  - npm run test -- --runInBand
 
 cache:
   - "%LOCALAPPDATA%\\Yarn"
