@@ -16,6 +16,7 @@ test_script:
   - node --version
   - npm --version
   - yarn --version
+  - eslint --version
   - yarn run lint
   - yarn run test -- --runInBand
 
