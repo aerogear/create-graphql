@@ -5,6 +5,7 @@ environment:
 
 install:
   - ps: Install-Product node $env:nodejs_version
+  - npm install -g npm@3.x
   - yarn install
   - yarn bootstrap
 
