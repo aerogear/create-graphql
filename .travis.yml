@@ -16,11 +16,11 @@ before_install:
 
 install:
   - yarn
-  - npm run bootstrap
+  - yarn bootstrap
 
 script:
-  - npm run lint
-  - npm run test
+  - yarn lint
+  - yarn test -- --runInBand
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
