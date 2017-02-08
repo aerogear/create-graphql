@@ -5,7 +5,7 @@ environment:
 
 install:
   - ps: Install-Product node $env:node_version
-  - yarn global add npm@3.x
+  - npm install -g npm@3.x
   - set PATH=%APPDATA%\npm;%PATH%
   - yarn install
   - yarn run bootstrap
