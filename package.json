@@ -21,7 +21,7 @@
     "fs-extra": "^2.0.0",
     "jest": "^18.1.0",
     "jest-cli": "^18.1.0",
-    "lerna": "2.0.0-beta.35",
+    "lerna": "2.0.0-beta.37",
     "lerna-changelog": "^0.3.0",
     "rimraf": "^2.5.4",
     "yeoman-assert": "^2.2.2",
