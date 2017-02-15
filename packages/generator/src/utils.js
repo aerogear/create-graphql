@@ -274,7 +274,7 @@ export const getRelativeConfigDir = (from, to) => {
   const config = getCreateGraphQLConfig().directories;
 
   return to.reduce((directories, dir) => {
-    const relativePath = path.relative(config[from], config[dir]);
+    const relativePath = path.posix.relative(config[from], config[dir]);
 
     return {
       ...directories,
