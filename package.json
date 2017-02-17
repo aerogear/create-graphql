@@ -24,7 +24,7 @@
     "lerna": "2.0.0-beta.35",
     "lerna-changelog": "^0.3.0",
     "rimraf": "^2.5.4",
-    "yeoman-assert": "^2.2.2",
+    "yeoman-assert": "^3.0.0",
     "yeoman-test": "^1.6.0"
   },
   "scripts": {
