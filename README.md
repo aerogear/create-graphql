@@ -9,6 +9,7 @@
 </p>
 <p align="center">
   <a href="https://travis-ci.org/lucasbento/create-graphql"><img src="https://travis-ci.org/lucasbento/create-graphql.svg?branch=master"></a>
+  <a href="https://ci.appveyor.com/project/lucasbento/create-graphql/branch/master"><img src="https://ci.appveyor.com/api/projects/status/cpxul2ofnyf6ypy8/branch/master?svg=true"></a>
   <a href="https://codecov.io/gh/lucasbento/create-graphql"><img src="https://img.shields.io/codecov/c/github/lucasbento/create-graphql.svg"></a>
   <a href="https://github.com/airbnb/javascript"><img src="https://img.shields.io/badge/code%20style-airbnb-blue.svg"></a>
   <a href="https://github.com/lucasbento/create-graphql/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
