@@ -8,12 +8,12 @@ install:
   - ps: Install-Product node $env:node_version
   - npm install -g npm@3.x
   - yarn install
-  - yarn run bootstrap
+  - npm run bootstrap
 
 build: off
 
 test_script:
   - node --version
   - yarn --version
-  - yarn run lint
-  - yarn run test -- --runInBand
+  - npm run lint
+  - npm run test -- --runInBand
