@@ -7,7 +7,7 @@ environment:
 install:
   - ps: Install-Product node $env:node_version
   - npm install -g npm@3.x
-  - yarn install
+  - npm install
   - npm run bootstrap
 
 build: off
