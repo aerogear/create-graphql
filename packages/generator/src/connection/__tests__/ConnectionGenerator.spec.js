@@ -63,6 +63,6 @@ it('should always import connectionDefinitions', async () => {
   const connectionFile = `${destinationDir}/ExampleConnection.js`;
 
   assert.fileContent(
-    connectionFile, 'import { connectionDefinitions } from \'graphql-relay\';'
+    connectionFile, 'import { connectionDefinitions } from \'graphql-relay\';',
   );
 });

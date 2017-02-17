@@ -31,9 +31,9 @@
     "bootstrap": "lerna bootstrap",
     "build": "lerna exec -- npm run build",
     "clean": "lerna clean",
-    "lint": "eslint packages/*/src/**/*.js packages/*/__tests__ ",
+    "lint": "eslint \"packages/*/src/**/*.js\" \"packages/*/__tests__\"",
     "prepublish": "npm run build",
-    "test": "jest --runInBand --config jest.json",
+    "test": "jest --config jest.json",
     "watch": "lerna exec -- npm run watch"
   }
 }
