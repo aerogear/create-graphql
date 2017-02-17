@@ -6,9 +6,6 @@ environment:
 
 install:
   - ps: Install-Product node $env:node_version
-  - npm cache clean
-  - npm install -g npm@3.x
-  - set PATH=%APPDATA%\npm;%PATH%
   - yarn install
   - yarn run bootstrap
 
@@ -16,7 +13,6 @@ build: off
 
 test_script:
   - node --version
-  - npm --version
   - yarn --version
   - yarn run lint
   - yarn run test -- --runInBand
