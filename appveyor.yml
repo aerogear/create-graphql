@@ -6,6 +6,7 @@ environment:
 
 install:
   - ps: Install-Product node $env:node_version
+  - yarn cache clean
   - yarn install
   - yarn run bootstrap
 
