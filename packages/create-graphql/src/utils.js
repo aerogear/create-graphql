@@ -11,14 +11,8 @@ const installYeoman = async () => {
 
   spinner.start();
 
-  let command = 'yarn';
-  let args = ['global', 'add', 'yo'];
-
-  if (!shell.which('npm')) {
-    command = 'npm';
-    args = ['install', '-g', 'yo'];
-  }
-
+  const command = 'npm';
+  const args = ['install', '-g', 'yo'];
   const options = {
     shell: true,
     stdio: false,
