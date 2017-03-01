@@ -6,6 +6,8 @@ Object {
 } from \'graphql\';
 import { globalIdField } from \'graphql-relay\';
 
+import { NodeInterface } from \'../interface/NodeInterface\';
+
 export default new GraphQLObjectType({
   name: \'Example\',
   description: \'Represents Example\',
@@ -17,7 +19,9 @@ export default new GraphQLObjectType({
       resolve: obj => obj.example,
     },
   }),
-});",
+  interfaces: () => [NodeInterface],
+});
+",
   "typeTest": "import { graphql } from \'graphql\';
 import { schema } from \'../../schema\';
 import { setupTest } from \'../../../../test/helper\';
@@ -62,9 +66,12 @@ Object {
 import {
   GraphQLObjectType,
   GraphQLString,
-  GraphQLID,
 } from \'graphql\';
 import { globalIdField } from \'graphql-relay\';
+
+import { NodeInterface } from \'../interface/NodeInterface\';
+import UserType from \'./UserType\';
+import UserLoader from \'../loader/UserLoader\';
 
 export default new GraphQLObjectType({
   name: \'Post\',
@@ -77,9 +84,9 @@ export default new GraphQLObjectType({
       resolve: obj => obj.title,
     },
     user: {
-      type: GraphQLID,
+      type: UserType,
       description: \'User that created this post\',
-      resolve: obj => obj.user,
+      resolve: async (obj, args, { user }) => await UserLoader.load(user, obj.user),
     },
     slug: {
       type: GraphQLString,
@@ -97,6 +104,7 @@ export default new GraphQLObjectType({
       resolve: obj => obj.updatedAt.toISOString(),
     },
   }),
+  interfaces: () => [NodeInterface],
 });
 ",
   "typeTest": "import { graphql } from \'graphql\';
@@ -147,6 +155,8 @@ import {
 } from \'graphql\';
 import { globalIdField } from \'graphql-relay\';
 
+import { NodeInterface } from \'../interface/NodeInterface\';
+
 export default new GraphQLObjectType({
   name: \'User\',
   description: \'Represents User\',
@@ -173,6 +183,7 @@ export default new GraphQLObjectType({
       resolve: obj => obj.active,
     },
   }),
+  interfaces: () => [NodeInterface],
 });
 ",
   "typeTest": "import { graphql } from \'graphql\';

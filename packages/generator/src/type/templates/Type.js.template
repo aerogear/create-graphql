@@ -4,6 +4,8 @@ import {
 } from 'graphql';
 import { globalIdField } from 'graphql-relay';
 
+import { NodeInterface } from '<%= directories.interface %>/NodeInterface';
+
 export default new GraphQLObjectType({
   name: '<%= name %>',
   description: 'Represents <%= name %>',
@@ -15,4 +17,5 @@ export default new GraphQLObjectType({
       resolve: obj => obj.example,
     },
   }),
+  interfaces: () => [NodeInterface],
 });

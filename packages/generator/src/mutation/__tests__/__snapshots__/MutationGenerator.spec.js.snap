@@ -269,6 +269,8 @@ import Post from \'../model/Post\';
 import PostLoader from \'../loader/PostLoader\';
 import PostConnection from \'../connection/PostConnection\';
 
+import ViewerType from \'../type/ViewerType\';
+
 export default mutationWithClientMutationId({
   name: \'PostAdd\',
   inputFields: {
@@ -327,6 +329,10 @@ export default mutationWithClientMutationId({
           node: post,
         };
       },
+    },
+    viewer: {
+      type: ViewerType,
+      resolve: async (obj, args, { user }) => user,
     },
     error: {
       type: GraphQLString,
