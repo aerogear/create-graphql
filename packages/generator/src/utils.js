@@ -6,7 +6,7 @@ import merge from 'lodash.merge';
 
 const { visit } = recast.types;
 
-const rootPath = pkgDir.sync('.') || '.';
+export const rootPath = pkgDir.sync('.') || '.';
 
 /**
  * Uppercase the first letter of a text

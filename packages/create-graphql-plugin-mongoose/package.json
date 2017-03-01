@@ -1,0 +1,39 @@
+{
+  "name": "create-graphql-plugin-mongoose",
+  "description": "Create GraphQL Plugin to deal with Mongoose schema",
+  "version": "1.1.16",
+  "author": {
+    "name": "Lucas Bento",
+    "email": "lucas.bsilva@outlook.com",
+    "url": "https://github.com/lucasbento"
+  },
+  "bugs": "https://github.com/lucasbento/create-graphql/issues",
+  "dependencies": {
+    "babel-polyfill": "^6.20.0",
+    "babel-types": "^6.23.0"
+  },
+  "devDependencies": {},
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/lucasbento/create-graphql#readme",
+  "keywords": [
+    "cli",
+    "create-graphql-plugin",
+    "graphql",
+    "mongoose",
+    "plugin"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucasbento/create-graphql"
+  },
+  "scripts": {
+    "build": "npm run clear && babel -d ./dist ./src --copy-files --ignore *.spec.js",
+    "clear": "rimraf ./dist",
+    "test": "jest",
+    "watch": "babel -w -d ./dist ./src --copy-files"
+  }
+}

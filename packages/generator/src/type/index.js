@@ -1,10 +1,12 @@
 import Generator from 'yeoman-generator';
+import path from 'path';
 import {
-  getMongooseModelSchema,
   getConfigDir,
   uppercaseFirstLetter,
   getRelativeConfigDir,
 } from '../utils';
+
+import { getFieldsFromPlugins, runPlugins } from '../utils/plugins';
 
 class TypeGenerator extends Generator {
   constructor(args, options) {
@@ -15,68 +17,63 @@ class TypeGenerator extends Generator {
       required: true,
     });
 
-    this.argument('model', {
-      type: Object,
-      required: false,
-    });
-
     this.destinationDir = getConfigDir('type');
+    this.directories = this._getConfigDirectories();
+
+    // TODO: add default fields if there are no fields returned from plugins
+    this.fields = getFieldsFromPlugins();
   }
 
-  generateType() {
-    const schema = this.options.model ?
-      getMongooseModelSchema({
-        model: this.options.model,
-        withTimestamps: true,
-        ref: true,
-      })
-      : null;
-
-    const directories = this._getConfigDirectories();
-
-    const name = uppercaseFirstLetter(this.options.name);
-    const typeFileName = `${name}Type`;
-
-    const templatePath = schema ?
-      this.templatePath('TypeWithSchema.js.template')
-      : this.templatePath('Type.js.template');
-
-    const destinationPath = this.destinationPath(`${this.destinationDir}/${typeFileName}.js`);
-    const templateVars = {
-      name,
-      schema,
-      directories,
-    };
-
-    this._generateTypeTest({
-      name,
-      schema,
-    });
-
-    // TODO: generate types and loaders that do not exist yet
-
-    this.fs.copyTpl(templatePath, destinationPath, templateVars);
-  }
-
+  /**
+   * Get the relative path of the directories that _may_ be used by
+   * the Type template
+   */
   _getConfigDirectories() {
     return getRelativeConfigDir('type', ['model', 'type', 'loader', 'connection', 'interface']);
   }
 
-  _generateTypeTest({ name, schema }) {
-    const templatePath = this.templatePath('test/Type.js.template');
+  generateType() {
+    const name = uppercaseFirstLetter(this.options.name);
+    const typeFileName = `${name}Type`;
 
-    const destinationPath = this.destinationPath(`${this.destinationDir}/__tests__/${name}Type.spec.js`);
+    const templatePath = this.templatePath('Type.js.template');
 
-    const directories = this._getConfigDirectories();
-
+    const destinationPath = this.destinationPath(
+      path.join(this.destinationDir, `${typeFileName}.js`)
+    );
     const templateVars = {
       name,
-      schema,
-      directories,
+      fields: this.fields,
+      directories: this.directories,
     };
 
-    this.fs.copyTpl(templatePath, destinationPath, templateVars);
+    // TODO: put these tests on a separated plugin
+    // this._generateTypeTest({
+    //   name,
+    //   schema,
+    // });
+
+    // TODO: generate types and loaders that do not exist yet
+
+    // TODO: only copy after templates are parsed through plugin's visitors
+    // this.fs.copyTpl(templatePath, destinationPath, templateVars);
   }
+
+  // _generateTypeTest({ name, schema }) {
+  //   const templatePath = this.templatePath('test/Type.js.template');
+  //
+  //   const destinationPath = this.destinationPath(`${this.destinationDir}/__tests__/${name}Type.spec.js`);
+  //
+  //   const directories = this._getConfigDirectories();
+  //
+  //   const templateVars = {
+  //     name,
+  //     schema,
+  //     directories,
+  //   };
+  //
+  //   this.fs.copyTpl(templatePath, destinationPath, templateVars);
+  // }
 
   end() {
     this.log('🔥 Type created!');

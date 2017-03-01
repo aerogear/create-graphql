@@ -4256,12 +4256,16 @@ yargs@~3.10.0:
     decamelize "^1.0.0"
     window-size "0.1.0"
 
-yeoman-assert@^2.0.0, yeoman-assert@^2.2.2:
+yeoman-assert@^2.0.0:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/yeoman-assert/-/yeoman-assert-2.2.2.tgz#d2b15982f6a438a0d2319d8b5c1d65abc5b6dbea"
   dependencies:
     lodash "^3.6.0"
     path-exists "^2.1.0"
+
+yeoman-assert@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/yeoman-assert/-/yeoman-assert-3.0.0.tgz#8e52eb657d3f42d90703f94918091aba1cfc263c"
 
 yeoman-environment@^1.1.0, yeoman-environment@^1.5.2:
   version "1.6.6"

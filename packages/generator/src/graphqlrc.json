@@ -12,5 +12,8 @@
   },
   "files": {
     "schema": "schema"
-  }
+  },
+  "plugins": [
+    "create-graphql-plugin-mongoose"
+  ]
 }
