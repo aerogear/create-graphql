@@ -1,5 +1,5 @@
 {
-  "lerna": "2.0.0-beta.35",
+  "lerna": "2.0.0-beta.38",
   "version": "1.1.16",
   "changelog": {
     "repo": "lucasbento/create-graphql",
@@ -11,5 +11,8 @@
       "documentation": ":memo: Documentation",
       "internal": ":house: Internal"
     }
-  }
+  },
+  "packages": [
+    "packages/*"
+  ]
 }
