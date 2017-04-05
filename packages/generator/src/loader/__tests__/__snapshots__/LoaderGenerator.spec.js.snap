@@ -1,10 +1,12 @@
-exports[`test generate a loader 1`] = `
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generate a loader 1`] = `
 Object {
   "loader": "// @flow
 
-import DataLoader from \'dataloader\';
-import ConnectionFromMongoCursor from \'../connection/ConnectionFromMongoCursor\';
-import ExampleModel from \'../model/Example\';
+import DataLoader from 'dataloader';
+import ConnectionFromMongoCursor from '../connection/ConnectionFromMongoCursor';
+import ExampleModel from '../model/Example';
 
 type ExampleType = {
   id: string,
@@ -64,13 +66,13 @@ export default class Example {
 }
 `;
 
-exports[`test generate a loader with schema 1`] = `
+exports[`generate a loader with schema 1`] = `
 Object {
   "loader": "// @flow
 
-import DataLoader from \'dataloader\';
-import ConnectionFromMongoCursor from \'../connection/ConnectionFromMongoCursor\';
-import PostModel from \'../model/Post\';
+import DataLoader from 'dataloader';
+import ConnectionFromMongoCursor from '../connection/ConnectionFromMongoCursor';
+import PostModel from '../model/Post';
 
 type PostType = {
   id: string,
@@ -142,13 +144,13 @@ export default class Post {
 }
 `;
 
-exports[`test generate a loader with schema and without timestamps 1`] = `
+exports[`generate a loader with schema and without timestamps 1`] = `
 Object {
   "loader": "// @flow
 
-import DataLoader from \'dataloader\';
-import ConnectionFromMongoCursor from \'../connection/ConnectionFromMongoCursor\';
-import UserModel from \'../model/User\';
+import DataLoader from 'dataloader';
+import ConnectionFromMongoCursor from '../connection/ConnectionFromMongoCursor';
+import UserModel from '../model/User';
 
 type UserType = {
   id: string,

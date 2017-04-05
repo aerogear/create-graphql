@@ -1,33 +1,35 @@
-exports[`test generate mutation files 1`] = `
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generate mutation files 1`] = `
 Object {
   "add": "// @flow
 
 import {
   GraphQLString,
   GraphQLNonNull,
-} from \'graphql\';
+} from 'graphql';
 import {
   mutationWithClientMutationId,
   toGlobalId,
-} from \'graphql-relay\';
+} from 'graphql-relay';
 
-import Example from \'../model/Example\';
+import Example from '../model/Example';
 
-import ExampleLoader from \'../loader/ExampleLoader\';
-import ExampleConnection from \'../connection/ExampleConnection\';
+import ExampleLoader from '../loader/ExampleLoader';
+import ExampleConnection from '../connection/ExampleConnection';
 
 export default mutationWithClientMutationId({
-  name: \'ExampleAdd\',
+  name: 'ExampleAdd',
   inputFields: {
     example: {
       type: new GraphQLNonNull(GraphQLString),
-      description: \'My example field\',
+      description: 'My example field',
     },
   },
   mutateAndGetPayload: async ({ example }, { user }) => {
     // Verify if user is authorized
     if (!user) {
-      throw new Error(\'Unauthorized user\');
+      throw new Error('Unauthorized user');
     }
 
     // TODO: mutation logic
@@ -52,7 +54,7 @@ export default mutationWithClientMutationId({
         }
 
         return {
-          cursor: toGlobalId(\'Example\', example),
+          cursor: toGlobalId('Example', example),
           node: example,
         };
       },
@@ -64,20 +66,20 @@ export default mutationWithClientMutationId({
   },
 });
 ",
-  "addTest": "import { graphql } from \'graphql\';
-import { schema } from \'../../schema\';
-import { setupTest } from \'../../../test/helper\';
+  "addTest": "import { graphql } from 'graphql';
+import { schema } from '../../schema';
+import { setupTest } from '../../../test/helper';
 
-import User from \'../model/User\';
-import Example from \'../model/Example\';
+import User from '../model/User';
+import Example from '../model/Example';
 
 beforeEach(async () => await setupTest());
 
-it(\'should not allow anonymous user\', async () => {
+it('should not allow anonymous user', async () => {
   const query = \`
     mutation M {
       ExampleAdd(input: {
-        exampleField: \"Example field\"
+        exampleField: \\"Example field\\"
       }) {
         exampleFieldToRetrieve
       }
@@ -93,10 +95,10 @@ it(\'should not allow anonymous user\', async () => {
   expect(result).toMatchSnapshot();
 });
 
-it(\'should create a record on database\', async () => {
+it('should create a record on database', async () => {
   const user = new User({
-    name: \'user\',
-    email: \'user@example.com\',
+    name: 'user',
+    email: 'user@example.com',
   });
 
   await user.save();
@@ -104,7 +106,7 @@ it(\'should create a record on database\', async () => {
   const query = \`
     mutation M {
       ExampleAdd(input: {
-        exampleField: \"Example field\"
+        exampleField: \\"Example field\\"
       }) {
         exampleFieldToRetrieve
       }
@@ -125,19 +127,19 @@ import {
   GraphQLID,
   GraphQLString,
   GraphQLNonNull,
-} from \'graphql\';
+} from 'graphql';
 import {
   mutationWithClientMutationId,
   fromGlobalId,
-} from \'graphql-relay\';
+} from 'graphql-relay';
 
-import Example from \'../model/Example\';
+import Example from '../model/Example';
 
-import ExampleType from \'../type/ExampleType\';
-import ExampleLoader from \'../loader/ExampleLoader\';
+import ExampleType from '../type/ExampleType';
+import ExampleLoader from '../loader/ExampleLoader';
 
 export default mutationWithClientMutationId({
-  name: \'ExampleEdit\',
+  name: 'ExampleEdit',
   inputFields: {
     id: {
       type: new GraphQLNonNull(GraphQLID),
@@ -149,7 +151,7 @@ export default mutationWithClientMutationId({
   mutateAndGetPayload: async (args, { user }) => {
     // Verify if user is authorized
     if (!user) {
-      throw new Error(\'Unauthorized user\');
+      throw new Error('Unauthorized user');
     }
 
     const {
@@ -164,7 +166,7 @@ export default mutationWithClientMutationId({
 
     // If not, throw an error
     if (!example) {
-      throw new Error(\'Invalid exampleId\');
+      throw new Error('Invalid exampleId');
     }
 
     // TODO: mutation logic
@@ -189,22 +191,22 @@ export default mutationWithClientMutationId({
   },
 });
 ",
-  "editTest": "import { graphql } from \'graphql\';
-import { toGlobalId } from \'graphql-relay\';
-import { schema } from \'../../schema\';
-import { setupTest } from \'../../../test/helper\';
+  "editTest": "import { graphql } from 'graphql';
+import { toGlobalId } from 'graphql-relay';
+import { schema } from '../../schema';
+import { setupTest } from '../../../test/helper';
 
-import User from \'../model/User\';
-import Example from \'../model/Example\';
+import User from '../model/User';
+import Example from '../model/Example';
 
 beforeEach(async () => await setupTest());
 
-it(\'should not allow anonymous user\', async () => {
+it('should not allow anonymous user', async () => {
   const query = \`
     mutation M {
       ExampleEdit(input: {
-        id: \"Example Id\"
-        exampleField: \"Example field\"
+        id: \\"Example Id\\"
+        exampleField: \\"Example field\\"
       }) {
         exampleFieldToRetrieve
       }
@@ -220,10 +222,10 @@ it(\'should not allow anonymous user\', async () => {
   expect(result).toMatchSnapshot();
 });
 
-it(\'should create a record on database\', async () => {
+it('should create a record on database', async () => {
   const user = new User({
-    name: \'user\',
-    email: \'user@example.com\',
+    name: 'user',
+    email: 'user@example.com',
   });
 
   await user.save();
@@ -231,8 +233,8 @@ it(\'should create a record on database\', async () => {
   const query = \`
     mutation M {
       ExampleEdit(input: {
-        id: \"Example Id\"
-        exampleField: \"Example field\"
+        id: \\"Example Id\\"
+        exampleField: \\"Example field\\"
       }) {
         exampleFieldToRetrieve
       }
@@ -250,7 +252,7 @@ it(\'should create a record on database\', async () => {
 }
 `;
 
-exports[`test generate mutation files with schema 1`] = `
+exports[`generate mutation files with schema 1`] = `
 Object {
   "add": "// @flow
 
@@ -258,21 +260,21 @@ import {
   GraphQLString,
   GraphQLID,
   GraphQLNonNull,
-} from \'graphql\';
+} from 'graphql';
 import {
   mutationWithClientMutationId,
   toGlobalId,
-} from \'graphql-relay\';
+} from 'graphql-relay';
 
-import Post from \'../model/Post\';
+import Post from '../model/Post';
 
-import PostLoader from \'../loader/PostLoader\';
-import PostConnection from \'../connection/PostConnection\';
+import PostLoader from '../loader/PostLoader';
+import PostConnection from '../connection/PostConnection';
 
-import ViewerType from \'../type/ViewerType\';
+import ViewerType from '../type/ViewerType';
 
 export default mutationWithClientMutationId({
-  name: \'PostAdd\',
+  name: 'PostAdd',
   inputFields: {
     title: {
       type: new GraphQLNonNull(GraphQLString),
@@ -287,7 +289,7 @@ export default mutationWithClientMutationId({
   mutateAndGetPayload: async (args, { user }) => {
     // Verify if user is authorized
     if (!user) {
-      throw new Error(\'Unauthorized user\');
+      throw new Error('Unauthorized user');
     }
 
     const {
@@ -325,7 +327,7 @@ export default mutationWithClientMutationId({
         }
 
         return {
-          cursor: toGlobalId(\'Post\', post),
+          cursor: toGlobalId('Post', post),
           node: post,
         };
       },
@@ -341,22 +343,22 @@ export default mutationWithClientMutationId({
   },
 });
 ",
-  "addTest": "import { graphql } from \'graphql\';
-import { schema } from \'../../schema\';
-import { setupTest } from \'../../../test/helper\';
+  "addTest": "import { graphql } from 'graphql';
+import { schema } from '../../schema';
+import { setupTest } from '../../../test/helper';
 
-import User from \'../model/User\';
-import Post from \'../model/Post\';
+import User from '../model/User';
+import Post from '../model/Post';
 
 beforeEach(async () => await setupTest());
 
-it(\'should not allow anonymous user\', async () => {
+it('should not allow anonymous user', async () => {
   const query = \`
     mutation M {
       PostAdd(input: {
-        title: \"Example value\"
-        user: \"Example value\"
-        slug: \"Example value\"
+        title: \\"Example value\\"
+        user: \\"Example value\\"
+        slug: \\"Example value\\"
       }) {
         postEdge {
           node {
@@ -378,10 +380,10 @@ it(\'should not allow anonymous user\', async () => {
   expect(result).toMatchSnapshot();
 });
 
-it(\'should create a record on database\', async () => {
+it('should create a record on database', async () => {
   const user = new User({
-    name: \'user\',
-    email: \'user@example.com\',
+    name: 'user',
+    email: 'user@example.com',
   });
 
   await user.save();
@@ -389,9 +391,9 @@ it(\'should create a record on database\', async () => {
   const query = \`
     mutation M {
       PostAdd(input: {
-        title: \"Example value\"
-        user: \"Example value\"
-        slug: \"Example value\"
+        title: \\"Example value\\"
+        user: \\"Example value\\"
+        slug: \\"Example value\\"
       }) {
         postEdge {
           node {
@@ -418,19 +420,19 @@ import {
   GraphQLString,
   GraphQLNonNull,
   GraphQLID,
-} from \'graphql\';
+} from 'graphql';
 import {
   mutationWithClientMutationId,
   fromGlobalId,
-} from \'graphql-relay\';
+} from 'graphql-relay';
 
-import Post from \'../model/Post\';
+import Post from '../model/Post';
 
-import PostType from \'../type/PostType\';
-import PostLoader from \'../loader/PostLoader\';
+import PostType from '../type/PostType';
+import PostLoader from '../loader/PostLoader';
 
 export default mutationWithClientMutationId({
-  name: \'PostEdit\',
+  name: 'PostEdit',
   inputFields: {
     id: {
       type: new GraphQLNonNull(GraphQLID),
@@ -448,7 +450,7 @@ export default mutationWithClientMutationId({
   mutateAndGetPayload: async (args, { user }) => {
     // Verify if user is authorized
     if (!user) {
-      throw new Error(\'Unauthorized user\');
+      throw new Error('Unauthorized user');
     }
 
     const {
@@ -465,7 +467,7 @@ export default mutationWithClientMutationId({
 
     // If not, throw an error
     if (!post) {
-      throw new Error(\'Invalid postId\');
+      throw new Error('Invalid postId');
     }
 
     // Edit record
@@ -497,33 +499,33 @@ export default mutationWithClientMutationId({
   },
 });
 ",
-  "editTest": "import { graphql } from \'graphql\';
-import { toGlobalId } from \'graphql-relay\';
-import { schema } from \'../../schema\';
-import { setupTest } from \'../../../test/helper\';
+  "editTest": "import { graphql } from 'graphql';
+import { toGlobalId } from 'graphql-relay';
+import { schema } from '../../schema';
+import { setupTest } from '../../../test/helper';
 
-import User from \'../model/User\';
-import Post from \'../model/Post\';
+import User from '../model/User';
+import Post from '../model/Post';
 
 beforeEach(async () => await setupTest());
 
-it(\'should not allow anonymous user\', async () => {
+it('should not allow anonymous user', async () => {
   // TODO: specify fields to create a new Post
   const post = new Post({
-    title: \'Example value\',
-    user: \'Example value\',
-    slug: \'Example value\',
+    title: 'Example value',
+    user: 'Example value',
+    slug: 'Example value',
   });
 
   await post.save();
 
-  const postId = toGlobalId(\'Post\', post._id);
+  const postId = toGlobalId('Post', post._id);
 
   const query = \`
     mutation M {
       PostEdit(input: {
-        id: \"\${postId}\"
-        example: \"Example Field to Update\"
+        id: \\"\${postId}\\"
+        example: \\"Example Field to Update\\"
       }) {
         post {
           title
@@ -543,30 +545,30 @@ it(\'should not allow anonymous user\', async () => {
   expect(result).toMatchSnapshot();
 });
 
-it(\'should edit a record on database\', async () => {
+it('should edit a record on database', async () => {
   const user = new User({
-    name: \'user\',
-    email: \'user@example.com\',
+    name: 'user',
+    email: 'user@example.com',
   });
 
   await user.save();
 
   // TODO: specify fields to create a new Post
   const post = new Post({
-    title: \'Example value\',
-    user: \'Example value\',
-    slug: \'Example value\',
+    title: 'Example value',
+    user: 'Example value',
+    slug: 'Example value',
   });
 
   await post.save();
 
-  const postId = toGlobalId(\'Post\', post._id);
+  const postId = toGlobalId('Post', post._id);
 
   const query = \`
     mutation M {
       PostEdit(input: {
-        id: \"\${postId}\"
-        example: \"Example Field to Update\"
+        id: \\"\${postId}\\"
+        example: \\"Example Field to Update\\"
       }) {
         post {
           title
