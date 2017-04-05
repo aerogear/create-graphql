@@ -28,7 +28,8 @@
   ],
   "testPathDirs": [
     "generator/src",
-    "create-graphql/src"
+    "create-graphql/src",
+    "create-graphql-mongoose/src"
   ],
   "rootDir": "./packages/",
   "verbose": true
