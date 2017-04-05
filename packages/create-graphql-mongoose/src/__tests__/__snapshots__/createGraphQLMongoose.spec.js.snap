@@ -1,6 +1,45 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
 exports[`should generate list of fields 1`] = `
+Array [
+  Object {
+    "description": "user name",
+    "flowType": "string",
+    "name": "name",
+    "originalType": "String",
+    "required": true,
+    "resolve": "obj.name",
+    "type": "GraphQLString",
+  },
+  Object {
+    "description": "hashed user password",
+    "flowType": "string",
+    "name": "password",
+    "originalType": "String",
+    "required": false,
+    "resolve": "obj.password",
+    "type": "GraphQLString",
+  },
+  Object {
+    "description": "user email",
+    "flowType": "string",
+    "name": "email",
+    "originalType": "String",
+    "required": false,
+    "resolve": "obj.email",
+    "type": "GraphQLString",
+  },
+  Object {
+    "description": undefined,
+    "flowType": "boolean",
+    "name": "active",
+    "originalType": "Boolean",
+    "required": false,
+    "resolve": "obj.active",
+    "type": "GraphQLBoolean",
+  },
+]
+`;
+
+exports[`test should generate list of fields 1`] = `
 Array [
   Object {
     "description": "user name",
