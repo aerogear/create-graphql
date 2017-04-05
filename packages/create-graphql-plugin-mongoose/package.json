@@ -1,5 +1,5 @@
 {
-  "name": "create-graphql-mongoose",
+  "name": "create-graphql-plugin-mongoose",
   "description": "Create GraphQL plugin to get fields from mongoose schemas",
   "version": "1.1.16",
   "author": {

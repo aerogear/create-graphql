@@ -241,10 +241,10 @@ const getModelCode = modelPath => fs.readFileSync(modelPath, 'utf8');
 
  TODO - improve this structure
  */
-export default function ({ modelPath }) {
+export default function ({ schemaPath }) {
   return {
     getFields: ({ withTimestamps = false, ref = false } = {}) => {
-      const modelCode = getModelCode(modelPath);
+      const modelCode = getModelCode(schemaPath);
 
       const schemaDefinitions = getSchemaDefinition(modelCode, withTimestamps, ref);
 
