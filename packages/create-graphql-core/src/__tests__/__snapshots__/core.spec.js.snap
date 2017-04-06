@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should call getFields of first plugin, and generateTemplate from the second one 1`] = `
+Array [
+  "export default new GraphQLObjectType({
+  name: \\"User\\",
+  description: 'Represents NAME',
+  fields: () => ({
+    id: globalIdField('NAME'),
+    example: {
+      type: GraphQLString,
+      description: 'My example field',
+      resolve: obj => obj.example
+    }
+  }),
+  interfaces: () => [NodeInterface]
+});",
+]
+`;
