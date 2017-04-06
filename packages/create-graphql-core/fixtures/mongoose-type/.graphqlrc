@@ -1,0 +1,22 @@
+{
+  "plugins": [
+    "mongoose",
+    "type"
+  ],
+  "paths": {
+    "directories": {
+      "source": "src",
+      "connection": "connection",
+      "loader": "loader",
+      "model": "model",
+      "mutation": "mutation",
+      "mutation_test": "mutation/__tests__",
+      "type": "type",
+      "type_test": "type/__tests__",
+      "interface": "interface"
+    },
+    "files": {
+      "schema": "schema"
+    }
+  }
+}

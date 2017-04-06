@@ -28,7 +28,10 @@
   ],
   "roots": [
     "generator/src",
-    "create-graphql/src"
+    "create-graphql/src",
+    "create-graphql-core/src",
+    "create-graphql-plugin-mongoose/src",
+    "create-graphql-plugin-type/src"
   ],
   "rootDir": "./packages/",
   "verbose": true

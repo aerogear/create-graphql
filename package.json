@@ -23,9 +23,14 @@
     "jest-cli": "^19.0.2",
     "lerna": "2.0.0-beta.38",
     "lerna-changelog": "^0.4.0",
+    "nodemon": "^1.11.0",
     "rimraf": "^2.6.1",
     "yeoman-assert": "^3.0.0",
-    "yeoman-test": "^1.6.0"
+    "yeoman-test": "^1.6.0",
+    "reify": "^0.6.8",
+    "repl-promised": "^0.1.0",
+    "repl.history": "^0.1.4",
+    "babel-polyfill": "^6.23.0"
   },
   "scripts": {
     "bootstrap": "lerna bootstrap",
@@ -34,6 +39,7 @@
     "lint": "eslint \"packages/*/src/**/*.js\" \"packages/*/__tests__\"",
     "prepublish": "npm run build",
     "test": "jest --config jest.json",
-    "watch": "lerna exec -- npm run watch"
+    "watch": "lerna exec -- npm run watch",
+    "repl": "nodemon --config ./repl/nodemon.json ./repl.js --exec babel-node"
   }
 }

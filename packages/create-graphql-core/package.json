@@ -1,0 +1,56 @@
+{
+  "name": "create-graphql-core",
+  "description": "Create GraphQL core",
+  "version": "1.1.16",
+  "author": {
+    "name": "Lucas Bento",
+    "email": "lucas.bsilva@outlook.com",
+    "url": "https://github.com/lucasbento"
+  },
+  "bugs": "https://github.com/lucasbento/create-graphql/issues",
+  "dependencies": {
+    "babel-generator": "^6.24.0",
+    "babel-polyfill": "^6.20.0",
+    "babel-template": "^6.23.0",
+    "babel-types": "^6.23.0",
+    "babylon": "^6.16.1",
+    "chalk": "^1.1.3",
+    "colors": "^1.1.2",
+    "es-module-loader": "^2.1.4",
+    "lodash.merge": "^4.6.0",
+    "ora": "^0.4.0",
+    "pkg-dir": "^1.0.0",
+    "pluralize": "^3.1.0",
+    "ramda": "^0.22.1",
+    "recast": "^0.12.2",
+    "semver": "^5.1.0",
+    "shelljs": "^0.7.4",
+    "yeoman-generator": "^1.0.1"
+  },
+  "devDependencies": {},
+  "homepage": "https://github.com/lucasbento/create-graphql#readme",
+  "keywords": [
+    "apollo",
+    "create",
+    "generator",
+    "graphql",
+    "koa",
+    "relay",
+    "server",
+    "yeoman",
+    "yo",
+    "yeoman-generator"
+  ],
+  "license": "MIT",
+  "preferGlobal": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucasbento/create-graphql"
+  },
+  "scripts": {
+    "build": "npm run clear && babel src --ignore *.spec.js --out-dir dist",
+    "clear": "rimraf ./dist",
+    "test": "jest",
+    "watch": "babel -w -d ./dist ./src --copy-files"
+  }
+}
