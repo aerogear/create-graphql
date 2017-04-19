@@ -61,7 +61,7 @@ It can generate:
 🔥 **Tip**: You may use aliases commands to create multiple files in one single command:
 
 ```sh
-create-graphql -tm Awesome --schema Awesome
+create-graphql generate -tm Awesome --schema Awesome
 # Will create a GraphQL type and mutation based on `Awesome` schema.
 ```
 
