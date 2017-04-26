@@ -7,6 +7,7 @@ Object {
 import DataLoader from 'dataloader';
 import ConnectionFromMongoCursor from '../connection/ConnectionFromMongoCursor';
 import ExampleModel from '../model/Example';
+import mongooseLoader from './mongooseLoader';
 
 type ExampleType = {
   id: string,
@@ -19,13 +20,7 @@ export default class Example {
   _id: string;
   exampleField: string;
 
-  static ExampleLoader = new DataLoader(
-    ids => Promise.all(
-      ids.map(id =>
-        ExampleModel.findOne({ _id: id })
-      ),
-    ),
-  );
+  static getLoader = () => new DataLoader(ids => mongooseLoader(ExampleModel, ids));
 
   constructor(data: ExampleType) {
     this.id = data.id;
@@ -73,6 +68,7 @@ Object {
 import DataLoader from 'dataloader';
 import ConnectionFromMongoCursor from '../connection/ConnectionFromMongoCursor';
 import PostModel from '../model/Post';
+import mongooseLoader from './mongooseLoader';
 
 type PostType = {
   id: string,
@@ -93,13 +89,7 @@ export default class Post {
   createdAt: string;
   updatedAt: string;
 
-  static PostLoader = new DataLoader(
-    ids => Promise.all(
-      ids.map(id =>
-        PostModel.findOne({ _id: id })
-      ),
-    ),
-  );
+  static getLoader = () => new DataLoader(ids => mongooseLoader(PostModel, ids));
 
   constructor(data: PostType) {
     this.id = data.id;
@@ -151,6 +141,7 @@ Object {
 import DataLoader from 'dataloader';
 import ConnectionFromMongoCursor from '../connection/ConnectionFromMongoCursor';
 import UserModel from '../model/User';
+import mongooseLoader from './mongooseLoader';
 
 type UserType = {
   id: string,
@@ -169,13 +160,7 @@ export default class User {
   email: string;
   active: boolean;
 
-  static UserLoader = new DataLoader(
-    ids => Promise.all(
-      ids.map(id =>
-        UserModel.findOne({ _id: id })
-      ),
-    ),
-  );
+  static getLoader = () => new DataLoader(ids => mongooseLoader(UserModel, ids));
 
   constructor(data: UserType) {
     this.id = data.id;
