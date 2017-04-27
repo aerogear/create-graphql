@@ -184,6 +184,11 @@ export default new GraphQLObjectType({
       description: '',
       resolve: obj => obj.active,
     },
+    lastLoginAt: {
+      type: GraphQLString,
+      description: '',
+      resolve: obj => obj.lastLoginAt.toISOString(),
+    },
   }),
   interfaces: () => [NodeInterface],
 });

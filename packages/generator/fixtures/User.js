@@ -19,6 +19,7 @@ const Schema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  lastLoginAt: Date,
 }, {
   collection: 'user',
 });
