@@ -150,6 +150,7 @@ type UserType = {
   password: string,
   email: string,
   active: boolean,
+  lastLoginAt: string,
 }
 
 export default class User {
@@ -159,6 +160,7 @@ export default class User {
   password: string;
   email: string;
   active: boolean;
+  lastLoginAt: string;
 
   static getLoader = () => new DataLoader(ids => mongooseLoader(UserModel, ids));
 
@@ -169,6 +171,7 @@ export default class User {
     this.password = data.password;
     this.email = data.email;
     this.active = data.active;
+    this.lastLoginAt = data.lastLoginAt;
   }
 
   static viewerCanSee(viewer, data) {
