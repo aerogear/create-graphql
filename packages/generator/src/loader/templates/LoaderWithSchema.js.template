@@ -3,6 +3,7 @@
 import DataLoader from 'dataloader';
 import ConnectionFromMongoCursor from '<%= directories.connection %>/ConnectionFromMongoCursor';
 import <%= name %>Model from '<%= directories.model %>/<%= name %>';
+import mongooseLoader from './mongooseLoader';
 
 type <%= name %>Type = {
   id: string,
@@ -19,13 +20,7 @@ export default class <%= name %> {
   <%- field.name + ': ' + field.flowType -%>;
   <%_ } -%>
 
-  static <%= rawName %>Loader = new DataLoader(
-    ids => Promise.all(
-      ids.map(id =>
-        <%= name %>Model.findOne({ _id: id })
-      ),
-    ),
-  );
+  static getLoader = () => new DataLoader(ids => mongooseLoader(<%= name %>Model, ids));
 
   constructor(data: <%= name %>Type) {
     this.id = data.id;

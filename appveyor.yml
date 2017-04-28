@@ -1,0 +1,19 @@
+environment:
+  matrix:
+    - node_version: "4"
+    - node_version: "6"
+    - node_version: "7"
+
+install:
+  - ps: Install-Product node $env:node_version
+  - npm install -g npm@3.x
+  - npm install
+  - npm run bootstrap
+
+build: off
+
+test_script:
+  - node --version
+  - yarn --version
+  - npm run lint
+  - npm run test -- --runInBand

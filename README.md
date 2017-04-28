@@ -9,6 +9,7 @@
 </p>
 <p align="center">
   <a href="https://travis-ci.org/lucasbento/create-graphql"><img src="https://travis-ci.org/lucasbento/create-graphql.svg?branch=master"></a>
+  <a href="https://ci.appveyor.com/project/lucasbento/create-graphql/branch/master"><img src="https://ci.appveyor.com/api/projects/status/cpxul2ofnyf6ypy8/branch/master?svg=true"></a>
   <a href="https://codecov.io/gh/lucasbento/create-graphql"><img src="https://img.shields.io/codecov/c/github/lucasbento/create-graphql.svg"></a>
   <a href="https://github.com/airbnb/javascript"><img src="https://img.shields.io/badge/code%20style-airbnb-blue.svg"></a>
   <a href="https://github.com/lucasbento/create-graphql/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
@@ -60,7 +61,7 @@ It can generate:
 🔥 **Tip**: You may use aliases commands to create multiple files in one single command:
 
 ```sh
-create-graphql -tm Awesome --schema Awesome
+create-graphql generate -tm Awesome --schema Awesome
 # Will create a GraphQL type and mutation based on `Awesome` schema.
 ```
 

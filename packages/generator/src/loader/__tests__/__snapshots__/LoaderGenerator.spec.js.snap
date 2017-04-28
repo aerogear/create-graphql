@@ -1,10 +1,13 @@
-exports[`test generate a loader 1`] = `
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generate a loader 1`] = `
 Object {
   "loader": "// @flow
 
-import DataLoader from \'dataloader\';
-import ConnectionFromMongoCursor from \'../connection/ConnectionFromMongoCursor\';
-import ExampleModel from \'../model/Example\';
+import DataLoader from 'dataloader';
+import ConnectionFromMongoCursor from '../connection/ConnectionFromMongoCursor';
+import ExampleModel from '../model/Example';
+import mongooseLoader from './mongooseLoader';
 
 type ExampleType = {
   id: string,
@@ -17,13 +20,7 @@ export default class Example {
   _id: string;
   exampleField: string;
 
-  static ExampleLoader = new DataLoader(
-    ids => Promise.all(
-      ids.map(id =>
-        ExampleModel.findOne({ _id: id })
-      ),
-    ),
-  );
+  static getLoader = () => new DataLoader(ids => mongooseLoader(ExampleModel, ids));
 
   constructor(data: ExampleType) {
     this.id = data.id;
@@ -64,13 +61,14 @@ export default class Example {
 }
 `;
 
-exports[`test generate a loader with schema 1`] = `
+exports[`generate a loader with schema 1`] = `
 Object {
   "loader": "// @flow
 
-import DataLoader from \'dataloader\';
-import ConnectionFromMongoCursor from \'../connection/ConnectionFromMongoCursor\';
-import PostModel from \'../model/Post\';
+import DataLoader from 'dataloader';
+import ConnectionFromMongoCursor from '../connection/ConnectionFromMongoCursor';
+import PostModel from '../model/Post';
+import mongooseLoader from './mongooseLoader';
 
 type PostType = {
   id: string,
@@ -91,13 +89,7 @@ export default class Post {
   createdAt: string;
   updatedAt: string;
 
-  static PostLoader = new DataLoader(
-    ids => Promise.all(
-      ids.map(id =>
-        PostModel.findOne({ _id: id })
-      ),
-    ),
-  );
+  static getLoader = () => new DataLoader(ids => mongooseLoader(PostModel, ids));
 
   constructor(data: PostType) {
     this.id = data.id;
@@ -142,13 +134,14 @@ export default class Post {
 }
 `;
 
-exports[`test generate a loader with schema and without timestamps 1`] = `
+exports[`generate a loader with schema and without timestamps 1`] = `
 Object {
   "loader": "// @flow
 
-import DataLoader from \'dataloader\';
-import ConnectionFromMongoCursor from \'../connection/ConnectionFromMongoCursor\';
-import UserModel from \'../model/User\';
+import DataLoader from 'dataloader';
+import ConnectionFromMongoCursor from '../connection/ConnectionFromMongoCursor';
+import UserModel from '../model/User';
+import mongooseLoader from './mongooseLoader';
 
 type UserType = {
   id: string,
@@ -157,6 +150,7 @@ type UserType = {
   password: string,
   email: string,
   active: boolean,
+  lastLoginAt: string,
 }
 
 export default class User {
@@ -166,14 +160,9 @@ export default class User {
   password: string;
   email: string;
   active: boolean;
+  lastLoginAt: string;
 
-  static UserLoader = new DataLoader(
-    ids => Promise.all(
-      ids.map(id =>
-        UserModel.findOne({ _id: id })
-      ),
-    ),
-  );
+  static getLoader = () => new DataLoader(ids => mongooseLoader(UserModel, ids));
 
   constructor(data: UserType) {
     this.id = data.id;
@@ -182,6 +171,7 @@ export default class User {
     this.password = data.password;
     this.email = data.email;
     this.active = data.active;
+    this.lastLoginAt = data.lastLoginAt;
   }
 
   static viewerCanSee(viewer, data) {

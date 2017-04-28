@@ -8,6 +8,13 @@ const { visit } = recast.types;
 
 const rootPath = pkgDir.sync('.') || '.';
 
+/**
+ * Uppercase the first letter of a text
+ * @param text {string}
+ * @returns {string}
+ */
+export const uppercaseFirstLetter = text => `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
+
 const parseFieldToGraphQL = (field, ref) => {
   const graphQLField = {
     name: field.name,
@@ -45,13 +52,13 @@ const parseFieldToGraphQL = (field, ref) => {
           graphqlType: typeFileName,
           graphqlLoader: loaderFileName,
         };
-      } else {
-        return {
-          ...graphQLField,
-          type: 'GraphQLID',
-          flowType: 'string',
-        }
       }
+
+      return {
+        ...graphQLField,
+        type: 'GraphQLID',
+        flowType: 'string',
+      };
     case 'Date':
       return {
         ...graphQLField,
@@ -84,11 +91,8 @@ const parseGraphQLSchema = (mongooseFields, ref) => {
       if (loaderDependencies.indexOf(field.graphqlLoader) === -1) {
         loaderDependencies.push(field.graphqlLoader);
       }
-
-    } else {
-      if (dependencies.indexOf(field.type) === -1) {
-        dependencies.push(field.type);
-      }
+    } else if (dependencies.indexOf(field.type) === -1) {
+      dependencies.push(field.type);
     }
 
     return field;
@@ -100,39 +104,6 @@ const parseGraphQLSchema = (mongooseFields, ref) => {
     typeDependencies,
     loaderDependencies,
   };
-};
-
-const getSchemaFieldsFromAst = (node, withTimestamps) => {
-  const astSchemaFields = node.arguments[0].properties;
-
-  const fields = [];
-  astSchemaFields.forEach((field) => {
-    const name = field.key.name;
-
-    const fieldDefinition = {};
-
-    if (field.value.type === 'ArrayExpression') {
-      return;
-    }
-
-    field.value.properties.forEach(({ key, value }) => fieldDefinition[key.name] = value.name || value.value);
-
-    fields[name] = {
-      name,
-      ...fieldDefinition,
-    };
-  });
-
-  if (withTimestamps) {
-    const astSchemaTimestamp = getSchemaTimestampsFromAst(node.arguments[1].properties);
-
-    return {
-      ...fields,
-      ...astSchemaTimestamp,
-    };
-  }
-
-  return fields;
 };
 
 /**
@@ -153,17 +124,58 @@ const getSchemaTimestampsFromAst = (nodes) => {
           name: fieldName,
           type: 'Date',
         };
-      })
+      });
     }
   });
 
   return timestampFields;
 };
 
+const getSchemaFieldsFromAst = (node, withTimestamps) => {
+  const astSchemaFields = node.arguments[0].properties;
+
+  const fields = [];
+  // MemberExpression: { field1: Schema.Types.ObjectId }
+  // Identifier: { field1: ObjectId }
+  const validSingleValueTypes = ['MemberExpression', 'Identifier'];
+
+  astSchemaFields.forEach((field) => {
+    const name = field.key.name;
+
+    const fieldDefinition = {};
+
+    if (field.value.type === 'ArrayExpression') {
+      return;
+    } else if (validSingleValueTypes.indexOf(field.value.type) !== -1) {
+      fieldDefinition.type = field.value.property ? field.value.property.name : field.value.name;
+    } else {
+      field.value.properties.forEach(({ key, value }) => {
+        fieldDefinition[key.name] = value.name || value.value;
+      });
+    }
+
+    fields[name] = {
+      name,
+      ...fieldDefinition,
+    };
+  });
+
+  if (withTimestamps) {
+    const astSchemaTimestamp = getSchemaTimestampsFromAst(node.arguments[1].properties);
+
+    return {
+      ...fields,
+      ...astSchemaTimestamp,
+    };
+  }
+
+  return fields;
+};
+
 const getSchemaDefinition = (modelCode, withTimestamps, ref) => {
   const ast = recast.parse(modelCode, {
     parser: {
-      parse: source => require('babylon').parse(source, {
+      parse: source => require('babylon').parse(source, { // eslint-disable-line global-require
         sourceType: 'module',
         plugins: [
           'asyncFunctions',
@@ -240,7 +252,7 @@ export const getCreateGraphQLConfig = () => {
   // Use default config
   const defaultFilePath = path.resolve(`${__dirname}/graphqlrc.json`);
 
-  let config = parseConfigFile(defaultFilePath);
+  const config = parseConfigFile(defaultFilePath);
 
   try {
     // Check if there is a `.graphqlrc` file in the root path
@@ -262,7 +274,7 @@ export const getCreateGraphQLConfig = () => {
  * @param directory {string} The name of the directory, e.g. 'source'/'mutation'
  * @returns {string} The directory path
  */
-export const getConfigDir = (directory) => getCreateGraphQLConfig().directories[directory];
+export const getConfigDir = directory => getCreateGraphQLConfig().directories[directory];
 
 /**
  * Get the relative path directory between two directories specified on the config file
@@ -274,7 +286,7 @@ export const getRelativeConfigDir = (from, to) => {
   const config = getCreateGraphQLConfig().directories;
 
   return to.reduce((directories, dir) => {
-    const relativePath = path.relative(config[from], config[dir]);
+    const relativePath = path.posix.relative(config[from], config[dir]);
 
     return {
       ...directories,
@@ -283,10 +295,17 @@ export const getRelativeConfigDir = (from, to) => {
   }, {});
 };
 
+/**
+ * Get the Mongoose model schema code
+ * @param modelPath {string} The path of the Mongoose model
+ * @returns {string} The code of the Mongoose model
+ */
+const getModelCode = modelPath => fs.readFileSync(modelPath, 'utf8');
+
 export const getMongooseModelSchema = ({
   model,
   withTimestamps = false,
-  ref = false
+  ref = false,
 }) => {
   const modelDir = getCreateGraphQLConfig().directories.model;
 
@@ -298,30 +317,15 @@ export const getMongooseModelSchema = ({
 };
 
 /**
- * Get the Mongoose model schema code
- * @param modelPath {string} The path of the Mongoose model
- * @returns {string} The code of the Mongoose model
- */
-const getModelCode = modelPath => fs.readFileSync(modelPath, 'utf8');
-
-/**
  * Camel cases text
  * @param text {string} Text to be camel-cased
  * @returns {string} Camel-cased text
  */
-export const camelCaseText = (text) => {
-  return text.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) => {
+export const camelCaseText = text =>
+  text.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) => {
     if (+match === 0) {
       return '';
     }
 
     return index === 0 ? match.toLowerCase() : match.toUpperCase();
   });
-};
-
-/**
- * Uppercase the first letter of a text
- * @param text {string}
- * @returns {string}
- */
-export const uppercaseFirstLetter = text => `${text.charAt(0).toUpperCase()}${text.slice(1)}`;

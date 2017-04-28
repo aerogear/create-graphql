@@ -1,47 +1,49 @@
-exports[`test generate a type 1`] = `
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generate a type 1`] = `
 Object {
   "type": "import {
   GraphQLObjectType,
   GraphQLString,
-} from \'graphql\';
-import { globalIdField } from \'graphql-relay\';
+} from 'graphql';
+import { globalIdField } from 'graphql-relay';
 
-import { NodeInterface } from \'../interface/NodeInterface\';
+import { NodeInterface } from '../interface/NodeInterface';
 
 export default new GraphQLObjectType({
-  name: \'Example\',
-  description: \'Represents Example\',
+  name: 'Example',
+  description: 'Represents Example',
   fields: () => ({
-    id: globalIdField(\'Example\'),
+    id: globalIdField('Example'),
     example: {
       type: GraphQLString,
-      description: \'My example field\',
+      description: 'My example field',
       resolve: obj => obj.example,
     },
   }),
   interfaces: () => [NodeInterface],
 });
 ",
-  "typeTest": "import { graphql } from \'graphql\';
-import { schema } from \'../../schema\';
-import { setupTest } from \'../../../../test/helper\';
+  "typeTest": "import { graphql } from 'graphql';
+import { schema } from '../../schema';
+import { setupTest } from '../../../../test/helper';
 import {
   User,
   Example,
-} from \'../../../models\';
+} from '../../../models';
 
 beforeEach(async () => await setupTest());
 
-it(\'should retrieve a record\', async () => {
+it('should retrieve a record', async () => {
   const user = await new User({
-    name: \'user\',
-    email: \'user@example.com\',
+    name: 'user',
+    email: 'user@example.com',
   }).save();
 
   // TODO: query to return a record
   const query = \`
     query Q {
-      node(id:\"123\") {
+      node(id:\\"123\\") {
         id
       }
     }
@@ -59,74 +61,74 @@ it(\'should retrieve a record\', async () => {
 }
 `;
 
-exports[`test generate a type with schema 1`] = `
+exports[`generate a type with schema 1`] = `
 Object {
   "type": "// @flow
 
 import {
   GraphQLObjectType,
   GraphQLString,
-} from \'graphql\';
-import { globalIdField } from \'graphql-relay\';
+} from 'graphql';
+import { globalIdField } from 'graphql-relay';
 
-import { NodeInterface } from \'../interface/NodeInterface\';
-import UserType from \'./UserType\';
-import UserLoader from \'../loader/UserLoader\';
+import { NodeInterface } from '../interface/NodeInterface';
+import UserType from './UserType';
+import UserLoader from '../loader/UserLoader';
 
 export default new GraphQLObjectType({
-  name: \'Post\',
-  description: \'Represents Post\',
+  name: 'Post',
+  description: 'Represents Post',
   fields: () => ({
-    id: globalIdField(\'Post\'),
+    id: globalIdField('Post'),
     title: {
       type: GraphQLString,
-      description: \'\',
+      description: '',
       resolve: obj => obj.title,
     },
     user: {
       type: UserType,
-      description: \'User that created this post\',
+      description: 'User that created this post',
       resolve: async (obj, args, { user }) => await UserLoader.load(user, obj.user),
     },
     slug: {
       type: GraphQLString,
-      description: \'Used for SEO\',
+      description: 'Used for SEO',
       resolve: obj => obj.slug,
     },
     createdAt: {
       type: GraphQLString,
-      description: \'\',
+      description: '',
       resolve: obj => obj.createdAt.toISOString(),
     },
     updatedAt: {
       type: GraphQLString,
-      description: \'\',
+      description: '',
       resolve: obj => obj.updatedAt.toISOString(),
     },
   }),
   interfaces: () => [NodeInterface],
 });
 ",
-  "typeTest": "import { graphql } from \'graphql\';
-import { schema } from \'../../schema\';
-import { setupTest } from \'../../../../test/helper\';
+  "typeTest": "import { graphql } from 'graphql';
+import { schema } from '../../schema';
+import { setupTest } from '../../../../test/helper';
 import {
   User,
   Post,
-} from \'../../../models\';
+} from '../../../models';
 
 beforeEach(async () => await setupTest());
 
-it(\'should retrieve a record\', async () => {
+it('should retrieve a record', async () => {
   const user = await new User({
-    name: \'user\',
-    email: \'user@example.com\',
+    name: 'user',
+    email: 'user@example.com',
   }).save();
 
   // TODO: query to return a record
   const query = \`
     query Q {
-      node(id:\"123\") {
+      node(id:\\"123\\") {
         id
       }
     }
@@ -144,7 +146,7 @@ it(\'should retrieve a record\', async () => {
 }
 `;
 
-exports[`test generate a type with schema and without timestamps 1`] = `
+exports[`generate a type with schema and without timestamps 1`] = `
 Object {
   "type": "// @flow
 
@@ -152,60 +154,65 @@ import {
   GraphQLObjectType,
   GraphQLString,
   GraphQLBoolean,
-} from \'graphql\';
-import { globalIdField } from \'graphql-relay\';
+} from 'graphql';
+import { globalIdField } from 'graphql-relay';
 
-import { NodeInterface } from \'../interface/NodeInterface\';
+import { NodeInterface } from '../interface/NodeInterface';
 
 export default new GraphQLObjectType({
-  name: \'User\',
-  description: \'Represents User\',
+  name: 'User',
+  description: 'Represents User',
   fields: () => ({
-    id: globalIdField(\'User\'),
+    id: globalIdField('User'),
     name: {
       type: GraphQLString,
-      description: \'\',
+      description: '',
       resolve: obj => obj.name,
     },
     password: {
       type: GraphQLString,
-      description: \'\',
+      description: '',
       resolve: obj => obj.password,
     },
     email: {
       type: GraphQLString,
-      description: \'\',
+      description: '',
       resolve: obj => obj.email,
     },
     active: {
       type: GraphQLBoolean,
-      description: \'\',
+      description: '',
       resolve: obj => obj.active,
+    },
+    lastLoginAt: {
+      type: GraphQLString,
+      description: '',
+      resolve: obj => obj.lastLoginAt.toISOString(),
     },
   }),
   interfaces: () => [NodeInterface],
 });
 ",
-  "typeTest": "import { graphql } from \'graphql\';
-import { schema } from \'../../schema\';
-import { setupTest } from \'../../../../test/helper\';
+  "typeTest": "import { graphql } from 'graphql';
+import { schema } from '../../schema';
+import { setupTest } from '../../../../test/helper';
 import {
   User,
   User,
-} from \'../../../models\';
+} from '../../../models';
 
 beforeEach(async () => await setupTest());
 
-it(\'should retrieve a record\', async () => {
+it('should retrieve a record', async () => {
   const user = await new User({
-    name: \'user\',
-    email: \'user@example.com\',
+    name: 'user',
+    email: 'user@example.com',
   }).save();
 
   // TODO: query to return a record
   const query = \`
     query Q {
-      node(id:\"123\") {
+      node(id:\\"123\\") {
         id
       }
     }
