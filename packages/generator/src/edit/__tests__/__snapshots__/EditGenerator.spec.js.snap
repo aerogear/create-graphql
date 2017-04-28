@@ -1,13 +1,15 @@
-exports[`test generate edit and edit mutation files 1`] = `
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generate edit and edit mutation files 1`] = `
 Object {
-  "edit": "import React, { Component, PropTypes } from \'react\';
-import Relay from \'react-relay\';
-import RelayStore from \'../../../RelayStore\';
-import { withRouter } from \'react-router\';
+  "edit": "import React, { Component, PropTypes } from 'react';
+import Relay from 'react-relay';
+import RelayStore from '../../../RelayStore';
+import { withRouter } from 'react-router';
 
-import ExampleEditMutation from \'./ExampleEditMutation.js\';
+import ExampleEditMutation from './ExampleEditMutation.js';
 
-import Form from \'../../common/Form\';
+import Form from '../../common/Form';
 
 class ExampleEdit extends Component {
   static contextTypes = {
@@ -16,8 +18,8 @@ class ExampleEdit extends Component {
 
   fields = [
     {
-      name: \'id\',
-      placeholder: \'ID\',
+      name: 'id',
+      placeholder: 'ID',
       required: true,
     },
     // TODO - add ObjectType fields here
@@ -34,17 +36,17 @@ class ExampleEdit extends Component {
     RelayStore.commitUpdate(mutation, {
       onSuccess: () => {
         this.context.showSnackbar({
-          message: \'Example edited successfully!\',
+          message: 'Example edited successfully!',
         });
 
         this.props.router.goBack();
       },
       onFailure: (failureResponse) => {
         this.context.showSnackbar({
-          message: \'There was an error while trying to edit this Example.\',
+          message: 'There was an error while trying to edit this Example.',
         });
 
-        console.log(\'FAIL\', failureResponse);
+        console.log('FAIL', failureResponse);
       },
     });
   };
@@ -64,28 +66,28 @@ class ExampleEdit extends Component {
 
 const styles = {
   formContainer: {
-    display: \'flex\',
-    flexWrap: \'wrap\',
+    display: 'flex',
+    flexWrap: 'wrap',
     paddingTop: 30,
     paddingLeft: 10,
   },
   actionsContainer: {
-    display: \'flex\',
-    justifyContent: \'flex-end\',
+    display: 'flex',
+    justifyContent: 'flex-end',
     marginTop: 5,
     paddingRight: 8,
-    borderTopStyle: \'solid\',
+    borderTopStyle: 'solid',
     borderTopWidth: 1,
     paddingTop: 15,
-    borderColor: \'#ECECEC\',
+    borderColor: '#ECECEC',
   },
   formField: {
     marginRight: 10,
-    flex: \'1 0 47%\',
+    flex: '1 0 47%',
   },
   selectField: {
     marginRight: 10,
-    flex: \'1 0 48%\',
+    flex: '1 0 48%',
   },
 };
 
@@ -97,7 +99,7 @@ export default Relay.createContainer(withRouter(ExampleEdit), {
     example: () => Relay.QL\`
       fragment on Example {
         id
-        \${ExampleEditMutation.getFragment(\'example\')}
+        \${ExampleEditMutation.getFragment('example')}
       }
     \`,
     viewer: () => Relay.QL\`
@@ -108,7 +110,7 @@ export default Relay.createContainer(withRouter(ExampleEdit), {
   },
 });
 ",
-  "editMutation": "import Relay from \'react-relay\';
+  "editMutation": "import Relay from 'react-relay';
 
 export default class ExampleEditMutation extends Relay.Mutation {
   static fragments = {
@@ -149,7 +151,7 @@ export default class ExampleEditMutation extends Relay.Mutation {
 
   getConfigs() {
     return [{
-      type: \'FIELDS_CHANGE\',
+      type: 'FIELDS_CHANGE',
       fieldIDs: {
         example: this.props.example.id,
       },

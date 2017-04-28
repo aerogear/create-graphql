@@ -1,12 +1,14 @@
-exports[`test generate view files 1`] = `
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generate view files 1`] = `
 Object {
-  "view": "import React, { Component } from \'react\';
-import Relay from \'react-relay\';
-import { withRouter } from \'react-router\';
+  "view": "import React, { Component } from 'react';
+import Relay from 'react-relay';
+import { withRouter } from 'react-router';
 
-import ExampleEdit from \'./ExampleEdit\';
+import ExampleEdit from './ExampleEdit';
 
-import Tabs from \'../../common/Tabs\';
+import Tabs from '../../common/Tabs';
 
 class ExampleView extends Component {
   render() {
@@ -14,14 +16,14 @@ class ExampleView extends Component {
     const { example } = viewer;
 
     const tabs = [{
-      label: \'Details\',
+      label: 'Details',
       component: (
         <ExampleEdit
           example={example}
           viewer={viewer}
         />
       ),
-      icon: \'assignment\',
+      icon: 'assignment',
     }];
 
     return (
@@ -50,9 +52,9 @@ export default Relay.createContainer(withRouter(ExampleView), {
       fragment on Viewer {
         example(id: $id) {
           id
-          \${ExampleEdit.getFragment(\'example\')}
+          \${ExampleEdit.getFragment('example')}
         }
-        \${ExampleEdit.getFragment(\'viewer\')}
+        \${ExampleEdit.getFragment('viewer')}
       }
     \`,
   },

@@ -1,13 +1,15 @@
-exports[`test generate list files 1`] = `
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generate list files 1`] = `
 Object {
   "list": "// @flow
 
-import React, { Component } from \'react\';
-import Relay from \'react-relay\';
-import { withRouter } from \'react-router\';
+import React, { Component } from 'react';
+import Relay from 'react-relay';
+import { withRouter } from 'react-router';
 
-import Table from \'../common/Table\';
-import Toolbar from \'../common/Toolbar\';
+import Table from '../common/Table';
+import Toolbar from '../common/Toolbar';
 
 class ExampleList extends Component {
   state = {
@@ -16,18 +18,18 @@ class ExampleList extends Component {
 
   tableColumns = [
     {
-      property: \'\',
+      property: '',
       header: {
-        label: \'Actions\',
+        label: 'Actions',
       },
-      icon: \'mode_edit\',
-      type: \'icon\',
-      clickPath: \'/examples/view/:id\',
+      icon: 'mode_edit',
+      type: 'icon',
+      clickPath: '/examples/view/:id',
     },
     {
-      property: \'id\',
+      property: 'id',
       header: {
-        label: \'ID\',
+        label: 'ID',
       },
     },
     // TODO - add more fields to table
@@ -39,7 +41,7 @@ class ExampleList extends Component {
     });
   };
 
-  _handleNew = () => this.props.router.push(\'/Examples/new\');
+  _handleNew = () => this.props.router.push('/Examples/new');
 
   _handleRefreshList = () => {
     this.setState({
@@ -79,14 +81,14 @@ class ExampleList extends Component {
     return (
       <div>
         <Toolbar
-          title=\"Examples\"
-          primaryActionLabel=\"New Example\"
+          title=\\"Examples\\"
+          primaryActionLabel=\\"New Example\\"
           primaryActionOnClick={this._handleNew}
           onRefresh={this._handleRefreshList}
         />
 
         <Table
-          name=\"Example\"
+          name=\\"Example\\"
           columns={this.tableColumns}
           rows={this.props.viewer.examples}
           router={this.props.router}
