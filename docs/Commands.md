@@ -49,7 +49,7 @@ create-graphql generate --type Story
 
 Generates `StoryType` file under the path `./src/type`
 
-#### `--mutation`
+#### `--mutation`, `-m`
 Creates mutations, the files names will be automatically suffixed with `Mutation`
 
 ```sh
@@ -89,10 +89,10 @@ create-graphql --connection Story
 
 Generates a `StoryConnection` importing `StoryType` under the path `./src/connection`
 
-#### `--help`, `-h`
+## `--help`, `-h`
 Output usage information with all available commands
 
-#### `--version`, `-V`
+## `--version`, `-V`
 Output the current version
 
 If yout need, you can update **Create-GraphQL** with:
