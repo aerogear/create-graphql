@@ -38,10 +38,10 @@ export default mutationWithClientMutationId({
   outputFields: {
     <%= camelCaseName %>Edge: {
       type: <%= name %>Connection.edgeType,
-      resolve: async ({ id }, args, { user }) => {
+      resolve: async ({ id }, args, context) => {
         // Load new edge from loader
         const <%= camelCaseName %> = await <%= name %>Loader.load(
-          user, id,
+          context, id,
         );
 
         // Returns null if no node was loaded

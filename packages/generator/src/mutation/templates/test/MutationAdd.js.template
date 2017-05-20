@@ -1,6 +1,6 @@
 import { graphql } from 'graphql';
 import { schema } from '../../schema';
-import { setupTest } from '../../../test/helper';
+import { setupTest, getContext } from '../../../test/helper';
 
 import User from '<%= directories.model %>/User';
 import <%= name %> from '<%= directories.model %>/<%= name %>';
@@ -20,7 +20,7 @@ it('should not allow anonymous user', async () => {
 
   const rootValue = {};
   // No user should be passed to context since we are testing an anonymous session
-  const context = {};
+  const context = getContext();
 
   const result = await graphql(schema, query, rootValue, context);
 
@@ -46,7 +46,7 @@ it('should create a record on database', async () => {
   `;
 
   const rootValue = {};
-  const context = { user };
+  const context = getContext({ user });
 
   const result = await graphql(schema, query, rootValue, context);
 

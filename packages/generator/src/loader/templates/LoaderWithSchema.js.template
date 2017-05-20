@@ -36,26 +36,26 @@ export default class <%= name %> {
     return true;
   }
 
-  static async load(viewer, id) {
+  static async load({ user: viewer, dataloaders }, id) {
     if (!id) {
       return null;
     }
 
-    const data = await <%= name %>.<%= rawName %>Loader.load(id.toString());
+    const data = await dataloaders.<%= rawName %>Loader.load(id.toString());
 
     return <%= name %>.viewerCanSee(viewer, data) ? new <%= name %>(data) : null;
   }
 
-  static clearCache(id) {
-    return <%= name %>.<%= rawName %>Loader.clear(id.toString());
+  static clearCache({ dataloaders }, id) {
+    return dataloaders.<%= rawName %>Loader.clear(id.toString());
   }
 
-  static async load<%= pluralName %>(viewer, args) {
+  static async load<%= pluralName %>(context, args) {
     // TODO: specify conditions
     const <%= pluralCamelCaseName %> = <%= name %>Model.find({});
 
     return ConnectionFromMongoCursor.connectionFromMongoCursor(
-      viewer, <%= pluralCamelCaseName %>, args, <%= name %>.load,
+      context, <%= pluralCamelCaseName %>, args, <%= name %>.load,
     );
   }
 }

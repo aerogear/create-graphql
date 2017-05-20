@@ -26,7 +26,7 @@ export default new GraphQLObjectType({
 ",
   "typeTest": "import { graphql } from 'graphql';
 import { schema } from '../../schema';
-import { setupTest } from '../../../../test/helper';
+import { setupTest, getContext } from '../../../../test/helper';
 import {
   User,
   Example,
@@ -50,7 +50,7 @@ it('should retrieve a record', async () => {
   \`;
 
   const rootValue = {};
-  const context = { user };
+  const context = getContext({ user });
 
   const { errors, data } = await graphql(schema, query, rootValue, context);
 
@@ -88,7 +88,7 @@ export default new GraphQLObjectType({
     user: {
       type: UserType,
       description: 'User that created this post',
-      resolve: async (obj, args, { user }) => await UserLoader.load(user, obj.user),
+      resolve: async (obj, args, context) => await UserLoader.load(context, obj.user),
     },
     slug: {
       type: GraphQLString,
@@ -111,7 +111,7 @@ export default new GraphQLObjectType({
 ",
   "typeTest": "import { graphql } from 'graphql';
 import { schema } from '../../schema';
-import { setupTest } from '../../../../test/helper';
+import { setupTest, getContext } from '../../../../test/helper';
 import {
   User,
   Post,
@@ -135,7 +135,7 @@ it('should retrieve a record', async () => {
   \`;
 
   const rootValue = {};
-  const context = { user };
+  const context = getContext({ user });
 
   const { errors, data } = await graphql(schema, query, rootValue, context);
 
@@ -195,7 +195,7 @@ export default new GraphQLObjectType({
 ",
   "typeTest": "import { graphql } from 'graphql';
 import { schema } from '../../schema';
-import { setupTest } from '../../../../test/helper';
+import { setupTest, getContext } from '../../../../test/helper';
 import {
   User,
   User,
@@ -219,7 +219,7 @@ it('should retrieve a record', async () => {
   \`;
 
   const rootValue = {};
-  const context = { user };
+  const context = getContext({ user });
 
   const { errors, data } = await graphql(schema, query, rootValue, context);
 

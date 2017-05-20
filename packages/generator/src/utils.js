@@ -47,8 +47,8 @@ const parseFieldToGraphQL = (field, ref) => {
           ...graphQLField,
           type: typeFileName,
           flowType: 'string',
-          resolve: `await ${loaderFileName}.load(user, obj.${field.name})`,
-          resolveArgs: 'async (obj, args, { user })',
+          resolve: `await ${loaderFileName}.load(context, obj.${field.name})`,
+          resolveArgs: 'async (obj, args, context)',
           graphqlType: typeFileName,
           graphqlLoader: loaderFileName,
         };
