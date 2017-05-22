@@ -75,7 +75,7 @@ Will create a GraphQL *type* and *mutation* based on `Story` schema and automati
 Creates a GraphQL loader, the files names will be automatically suffixed with `Loader`
 
 ```sh
-create-graphql --loader Story
+create-graphql generate --loader Story
 ```
 
 Generates a `StoryLoader` file importing `StoryConnection` under the path `./src/loader`
@@ -84,7 +84,7 @@ Generates a `StoryLoader` file importing `StoryConnection` under the path `./src
 Creates a Relay connection, the files names will be automatically suffixed with `Connection`
 
 ```sh
-create-graphql --connection Story
+create-graphql generate --connection Story
 ```
 
 Generates a `StoryConnection` importing `StoryType` under the path `./src/connection`
