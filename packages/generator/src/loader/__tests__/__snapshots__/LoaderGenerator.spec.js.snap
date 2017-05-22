@@ -34,26 +34,26 @@ export default class Example {
     return true;
   }
 
-  static async load(viewer, id) {
+  static async load({ user: viewer, dataloaders }, id) {
     if (!id) {
       return null;
     }
 
-    const data = await Example.ExampleLoader.load(id.toString());
+    const data = await dataloaders.ExampleLoader.load(id.toString());
 
     return Example.viewerCanSee(viewer, data) ? new Example(data) : null;
   }
 
-  static clearCache(id) {
-    return Example.ExampleLoader.clear(id.toString());
+  static clearCache({ dataloaders }, id) {
+    return dataloaders.ExampleLoader.clear(id.toString());
   }
 
-  static async loadExamples(viewer, args) {
+  static async loadExamples(context, args) {
     // TODO: specify conditions
     const examples = ExampleModel.find({});
 
     return ConnectionFromMongoCursor.connectionFromMongoCursor(
-      viewer, examples, args, Example.load,
+      context, examples, args, Example.load,
     );
   }
 }
@@ -107,26 +107,26 @@ export default class Post {
     return true;
   }
 
-  static async load(viewer, id) {
+  static async load({ user: viewer, dataloaders }, id) {
     if (!id) {
       return null;
     }
 
-    const data = await Post.PostLoader.load(id.toString());
+    const data = await dataloaders.PostLoader.load(id.toString());
 
     return Post.viewerCanSee(viewer, data) ? new Post(data) : null;
   }
 
-  static clearCache(id) {
-    return Post.PostLoader.clear(id.toString());
+  static clearCache({ dataloaders }, id) {
+    return dataloaders.PostLoader.clear(id.toString());
   }
 
-  static async loadPosts(viewer, args) {
+  static async loadPosts(context, args) {
     // TODO: specify conditions
     const posts = PostModel.find({});
 
     return ConnectionFromMongoCursor.connectionFromMongoCursor(
-      viewer, posts, args, Post.load,
+      context, posts, args, Post.load,
     );
   }
 }
@@ -180,26 +180,26 @@ export default class User {
     return true;
   }
 
-  static async load(viewer, id) {
+  static async load({ user: viewer, dataloaders }, id) {
     if (!id) {
       return null;
     }
 
-    const data = await User.UserLoader.load(id.toString());
+    const data = await dataloaders.UserLoader.load(id.toString());
 
     return User.viewerCanSee(viewer, data) ? new User(data) : null;
   }
 
-  static clearCache(id) {
-    return User.UserLoader.clear(id.toString());
+  static clearCache({ dataloaders }, id) {
+    return dataloaders.UserLoader.clear(id.toString());
   }
 
-  static async loadUsers(viewer, args) {
+  static async loadUsers(context, args) {
     // TODO: specify conditions
     const users = UserModel.find({});
 
     return ConnectionFromMongoCursor.connectionFromMongoCursor(
-      viewer, users, args, User.load,
+      context, users, args, User.load,
     );
   }
 }

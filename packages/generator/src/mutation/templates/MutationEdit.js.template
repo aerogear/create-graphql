@@ -25,7 +25,9 @@ export default mutationWithClientMutationId({
       type: GraphQLString,
     },
   },
-  mutateAndGetPayload: async (args, { user }) => {
+  mutateAndGetPayload: async (args, context) => {
+    const { user } = context;
+
     // Verify if user is authorized
     if (!user) {
       throw new Error('Unauthorized user');
@@ -49,7 +51,7 @@ export default mutationWithClientMutationId({
     // TODO: mutation logic
 
     // Clear dataloader cache
-    <%= name %>Loader.clearCache(<%= camelCaseName %>._id);
+    <%= name %>Loader.clearCache(context, <%= camelCaseName %>._id);
 
     return {
       id: <%= camelCaseName %>._id,
@@ -59,7 +61,7 @@ export default mutationWithClientMutationId({
   outputFields: {
     <%= camelCaseName %>: {
       type: <%= name %>Type,
-      resolve: (obj, args, { user }) => <%= name %>Loader.load(user, obj.id),
+      resolve: (obj, args, context) => <%= name %>Loader.load(context, obj.id),
     },
     error: {
       type: GraphQLString,
