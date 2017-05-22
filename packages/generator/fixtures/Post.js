@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 import User from './User';
+import Comment from './Comment';
 const { ObjectId } = mongoose.Schema.Types;
 
 const Schema = new mongoose.Schema({
@@ -20,6 +21,13 @@ const Schema = new mongoose.Schema({
     indexed: true,
     description: 'Used for SEO',
   },
+  comments: [
+    {
+      type: ObjectId,
+      ref: 'Comment',
+    },
+  ],
+  tags: [String],
 }, {
   timestamps: {
     createdAt: 'createdAt',

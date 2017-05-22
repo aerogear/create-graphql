@@ -76,6 +76,8 @@ type PostType = {
   title: string,
   user: string,
   slug: string,
+  comments: array,
+  tags: array,
   createdAt: string,
   updatedAt: string,
 }
@@ -86,6 +88,8 @@ export default class Post {
   title: string;
   user: string;
   slug: string;
+  comments: array;
+  tags: array;
   createdAt: string;
   updatedAt: string;
 
@@ -97,6 +101,8 @@ export default class Post {
     this.title = data.title;
     this.user = data.user;
     this.slug = data.slug;
+    this.comments = data.comments;
+    this.tags = data.tags;
     this.createdAt = data.createdAt;
     this.updatedAt = data.updatedAt;
   }

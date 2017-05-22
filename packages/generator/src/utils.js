@@ -28,6 +28,10 @@ const parseFieldToGraphQL = (field, ref) => {
   const typeFileName = `${name}Type`;
   const loaderFileName = `${name}Loader`;
 
+  let parsedChildField;
+  let typeFileNameSingular;
+  let loaderFileNameSingular;
+
   switch (field.type) {
     case 'Number':
       return {
@@ -41,6 +45,28 @@ const parseFieldToGraphQL = (field, ref) => {
         type: 'GraphQLBoolean',
         flowType: 'boolean',
       };
+    case 'Array':
+      field.type = field.childType;
+
+      parsedChildField = parseFieldToGraphQL(field, ref);
+      parsedChildField.flowType = 'array';
+      parsedChildField.type = [parsedChildField.type];
+
+      if (field.childType === 'ObjectId' && ref) {
+        typeFileNameSingular = `${field.ref}Type`;
+        loaderFileNameSingular = `${field.ref}Loader`;
+
+        parsedChildField = {
+          ...parsedChildField,
+          type: [typeFileNameSingular],
+          resolve: `await ${loaderFileNameSingular}.load${name}ByIds(context, obj.${field.name})`,
+          resolveArgs: 'async (obj, args, context)',
+          graphqlType: typeFileNameSingular,
+          graphqlLoader: loaderFileNameSingular,
+        };
+      }
+
+      return parsedChildField;
     case 'ObjectId':
       if (ref) {
         return {
@@ -83,7 +109,30 @@ const parseGraphQLSchema = (mongooseFields, ref) => {
   const fields = Object.keys(mongooseFields).map((name) => {
     const field = parseFieldToGraphQL(mongooseFields[name], ref);
 
-    if (field.graphqlType) {
+    // we have a special case for array types, since we need to add as dependency
+    //  both the GraphQLList and the type itself.
+    if (Array.isArray(field.type)) {
+      // array of scalar types
+      if (!field.graphqlType) {
+        if (dependencies.indexOf(field.type[0]) === -1) {
+          dependencies.push(field.type[0]);
+        }
+      } else {
+        if (typeDependencies.indexOf(field.graphqlType) === -1) {
+          typeDependencies.push(field.graphqlType);
+        }
+
+        if (loaderDependencies.indexOf(field.graphqlLoader) === -1) {
+          loaderDependencies.push(field.graphqlLoader);
+        }
+      }
+
+      field.type = `new GraphQLList(${field.type[0]})`;
+
+      if (dependencies.indexOf('GraphQLList') === -1) {
+        dependencies.push('GraphQLList');
+      }
+    } else if (field.graphqlType) {
       if (typeDependencies.indexOf(field.graphqlType) === -1) {
         typeDependencies.push(field.graphqlType);
       }
@@ -131,28 +180,42 @@ const getSchemaTimestampsFromAst = (nodes) => {
   return timestampFields;
 };
 
+// MemberExpression: { field1: Schema.Types.ObjectId }
+// Identifier: { field1: ObjectId }
+const validSingleValueTypes = ['MemberExpression', 'Identifier'];
+
+const getFieldDefinition = (field, parent = null) => {
+  const value = field.value || field;
+  let fieldDefinition = {};
+
+  if (value.type === 'ArrayExpression') {
+    if (parent) {
+      throw new Error('Nested fields are not supported.');
+    }
+    fieldDefinition = getFieldDefinition(value.elements[0], value);
+    // override type, specify Array
+    fieldDefinition.childType = fieldDefinition.type;
+    fieldDefinition.type = 'Array';
+  } else if (validSingleValueTypes.indexOf(value.type) !== -1) {
+    fieldDefinition.type = value.property ? value.property.name : value.name;
+  } else {
+    value.properties.forEach(({ key, value: item }) => {
+      fieldDefinition[key.name] = item.name || item.value;
+    });
+  }
+
+  return fieldDefinition;
+};
+
 const getSchemaFieldsFromAst = (node, withTimestamps) => {
   const astSchemaFields = node.arguments[0].properties;
 
   const fields = [];
-  // MemberExpression: { field1: Schema.Types.ObjectId }
-  // Identifier: { field1: ObjectId }
-  const validSingleValueTypes = ['MemberExpression', 'Identifier'];
 
   astSchemaFields.forEach((field) => {
     const name = field.key.name;
 
-    const fieldDefinition = {};
-
-    if (field.value.type === 'ArrayExpression') {
-      return;
-    } else if (validSingleValueTypes.indexOf(field.value.type) !== -1) {
-      fieldDefinition.type = field.value.property ? field.value.property.name : field.value.name;
-    } else {
-      field.value.properties.forEach(({ key, value }) => {
-        fieldDefinition[key.name] = value.name || value.value;
-      });
-    }
+    const fieldDefinition = getFieldDefinition(field);
 
     fields[name] = {
       name,

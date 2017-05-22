@@ -261,6 +261,7 @@ Object {
 import {
   GraphQLString,
   GraphQLID,
+  GraphQLList,
   GraphQLNonNull,
 } from 'graphql';
 import {
@@ -287,6 +288,12 @@ export default mutationWithClientMutationId({
     slug: {
       type: GraphQLString,
     },
+    comments: {
+      type: new GraphQLList(GraphQLID),
+    },
+    tags: {
+      type: new GraphQLList(GraphQLString),
+    },
   },
   mutateAndGetPayload: async (args, { user }) => {
     // Verify if user is authorized
@@ -298,6 +305,8 @@ export default mutationWithClientMutationId({
       title,
       user,
       slug,
+      comments,
+      tags,
     } = args;
 
     // Create new record
@@ -305,6 +314,8 @@ export default mutationWithClientMutationId({
       title,
       user,
       slug,
+      comments,
+      tags,
     }).save();
 
     // TODO: mutation logic
@@ -361,12 +372,16 @@ it('should not allow anonymous user', async () => {
         title: \\"Example value\\"
         user: \\"Example value\\"
         slug: \\"Example value\\"
+        comments: \\"Example value\\"
+        tags: \\"Example value\\"
       }) {
         postEdge {
           node {
             title
             user
             slug
+            comments
+            tags
           }
         }
       }
@@ -396,12 +411,16 @@ it('should create a record on database', async () => {
         title: \\"Example value\\"
         user: \\"Example value\\"
         slug: \\"Example value\\"
+        comments: \\"Example value\\"
+        tags: \\"Example value\\"
       }) {
         postEdge {
           node {
             title
             user
             slug
+            comments
+            tags
           }
         }
       }
@@ -422,6 +441,7 @@ import {
   GraphQLString,
   GraphQLNonNull,
   GraphQLID,
+  GraphQLList,
 } from 'graphql';
 import {
   mutationWithClientMutationId,
@@ -448,6 +468,12 @@ export default mutationWithClientMutationId({
     slug: {
       type: GraphQLString,
     },
+    comments: {
+      type: new GraphQLList(GraphQLID),
+    },
+    tags: {
+      type: new GraphQLList(GraphQLString),
+    },
   },
   mutateAndGetPayload: async (args, context) => {
     const { user } = context;
@@ -462,6 +488,8 @@ export default mutationWithClientMutationId({
       title,
       user,
       slug,
+      comments,
+      tags,
     } = args;
 
     // Check if the provided ID is valid
@@ -479,6 +507,8 @@ export default mutationWithClientMutationId({
       title,
       user,
       slug,
+      comments,
+      tags,
     });
 
     // TODO: mutation logic
@@ -519,6 +549,8 @@ it('should not allow anonymous user', async () => {
     title: 'Example value',
     user: 'Example value',
     slug: 'Example value',
+    comments: 'Example value',
+    tags: 'Example value',
   });
 
   await post.save();
@@ -535,6 +567,8 @@ it('should not allow anonymous user', async () => {
           title
           user
           slug
+          comments
+          tags
         }
       }
     }
@@ -562,6 +596,8 @@ it('should edit a record on database', async () => {
     title: 'Example value',
     user: 'Example value',
     slug: 'Example value',
+    comments: 'Example value',
+    tags: 'Example value',
   });
 
   await post.save();
@@ -578,6 +614,8 @@ it('should edit a record on database', async () => {
           title
           user
           slug
+          comments
+          tags
         }
       }
     }
