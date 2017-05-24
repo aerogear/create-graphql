@@ -76,8 +76,10 @@ type PostType = {
   title: string,
   user: string,
   slug: string,
-  comments: array,
   tags: array,
+  oldSlugs: array,
+  comments: array,
+  externalComments: array,
   createdAt: string,
   updatedAt: string,
 }
@@ -88,8 +90,10 @@ export default class Post {
   title: string;
   user: string;
   slug: string;
-  comments: array;
   tags: array;
+  oldSlugs: array;
+  comments: array;
+  externalComments: array;
   createdAt: string;
   updatedAt: string;
 
@@ -101,8 +105,10 @@ export default class Post {
     this.title = data.title;
     this.user = data.user;
     this.slug = data.slug;
-    this.comments = data.comments;
     this.tags = data.tags;
+    this.oldSlugs = data.oldSlugs;
+    this.comments = data.comments;
+    this.externalComments = data.externalComments;
     this.createdAt = data.createdAt;
     this.updatedAt = data.updatedAt;
   }

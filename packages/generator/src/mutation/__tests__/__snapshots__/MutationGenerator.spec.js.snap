@@ -288,11 +288,17 @@ export default mutationWithClientMutationId({
     slug: {
       type: GraphQLString,
     },
+    tags: {
+      type: new GraphQLList(GraphQLString),
+    },
+    oldSlugs: {
+      type: new GraphQLList(GraphQLString),
+    },
     comments: {
       type: new GraphQLList(GraphQLID),
     },
-    tags: {
-      type: new GraphQLList(GraphQLString),
+    externalComments: {
+      type: new GraphQLList(GraphQLID),
     },
   },
   mutateAndGetPayload: async (args, { user }) => {
@@ -305,8 +311,10 @@ export default mutationWithClientMutationId({
       title,
       user,
       slug,
-      comments,
       tags,
+      oldSlugs,
+      comments,
+      externalComments,
     } = args;
 
     // Create new record
@@ -314,8 +322,10 @@ export default mutationWithClientMutationId({
       title,
       user,
       slug,
-      comments,
       tags,
+      oldSlugs,
+      comments,
+      externalComments,
     }).save();
 
     // TODO: mutation logic
@@ -372,16 +382,20 @@ it('should not allow anonymous user', async () => {
         title: \\"Example value\\"
         user: \\"Example value\\"
         slug: \\"Example value\\"
-        comments: \\"Example value\\"
         tags: \\"Example value\\"
+        oldSlugs: \\"Example value\\"
+        comments: \\"Example value\\"
+        externalComments: \\"Example value\\"
       }) {
         postEdge {
           node {
             title
             user
             slug
-            comments
             tags
+            oldSlugs
+            comments
+            externalComments
           }
         }
       }
@@ -411,16 +425,20 @@ it('should create a record on database', async () => {
         title: \\"Example value\\"
         user: \\"Example value\\"
         slug: \\"Example value\\"
-        comments: \\"Example value\\"
         tags: \\"Example value\\"
+        oldSlugs: \\"Example value\\"
+        comments: \\"Example value\\"
+        externalComments: \\"Example value\\"
       }) {
         postEdge {
           node {
             title
             user
             slug
-            comments
             tags
+            oldSlugs
+            comments
+            externalComments
           }
         }
       }
@@ -468,11 +486,17 @@ export default mutationWithClientMutationId({
     slug: {
       type: GraphQLString,
     },
+    tags: {
+      type: new GraphQLList(GraphQLString),
+    },
+    oldSlugs: {
+      type: new GraphQLList(GraphQLString),
+    },
     comments: {
       type: new GraphQLList(GraphQLID),
     },
-    tags: {
-      type: new GraphQLList(GraphQLString),
+    externalComments: {
+      type: new GraphQLList(GraphQLID),
     },
   },
   mutateAndGetPayload: async (args, context) => {
@@ -488,8 +512,10 @@ export default mutationWithClientMutationId({
       title,
       user,
       slug,
-      comments,
       tags,
+      oldSlugs,
+      comments,
+      externalComments,
     } = args;
 
     // Check if the provided ID is valid
@@ -507,8 +533,10 @@ export default mutationWithClientMutationId({
       title,
       user,
       slug,
-      comments,
       tags,
+      oldSlugs,
+      comments,
+      externalComments,
     });
 
     // TODO: mutation logic
@@ -549,8 +577,10 @@ it('should not allow anonymous user', async () => {
     title: 'Example value',
     user: 'Example value',
     slug: 'Example value',
-    comments: 'Example value',
     tags: 'Example value',
+    oldSlugs: 'Example value',
+    comments: 'Example value',
+    externalComments: 'Example value',
   });
 
   await post.save();
@@ -567,8 +597,10 @@ it('should not allow anonymous user', async () => {
           title
           user
           slug
-          comments
           tags
+          oldSlugs
+          comments
+          externalComments
         }
       }
     }
@@ -596,8 +628,10 @@ it('should edit a record on database', async () => {
     title: 'Example value',
     user: 'Example value',
     slug: 'Example value',
-    comments: 'Example value',
     tags: 'Example value',
+    oldSlugs: 'Example value',
+    comments: 'Example value',
+    externalComments: 'Example value',
   });
 
   await post.save();
@@ -614,8 +648,10 @@ it('should edit a record on database', async () => {
           title
           user
           slug
-          comments
           tags
+          oldSlugs
+          comments
+          externalComments
         }
       }
     }

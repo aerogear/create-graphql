@@ -180,6 +180,15 @@ const getSchemaTimestampsFromAst = (nodes) => {
   return timestampFields;
 };
 
+/**
+ * Check if there is an ObjectProperty with key named "type" and with value of type "ArrayExpression".
+ * @param properties {Array}
+ * @returns {Object} The ObjectProperty if found, undefined otherwise.
+ */
+const getArrayTypeElementFromPropertiesArray = properties => properties.find(
+  ({ key, value: item }) => key.name === 'type' && item.type === 'ArrayExpression',
+);
+
 // MemberExpression: { field1: Schema.Types.ObjectId }
 // Identifier: { field1: ObjectId }
 const validSingleValueTypes = ['MemberExpression', 'Identifier'];
@@ -188,11 +197,35 @@ const getFieldDefinition = (field, parent = null) => {
   const value = field.value || field;
   let fieldDefinition = {};
 
-  if (value.type === 'ArrayExpression') {
+  const isArrayValue = value.type === 'ArrayExpression';
+  const isObjectValue = value.type === 'ObjectExpression';
+  const isArrayFieldDefinition = isArrayValue || (
+    isObjectValue && !!getArrayTypeElementFromPropertiesArray(value.properties)
+  );
+
+  // This handles the following array types:
+  // [Scalar]
+  //  or {type: [Scalar]}
+  //  or [{type:ObjectId,ref:'Object'}]
+  //  or {type:[ObjectId],ref:'Object'}
+  if (isArrayFieldDefinition) {
     if (parent) {
       throw new Error('Nested fields are not supported.');
     }
-    fieldDefinition = getFieldDefinition(value.elements[0], value);
+
+    let childValue;
+
+    if (isObjectValue) {
+      // we are going to change from { type: [Object] } to { type: Object }
+      const typeProperty = getArrayTypeElementFromPropertiesArray(value.properties);
+      typeProperty.value = typeProperty.value.elements[0];
+      childValue = value;
+    } else {
+      childValue = value.elements[0];
+    }
+
+    fieldDefinition = getFieldDefinition(childValue, value);
+
     // override type, specify Array
     fieldDefinition.childType = fieldDefinition.type;
     fieldDefinition.type = 'Array';

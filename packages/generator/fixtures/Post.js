@@ -21,13 +21,22 @@ const Schema = new mongoose.Schema({
     indexed: true,
     description: 'Used for SEO',
   },
+  tags: [String],
+  oldSlugs: {
+    type: [String],
+    description: 'Old slugs used by this post'
+  },
   comments: [
     {
       type: ObjectId,
       ref: 'Comment',
     },
   ],
-  tags: [String],
+  externalComments: {
+    type: [ObjectId],
+    ref: 'Comment',
+    description: 'Comments from external source'
+  },
 }, {
   timestamps: {
     createdAt: 'createdAt',
