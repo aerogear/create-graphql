@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 import User from './User';
+import Comment from './Comment';
 const { ObjectId } = mongoose.Schema.Types;
 
 const Schema = new mongoose.Schema({
@@ -19,6 +20,22 @@ const Schema = new mongoose.Schema({
     type: String,
     indexed: true,
     description: 'Used for SEO',
+  },
+  tags: [String],
+  oldSlugs: {
+    type: [String],
+    description: 'Old slugs used by this post'
+  },
+  comments: [
+    {
+      type: ObjectId,
+      ref: 'Comment',
+    },
+  ],
+  externalComments: {
+    type: [ObjectId],
+    ref: 'Comment',
+    description: 'Comments from external source'
   },
 }, {
   timestamps: {
