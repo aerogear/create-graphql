@@ -42,10 +42,10 @@ export default mutationWithClientMutationId({
   outputFields: {
     exampleEdge: {
       type: ExampleConnection.edgeType,
-      resolve: async ({ id }, args, { user }) => {
+      resolve: async ({ id }, args, context) => {
         // Load new edge from loader
         const example = await ExampleLoader.load(
-          user, id,
+          context, id,
         );
 
         // Returns null if no node was loaded
@@ -68,7 +68,7 @@ export default mutationWithClientMutationId({
 ",
   "addTest": "import { graphql } from 'graphql';
 import { schema } from '../../schema';
-import { setupTest } from '../../../test/helper';
+import { setupTest, getContext } from '../../../test/helper';
 
 import User from '../model/User';
 import Example from '../model/Example';
@@ -88,7 +88,7 @@ it('should not allow anonymous user', async () => {
 
   const rootValue = {};
   // No user should be passed to context since we are testing an anonymous session
-  const context = {};
+  const context = getContext();
 
   const result = await graphql(schema, query, rootValue, context);
 
@@ -114,7 +114,7 @@ it('should create a record on database', async () => {
   \`;
 
   const rootValue = {};
-  const context = { user };
+  const context = getContext({ user });
 
   const result = await graphql(schema, query, rootValue, context);
 
@@ -148,7 +148,9 @@ export default mutationWithClientMutationId({
       type: GraphQLString,
     },
   },
-  mutateAndGetPayload: async (args, { user }) => {
+  mutateAndGetPayload: async (args, context) => {
+    const { user } = context;
+
     // Verify if user is authorized
     if (!user) {
       throw new Error('Unauthorized user');
@@ -172,7 +174,7 @@ export default mutationWithClientMutationId({
     // TODO: mutation logic
 
     // Clear dataloader cache
-    ExampleLoader.clearCache(example._id);
+    ExampleLoader.clearCache(context, example._id);
 
     return {
       id: example._id,
@@ -182,7 +184,7 @@ export default mutationWithClientMutationId({
   outputFields: {
     example: {
       type: ExampleType,
-      resolve: (obj, args, { user }) => ExampleLoader.load(user, obj.id),
+      resolve: (obj, args, context) => ExampleLoader.load(context, obj.id),
     },
     error: {
       type: GraphQLString,
@@ -194,7 +196,7 @@ export default mutationWithClientMutationId({
   "editTest": "import { graphql } from 'graphql';
 import { toGlobalId } from 'graphql-relay';
 import { schema } from '../../schema';
-import { setupTest } from '../../../test/helper';
+import { setupTest, getContext } from '../../../test/helper';
 
 import User from '../model/User';
 import Example from '../model/Example';
@@ -215,7 +217,7 @@ it('should not allow anonymous user', async () => {
 
   const rootValue = {};
   // No user should be passed to context since we are testing an anonymous session
-  const context = {};
+  const context = getContext();
 
   const result = await graphql(schema, query, rootValue, context);
 
@@ -242,7 +244,7 @@ it('should create a record on database', async () => {
   \`;
 
   const rootValue = {};
-  const context = { user };
+  const context = getContext({ user });
 
   const result = await graphql(schema, query, rootValue, context);
 
@@ -259,6 +261,7 @@ Object {
 import {
   GraphQLString,
   GraphQLID,
+  GraphQLList,
   GraphQLNonNull,
 } from 'graphql';
 import {
@@ -285,6 +288,18 @@ export default mutationWithClientMutationId({
     slug: {
       type: GraphQLString,
     },
+    tags: {
+      type: new GraphQLList(GraphQLString),
+    },
+    oldSlugs: {
+      type: new GraphQLList(GraphQLString),
+    },
+    comments: {
+      type: new GraphQLList(GraphQLID),
+    },
+    externalComments: {
+      type: new GraphQLList(GraphQLID),
+    },
   },
   mutateAndGetPayload: async (args, { user }) => {
     // Verify if user is authorized
@@ -296,6 +311,10 @@ export default mutationWithClientMutationId({
       title,
       user,
       slug,
+      tags,
+      oldSlugs,
+      comments,
+      externalComments,
     } = args;
 
     // Create new record
@@ -303,6 +322,10 @@ export default mutationWithClientMutationId({
       title,
       user,
       slug,
+      tags,
+      oldSlugs,
+      comments,
+      externalComments,
     }).save();
 
     // TODO: mutation logic
@@ -315,10 +338,10 @@ export default mutationWithClientMutationId({
   outputFields: {
     postEdge: {
       type: PostConnection.edgeType,
-      resolve: async ({ id }, args, { user }) => {
+      resolve: async ({ id }, args, context) => {
         // Load new edge from loader
         const post = await PostLoader.load(
-          user, id,
+          context, id,
         );
 
         // Returns null if no node was loaded
@@ -345,7 +368,7 @@ export default mutationWithClientMutationId({
 ",
   "addTest": "import { graphql } from 'graphql';
 import { schema } from '../../schema';
-import { setupTest } from '../../../test/helper';
+import { setupTest, getContext } from '../../../test/helper';
 
 import User from '../model/User';
 import Post from '../model/Post';
@@ -359,12 +382,20 @@ it('should not allow anonymous user', async () => {
         title: \\"Example value\\"
         user: \\"Example value\\"
         slug: \\"Example value\\"
+        tags: \\"Example value\\"
+        oldSlugs: \\"Example value\\"
+        comments: \\"Example value\\"
+        externalComments: \\"Example value\\"
       }) {
         postEdge {
           node {
             title
             user
             slug
+            tags
+            oldSlugs
+            comments
+            externalComments
           }
         }
       }
@@ -373,7 +404,7 @@ it('should not allow anonymous user', async () => {
 
   const rootValue = {};
   // No user should be passed to context since we are testing an anonymous session
-  const context = {};
+  const context = getContext();
 
   const result = await graphql(schema, query, rootValue, context);
 
@@ -394,12 +425,20 @@ it('should create a record on database', async () => {
         title: \\"Example value\\"
         user: \\"Example value\\"
         slug: \\"Example value\\"
+        tags: \\"Example value\\"
+        oldSlugs: \\"Example value\\"
+        comments: \\"Example value\\"
+        externalComments: \\"Example value\\"
       }) {
         postEdge {
           node {
             title
             user
             slug
+            tags
+            oldSlugs
+            comments
+            externalComments
           }
         }
       }
@@ -407,7 +446,7 @@ it('should create a record on database', async () => {
   \`;
 
   const rootValue = {};
-  const context = { user };
+  const context = getContext({ user });
 
   const result = await graphql(schema, query, rootValue, context);
 
@@ -420,6 +459,7 @@ import {
   GraphQLString,
   GraphQLNonNull,
   GraphQLID,
+  GraphQLList,
 } from 'graphql';
 import {
   mutationWithClientMutationId,
@@ -446,8 +486,22 @@ export default mutationWithClientMutationId({
     slug: {
       type: GraphQLString,
     },
+    tags: {
+      type: new GraphQLList(GraphQLString),
+    },
+    oldSlugs: {
+      type: new GraphQLList(GraphQLString),
+    },
+    comments: {
+      type: new GraphQLList(GraphQLID),
+    },
+    externalComments: {
+      type: new GraphQLList(GraphQLID),
+    },
   },
-  mutateAndGetPayload: async (args, { user }) => {
+  mutateAndGetPayload: async (args, context) => {
+    const { user } = context;
+
     // Verify if user is authorized
     if (!user) {
       throw new Error('Unauthorized user');
@@ -458,6 +512,10 @@ export default mutationWithClientMutationId({
       title,
       user,
       slug,
+      tags,
+      oldSlugs,
+      comments,
+      externalComments,
     } = args;
 
     // Check if the provided ID is valid
@@ -475,12 +533,16 @@ export default mutationWithClientMutationId({
       title,
       user,
       slug,
+      tags,
+      oldSlugs,
+      comments,
+      externalComments,
     });
 
     // TODO: mutation logic
 
     // Clear dataloader cache
-    PostLoader.clearCache(post._id);
+    PostLoader.clearCache(context, post._id);
 
     return {
       id: post._id,
@@ -490,7 +552,7 @@ export default mutationWithClientMutationId({
   outputFields: {
     post: {
       type: PostType,
-      resolve: (obj, args, { user }) => PostLoader.load(user, obj.id),
+      resolve: (obj, args, context) => PostLoader.load(context, obj.id),
     },
     error: {
       type: GraphQLString,
@@ -502,7 +564,7 @@ export default mutationWithClientMutationId({
   "editTest": "import { graphql } from 'graphql';
 import { toGlobalId } from 'graphql-relay';
 import { schema } from '../../schema';
-import { setupTest } from '../../../test/helper';
+import { setupTest, getContext } from '../../../test/helper';
 
 import User from '../model/User';
 import Post from '../model/Post';
@@ -515,6 +577,10 @@ it('should not allow anonymous user', async () => {
     title: 'Example value',
     user: 'Example value',
     slug: 'Example value',
+    tags: 'Example value',
+    oldSlugs: 'Example value',
+    comments: 'Example value',
+    externalComments: 'Example value',
   });
 
   await post.save();
@@ -531,6 +597,10 @@ it('should not allow anonymous user', async () => {
           title
           user
           slug
+          tags
+          oldSlugs
+          comments
+          externalComments
         }
       }
     }
@@ -538,7 +608,7 @@ it('should not allow anonymous user', async () => {
 
   const rootValue = {};
   // No user should be passed to context since we are testing an anonymous session
-  const context = {};
+  const context = getContext();
 
   const result = await graphql(schema, query, rootValue, context);
 
@@ -558,6 +628,10 @@ it('should edit a record on database', async () => {
     title: 'Example value',
     user: 'Example value',
     slug: 'Example value',
+    tags: 'Example value',
+    oldSlugs: 'Example value',
+    comments: 'Example value',
+    externalComments: 'Example value',
   });
 
   await post.save();
@@ -574,13 +648,17 @@ it('should edit a record on database', async () => {
           title
           user
           slug
+          tags
+          oldSlugs
+          comments
+          externalComments
         }
       }
     }
   \`;
 
   const rootValue = {};
-  const context = { user };
+  const context = getContext({ user });
 
   const result = await graphql(schema, query, rootValue, context);
 

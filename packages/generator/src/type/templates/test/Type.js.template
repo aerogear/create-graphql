@@ -1,6 +1,6 @@
 import { graphql } from 'graphql';
 import { schema } from '../../schema';
-import { setupTest } from '../../../../test/helper';
+import { setupTest, getContext } from '../../../../test/helper';
 import {
   User,
   <%= name %>,
@@ -24,7 +24,7 @@ it('should retrieve a record', async () => {
   `;
 
   const rootValue = {};
-  const context = { user };
+  const context = getContext({ user });
 
   const { errors, data } = await graphql(schema, query, rootValue, context);
 

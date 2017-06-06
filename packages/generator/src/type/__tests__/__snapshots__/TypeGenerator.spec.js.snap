@@ -26,7 +26,7 @@ export default new GraphQLObjectType({
 ",
   "typeTest": "import { graphql } from 'graphql';
 import { schema } from '../../schema';
-import { setupTest } from '../../../../test/helper';
+import { setupTest, getContext } from '../../../../test/helper';
 import {
   User,
   Example,
@@ -50,7 +50,7 @@ it('should retrieve a record', async () => {
   \`;
 
   const rootValue = {};
-  const context = { user };
+  const context = getContext({ user });
 
   const { errors, data } = await graphql(schema, query, rootValue, context);
 
@@ -68,12 +68,15 @@ Object {
 import {
   GraphQLObjectType,
   GraphQLString,
+  GraphQLList,
 } from 'graphql';
 import { globalIdField } from 'graphql-relay';
 
 import { NodeInterface } from '../interface/NodeInterface';
 import UserType from './UserType';
+import CommentType from './CommentType';
 import UserLoader from '../loader/UserLoader';
+import CommentLoader from '../loader/CommentLoader';
 
 export default new GraphQLObjectType({
   name: 'Post',
@@ -88,12 +91,32 @@ export default new GraphQLObjectType({
     user: {
       type: UserType,
       description: 'User that created this post',
-      resolve: async (obj, args, { user }) => await UserLoader.load(user, obj.user),
+      resolve: async (obj, args, context) => await UserLoader.load(context, obj.user),
     },
     slug: {
       type: GraphQLString,
       description: 'Used for SEO',
       resolve: obj => obj.slug,
+    },
+    tags: {
+      type: new GraphQLList(GraphQLString),
+      description: '',
+      resolve: obj => obj.tags,
+    },
+    oldSlugs: {
+      type: new GraphQLList(GraphQLString),
+      description: 'Old slugs used by this post',
+      resolve: obj => obj.oldSlugs,
+    },
+    comments: {
+      type: new GraphQLList(CommentType),
+      description: '',
+      resolve: async (obj, args, context) => await CommentLoader.loadCommentsByIds(context, obj.comments),
+    },
+    externalComments: {
+      type: new GraphQLList(CommentType),
+      description: 'Comments from external source',
+      resolve: async (obj, args, context) => await CommentLoader.loadExternalCommentsByIds(context, obj.externalComments),
     },
     createdAt: {
       type: GraphQLString,
@@ -111,7 +134,7 @@ export default new GraphQLObjectType({
 ",
   "typeTest": "import { graphql } from 'graphql';
 import { schema } from '../../schema';
-import { setupTest } from '../../../../test/helper';
+import { setupTest, getContext } from '../../../../test/helper';
 import {
   User,
   Post,
@@ -135,7 +158,7 @@ it('should retrieve a record', async () => {
   \`;
 
   const rootValue = {};
-  const context = { user };
+  const context = getContext({ user });
 
   const { errors, data } = await graphql(schema, query, rootValue, context);
 
@@ -195,7 +218,7 @@ export default new GraphQLObjectType({
 ",
   "typeTest": "import { graphql } from 'graphql';
 import { schema } from '../../schema';
-import { setupTest } from '../../../../test/helper';
+import { setupTest, getContext } from '../../../../test/helper';
 import {
   User,
   User,
@@ -219,7 +242,7 @@ it('should retrieve a record', async () => {
   \`;
 
   const rootValue = {};
-  const context = { user };
+  const context = getContext({ user });
 
   const { errors, data } = await graphql(schema, query, rootValue, context);
 
