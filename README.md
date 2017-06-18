@@ -6,17 +6,17 @@
 </p>
 
 <p align="center">
-  <a href="https://travis-ci.org/lucasbento/create-graphql"><img src="https://travis-ci.org/lucasbento/create-graphql.svg?branch=master"></a>
-  <a href="https://ci.appveyor.com/project/lucasbento/create-graphql/branch/master"><img src="https://ci.appveyor.com/api/projects/status/cpxul2ofnyf6ypy8/branch/master?svg=true"></a>
-  <a href="https://codecov.io/gh/lucasbento/create-graphql"><img src="https://img.shields.io/codecov/c/github/lucasbento/create-graphql.svg"></a>
+  <a href="https://travis-ci.org/graphql-community/create-graphql"><img src="https://travis-ci.org/graphql-community/create-graphql.svg?branch=master"></a>
+  <a href="https://ci.appveyor.com/project/graphql-community/create-graphql/branch/master"><img src="https://ci.appveyor.com/api/projects/status/cpxul2ofnyf6ypy8/branch/master?svg=true"></a>
+  <a href="https://codecov.io/gh/graphql-community/create-graphql"><img src="https://img.shields.io/codecov/c/github/graphql-community/create-graphql.svg"></a>
   <a href="https://github.com/airbnb/javascript"><img src="https://img.shields.io/badge/code%20style-airbnb-blue.svg"></a>
-  <a href="https://github.com/lucasbento/create-graphql/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
+  <a href="https://github.com/graphql-community/create-graphql/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
 </p>
 
 
 
 ## About
-**[Create-GraphQL](https://github.com/lucasbento/create-graphql)** is a command-line utility to build production-ready servers with GraphQL and also generate *Mutations*, *Types* and more into existent projects
+**[Create-GraphQL](https://github.com/graphql-community/create-graphql)** is a command-line utility to build production-ready servers with GraphQL and also generate *Mutations*, *Types* and more into existent projects
 
 Check out the post *[Announcing Create-GraphQL](https://medium.com/entria/announcing-create-graphql-17bdd81b9f96)* on **[Entria](https://medium.com/entria)** medium
 
@@ -51,7 +51,7 @@ If you want to contribute, see the [Contributing guidelines](CONTRIBUTING.md) be
 
 ## Feedbacks
 
-We love the feedbacks. It's help us to continue grow and improve. Give your feedbacks by open an [issue](https://github.com/lucasbento/create-graphql/issues/new). We will be glad to discuss your suggestions!
+We love the feedbacks. It's help us to continue grow and improve. Give your feedbacks by open an [issue](https://github.com/graphql-community/create-graphql/issues/new). We will be glad to discuss your suggestions!
 
 ## License
 
