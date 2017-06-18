@@ -1,8 +1,8 @@
 // @flow
 
 import DataLoader from 'dataloader';
-import ConnectionFromMongoCursor from '<%= directories.connection %>/ConnectionFromMongoCursor';
 import <%= name %>Model from '<%= directories.model %>/<%= name %>';
+import connectionFromMongoCursor from './ConnectionFromMongoCursor';
 import mongooseLoader from './mongooseLoader';
 
 type <%= name %>Type = {
@@ -54,8 +54,11 @@ export default class <%= name %> {
     // TODO: specify conditions
     const <%= pluralCamelCaseName %> = <%= name %>Model.find({});
 
-    return ConnectionFromMongoCursor.connectionFromMongoCursor(
-      context, <%= pluralCamelCaseName %>, args, <%= name %>.load,
-    );
+    return connectionFromMongoCursor({
+      cursor: <%= pluralCamelCaseName %>,
+      context,
+      args,
+      loader: <%= name %>.load,
+    });
   }
 }

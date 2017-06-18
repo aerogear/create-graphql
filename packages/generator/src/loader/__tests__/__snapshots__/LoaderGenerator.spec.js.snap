@@ -5,8 +5,8 @@ Object {
   "loader": "// @flow
 
 import DataLoader from 'dataloader';
-import ConnectionFromMongoCursor from '../connection/ConnectionFromMongoCursor';
 import ExampleModel from '../model/Example';
+import connectionFromMongoCursor from './ConnectionFromMongoCursor';
 import mongooseLoader from './mongooseLoader';
 
 type ExampleType = {
@@ -52,9 +52,12 @@ export default class Example {
     // TODO: specify conditions
     const examples = ExampleModel.find({});
 
-    return ConnectionFromMongoCursor.connectionFromMongoCursor(
-      context, examples, args, Example.load,
-    );
+    return connectionFromMongoCursor({
+      cursor: examples,
+      context,
+      args,
+      loader: Example.load,
+    });
   }
 }
 ",
@@ -66,8 +69,8 @@ Object {
   "loader": "// @flow
 
 import DataLoader from 'dataloader';
-import ConnectionFromMongoCursor from '../connection/ConnectionFromMongoCursor';
 import PostModel from '../model/Post';
+import connectionFromMongoCursor from './ConnectionFromMongoCursor';
 import mongooseLoader from './mongooseLoader';
 
 type PostType = {
@@ -137,9 +140,12 @@ export default class Post {
     // TODO: specify conditions
     const posts = PostModel.find({});
 
-    return ConnectionFromMongoCursor.connectionFromMongoCursor(
-      context, posts, args, Post.load,
-    );
+    return connectionFromMongoCursor({
+      cursor: posts,
+      context,
+      args,
+      loader: Post.load,
+    });
   }
 }
 ",
@@ -151,8 +157,8 @@ Object {
   "loader": "// @flow
 
 import DataLoader from 'dataloader';
-import ConnectionFromMongoCursor from '../connection/ConnectionFromMongoCursor';
 import UserModel from '../model/User';
+import connectionFromMongoCursor from './ConnectionFromMongoCursor';
 import mongooseLoader from './mongooseLoader';
 
 type UserType = {
@@ -210,9 +216,12 @@ export default class User {
     // TODO: specify conditions
     const users = UserModel.find({});
 
-    return ConnectionFromMongoCursor.connectionFromMongoCursor(
-      context, users, args, User.load,
-    );
+    return connectionFromMongoCursor({
+      cursor: users,
+      context,
+      args,
+      loader: User.load,
+    });
   }
 }
 ",
