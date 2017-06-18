@@ -16,43 +16,42 @@ export default class <%= name %> {
   _id: string;
   exampleField: string;
 
-  static getLoader = () => new DataLoader(ids => mongooseLoader(<%= name %>Model, ids));
-
   constructor(data: <%= name %>Type) {
     this.id = data.id;
     this._id = data._id;
     this.exampleField = data.exampleField;
   }
-
-  static viewerCanSee(viewer, data) {
-    // TODO: handle security
-
-    return true;
-  }
-
-  static async load({ user: viewer, dataloaders }, id) {
-    if (!id) {
-      return null;
-    }
-
-    const data = await dataloaders.<%= rawName %>Loader.load(id.toString());
-
-    return <%= name %>.viewerCanSee(viewer, data) ? new <%= name %>(data) : null;
-  }
-
-  static clearCache({ dataloaders }, id) {
-    return dataloaders.<%= rawName %>Loader.clear(id.toString());
-  }
-
-  static async load<%= pluralName %>(context, args) {
-    // TODO: specify conditions
-    const <%= pluralCamelCaseName %> = <%= name %>Model.find({});
-
-    return connectionFromMongoCursor({
-      cursor: <%= pluralCamelCaseName %>,
-      context,
-      args,
-      loader: <%= name %>.load,
-    });
-  }
 }
+
+export const getLoader = () => new DataLoader(ids => mongooseLoader(<%= name %>Model, ids));
+
+const viewerCanSee = (viewer, data) => {
+  // TODO: handle security
+  return true;
+};
+
+export const load = async ({ user: viewer, dataloaders }, id) => {
+  if (!id) return null;
+
+  const data = await dataloaders.<%= rawName %>Loader.load(id.toString());
+
+  if (!data) return null;
+
+  return viewerCanSee(viewer, data) ? new <%= name %>(data) : null;
+};
+
+export const clearCache = ({ dataloaders }, id) => {
+  return dataloaders.<%= rawName %>Loader.clear(id.toString());
+};
+
+export const load<%= pluralName %> = async (context, args) => {
+  // TODO: specify conditions
+  const <%= pluralCamelCaseName %> = <%= name %>Model.find({});
+
+  return connectionFromMongoCursor({
+    cursor: <%= pluralCamelCaseName %>,
+    context,
+    args,
+    loader: load,
+  });
+};
