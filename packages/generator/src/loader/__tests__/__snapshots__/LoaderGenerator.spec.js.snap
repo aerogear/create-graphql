@@ -20,46 +20,45 @@ export default class Example {
   _id: string;
   exampleField: string;
 
-  static getLoader = () => new DataLoader(ids => mongooseLoader(ExampleModel, ids));
-
   constructor(data: ExampleType) {
     this.id = data.id;
     this._id = data._id;
     this.exampleField = data.exampleField;
   }
-
-  static viewerCanSee(viewer, data) {
-    // TODO: handle security
-
-    return true;
-  }
-
-  static async load({ user: viewer, dataloaders }, id) {
-    if (!id) {
-      return null;
-    }
-
-    const data = await dataloaders.ExampleLoader.load(id.toString());
-
-    return Example.viewerCanSee(viewer, data) ? new Example(data) : null;
-  }
-
-  static clearCache({ dataloaders }, id) {
-    return dataloaders.ExampleLoader.clear(id.toString());
-  }
-
-  static async loadExamples(context, args) {
-    // TODO: specify conditions
-    const examples = ExampleModel.find({});
-
-    return connectionFromMongoCursor({
-      cursor: examples,
-      context,
-      args,
-      loader: Example.load,
-    });
-  }
 }
+
+export const getLoader = () => new DataLoader(ids => mongooseLoader(ExampleModel, ids));
+
+const viewerCanSee = (viewer, data) => {
+  // TODO: handle security
+  return true;
+};
+
+export const load = async ({ user: viewer, dataloaders }, id) => {
+  if (!id) return null;
+
+  const data = await dataloaders.ExampleLoader.load(id.toString());
+
+  if (!data) return null;
+
+  return viewerCanSee(viewer, data) ? new Example(data) : null;
+};
+
+export const clearCache = ({ dataloaders }, id) => {
+  return dataloaders.ExampleLoader.clear(id.toString());
+};
+
+export const loadExamples = async (context, args) => {
+  // TODO: specify conditions
+  const examples = ExampleModel.find({});
+
+  return connectionFromMongoCursor({
+    cursor: examples,
+    context,
+    args,
+    loader: load,
+  });
+};
 ",
 }
 `;
@@ -100,8 +99,6 @@ export default class Post {
   createdAt: string;
   updatedAt: string;
 
-  static getLoader = () => new DataLoader(ids => mongooseLoader(PostModel, ids));
-
   constructor(data: PostType) {
     this.id = data.id;
     this._id = data._id;
@@ -115,39 +112,40 @@ export default class Post {
     this.createdAt = data.createdAt;
     this.updatedAt = data.updatedAt;
   }
-
-  static viewerCanSee(viewer, data) {
-    // TODO: handle security
-
-    return true;
-  }
-
-  static async load({ user: viewer, dataloaders }, id) {
-    if (!id) {
-      return null;
-    }
-
-    const data = await dataloaders.PostLoader.load(id.toString());
-
-    return Post.viewerCanSee(viewer, data) ? new Post(data) : null;
-  }
-
-  static clearCache({ dataloaders }, id) {
-    return dataloaders.PostLoader.clear(id.toString());
-  }
-
-  static async loadPosts(context, args) {
-    // TODO: specify conditions
-    const posts = PostModel.find({});
-
-    return connectionFromMongoCursor({
-      cursor: posts,
-      context,
-      args,
-      loader: Post.load,
-    });
-  }
 }
+
+export const getLoader = () => new DataLoader(ids => mongooseLoader(PostModel, ids));
+
+const viewerCanSee = (viewer, data) => {
+  // TODO: handle security
+  return true;
+};
+
+export const load = async ({ user: viewer, dataloaders }, id) => {
+  if (!id) return null;
+
+  const data = await dataloaders.PostLoader.load(id.toString());
+
+  if (!data) return null;
+
+  return viewerCanSee(viewer, data) ? new Post(data) : null;
+};
+
+export const clearCache = ({ dataloaders }, id) => {
+  return dataloaders.PostLoader.clear(id.toString());
+};
+
+export const loadPosts = async (context, args) => {
+  // TODO: specify conditions
+  const posts = PostModel.find({});
+
+  return connectionFromMongoCursor({
+    cursor: posts,
+    context,
+    args,
+    loader: load,
+  });
+};
 ",
 }
 `;
@@ -180,8 +178,6 @@ export default class User {
   active: boolean;
   lastLoginAt: string;
 
-  static getLoader = () => new DataLoader(ids => mongooseLoader(UserModel, ids));
-
   constructor(data: UserType) {
     this.id = data.id;
     this._id = data._id;
@@ -191,39 +187,40 @@ export default class User {
     this.active = data.active;
     this.lastLoginAt = data.lastLoginAt;
   }
-
-  static viewerCanSee(viewer, data) {
-    // TODO: handle security
-
-    return true;
-  }
-
-  static async load({ user: viewer, dataloaders }, id) {
-    if (!id) {
-      return null;
-    }
-
-    const data = await dataloaders.UserLoader.load(id.toString());
-
-    return User.viewerCanSee(viewer, data) ? new User(data) : null;
-  }
-
-  static clearCache({ dataloaders }, id) {
-    return dataloaders.UserLoader.clear(id.toString());
-  }
-
-  static async loadUsers(context, args) {
-    // TODO: specify conditions
-    const users = UserModel.find({});
-
-    return connectionFromMongoCursor({
-      cursor: users,
-      context,
-      args,
-      loader: User.load,
-    });
-  }
 }
+
+export const getLoader = () => new DataLoader(ids => mongooseLoader(UserModel, ids));
+
+const viewerCanSee = (viewer, data) => {
+  // TODO: handle security
+  return true;
+};
+
+export const load = async ({ user: viewer, dataloaders }, id) => {
+  if (!id) return null;
+
+  const data = await dataloaders.UserLoader.load(id.toString());
+
+  if (!data) return null;
+
+  return viewerCanSee(viewer, data) ? new User(data) : null;
+};
+
+export const clearCache = ({ dataloaders }, id) => {
+  return dataloaders.UserLoader.clear(id.toString());
+};
+
+export const loadUsers = async (context, args) => {
+  // TODO: specify conditions
+  const users = UserModel.find({});
+
+  return connectionFromMongoCursor({
+    cursor: users,
+    context,
+    args,
+    loader: load,
+  });
+};
 ",
 }
 `;
