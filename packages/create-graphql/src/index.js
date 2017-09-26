@@ -7,7 +7,10 @@ import {
   init,
   generate,
 } from './commands';
-import { verifyYeoman } from './utils';
+import {
+  verifyYeoman,
+  verifyVersion,
+} from './utils';
 
 program
   .version(pkg.version);
@@ -18,6 +21,7 @@ program
   .description('Create a new GraphQL project')
   .action(async (project) => {
     await verifyYeoman();
+    await verifyVersion();    
 
     init(project);
   });
@@ -33,6 +37,7 @@ program
   .description('Generate a new file (Type, Loader, Mutation, etc)')
   .action(async (name, options) => {
     await verifyYeoman();
+    await verifyVersion();
 
     generate(name, options);
   });

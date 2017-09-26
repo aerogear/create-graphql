@@ -19,6 +19,7 @@
     "cross-spawn-promise": "^0.10.1",
     "ora": "^1.2.0",
     "shelljs": "^0.7.5",
+    "update-notifier": "^2.2.0",
     "yeoman-generator": "^0.24.1",
     "yo": "^1.8.5"
   },

@@ -2,6 +2,9 @@ import shell from 'shelljs';
 import chalk from 'chalk';
 import ora from 'ora';
 import spawn from 'cross-spawn-promise';
+import updateNotifier from 'update-notifier';
+
+import pkg from '../package.json';
 
 const tic = chalk.green('✓');
 const tac = chalk.red('✗');
@@ -40,3 +43,7 @@ export const verifyYeoman = async () => { // eslint-disable-line import/prefer-d
 
   return true;
 };
+
+export const verifyVersion = async () => { // eslint-disable-line import/prefer-default-export
+  return await updateNotifier({pkg}).notify();
+}
