@@ -28,7 +28,7 @@
     "yeoman-test": "^1.6.0"
   },
   "scripts": {
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap --concurrency=1",
     "build": "lerna exec -- npm run build",
     "clean": "lerna clean",
     "lint": "eslint \"packages/*/src/**/*.js\" \"packages/*/__tests__\"",
