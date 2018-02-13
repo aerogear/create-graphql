@@ -40,14 +40,20 @@ class AppGenerator extends Generator {
     const done = this.async();
     const command = 'git';
     const commandOpts = ['clone', repository, this.dir];
-
+    const checkoutCommandOpts = ['checkout', '4a0eab74f021bac16e626c0ebc9fddec3d4d8c7e'];
+    
     this.spawnCommand(command, commandOpts, { stdio: 'ignore' })
       .on('close', () => {
-        this.spinner.stop();
+        shell.cd(this.dir);
 
-        this.log(`${tic} GraphQL project ${this.options.name} created.`);
-
-        done();
+        this.spawnCommand(command, checkoutCommandOpts, { stdio: 'ignore' })
+          .on('close', () => {
+            this.spinner.stop();
+            
+            this.log(`${tic} GraphQL project ${this.options.name} created.`);
+            
+            done();    
+          });
       });
   }
 
