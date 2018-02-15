@@ -9,6 +9,7 @@ import logo from '../graphql-logo';
 
 const tic = chalk.green('✓');
 const tac = chalk.red('✗');
+const commitHash = '4a0eab74f021bac16e626c0ebc9fddec3d4d8c7e';
 
 class AppGenerator extends Generator {
   constructor(args, options) {
@@ -40,14 +41,20 @@ class AppGenerator extends Generator {
     const done = this.async();
     const command = 'git';
     const commandOpts = ['clone', repository, this.dir];
+    const checkoutCommandOpts = ['checkout', commitHash];
 
     this.spawnCommand(command, commandOpts, { stdio: 'ignore' })
       .on('close', () => {
-        this.spinner.stop();
+        shell.cd(this.dir);
 
-        this.log(`${tic} GraphQL project ${this.options.name} created.`);
+        this.spawnCommand(command, checkoutCommandOpts, { stdio: 'ignore' })
+          .on('close', () => {
+            this.spinner.stop();
 
-        done();
+            this.log(`${tic} GraphQL project ${this.options.name} created.`);
+
+            done();
+          });
       });
   }
 
