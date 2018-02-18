@@ -1,7 +1,7 @@
 {
   "name": "generator-graphql",
   "description": "Create production-ready GraphQL servers",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "author": {
     "name": "Lucas Bento",
     "email": "lucas.bsilva@outlook.com",
@@ -23,7 +23,6 @@
     "shelljs": "^0.7.4",
     "yeoman-generator": "^1.0.1"
   },
-  "devDependencies": {},
   "files": [
     "generators/app",
     "generators/type",

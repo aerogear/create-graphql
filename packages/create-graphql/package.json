@@ -1,7 +1,7 @@
 {
   "name": "create-graphql",
   "description": "Create production-ready GraphQL servers",
-  "version": "1.1.17",
+  "version": "1.2.3",
   "author": {
     "name": "Lucas Bento",
     "email": "lucas.bsilva@outlook.com",
@@ -22,7 +22,6 @@
     "yeoman-generator": "^0.24.1",
     "yo": "^1.8.5"
   },
-  "devDependencies": {},
   "homepage": "https://github.com/lucasbento/create-graphql#readme",
   "keywords": [
     "apollo",
