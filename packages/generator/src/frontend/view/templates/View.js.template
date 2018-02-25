@@ -1,0 +1,57 @@
+import React, { Component } from 'react';
+import Relay from 'react-relay';
+import { withRouter } from 'react-router';
+
+import <%= name %>Edit from './<%= name %>Edit';
+
+import Tabs from '../../common/Tabs';
+
+class <%= name %>View extends Component {
+  render() {
+    const { viewer } = this.props;
+    const { <%= camelCaseName %> } = viewer;
+
+    const tabs = [{
+      label: 'Details',
+      component: (
+        <<%= name %>Edit
+          <%= camelCaseName %>={<%= camelCaseName %>}
+          viewer={viewer}
+        />
+      ),
+      icon: 'assignment',
+    }];
+
+    return (
+      <div>
+        <h1 style={styles.title}><%= name %>: {<%= camelCaseName %>.id}</h1>
+
+        <Tabs tabs={tabs} />
+      </div>
+    );
+  }
+}
+
+const styles = {
+  title: {
+    fontSize: 25,
+    fontWeight: 300,
+  },
+};
+
+export default Relay.createContainer(withRouter(<%= name %>View), {
+  initialVariables: {
+    id: null,
+  },
+  fragments: {
+    viewer: ({ id }) => Relay.QL`
+      fragment on Viewer {
+        <%= camelCaseName %>(id: $id) {
+          id
+          ${<%= name %>Edit.getFragment('<%= camelCaseName %>')}
+        }
+        ${<%= name %>Edit.getFragment('viewer')}
+      }
+    `,
+  },
+});

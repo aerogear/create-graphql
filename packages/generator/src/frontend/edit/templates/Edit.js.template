@@ -1,0 +1,106 @@
+import React, { Component, PropTypes } from 'react';
+import Relay from 'react-relay';
+import RelayStore from '../../../RelayStore';
+import { withRouter } from 'react-router';
+
+import <%= name %>EditMutation from './<%= name %>EditMutation.js';
+
+import Form from '../../common/Form';
+
+class <%= name %>Edit extends Component {
+  static contextTypes = {
+    showSnackbar: PropTypes.func,
+  };
+
+  fields = [
+    {
+      name: 'id',
+      placeholder: 'ID',
+      required: true,
+    },
+    // TODO - add ObjectType fields here
+  ];
+
+  onSubmit = (data) => {
+    const { <%= camelCasedName %> } = this.props;
+
+    const mutation = new <%= name %>EditMutation({
+      ...data,
+    });
+
+    RelayStore.commitUpdate(mutation, {
+      onSuccess: () => {
+        this.context.showSnackbar({
+          message: '<%= name %> edited successfully!',
+        });
+
+        this.props.router.goBack();
+      },
+      onFailure: (failureResponse) => {
+        this.context.showSnackbar({
+          message: 'There was an error while trying to edit this <%= rawName %>.',
+        });
+
+        console.log('FAIL', failureResponse);
+      },
+    });
+  };
+
+  render() {
+    const { <%= camelCasedName %> } = this.props;
+
+    return (
+      <Form
+        fields={this.fields}
+        onSubmit={this.onSubmit}
+        value={<%= camelCasedName %>}
+      />
+    );
+  }
+}
+
+const styles = {
+  formContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    paddingTop: 30,
+    paddingLeft: 10,
+  },
+  actionsContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    marginTop: 5,
+    paddingRight: 8,
+    borderTopStyle: 'solid',
+    borderTopWidth: 1,
+    paddingTop: 15,
+    borderColor: '#ECECEC',
+  },
+  formField: {
+    marginRight: 10,
+    flex: '1 0 47%',
+  },
+  selectField: {
+    marginRight: 10,
+    flex: '1 0 48%',
+  },
+};
+
+export default Relay.createContainer(withRouter(<%= name %>Edit), {
+  initialVariables: {
+    id: null,
+  },
+  fragments: {
+    <%= camelCasedName %>: () => Relay.QL`
+      fragment on <%= name %> {
+        id
+        ${<%= name %>EditMutation.getFragment('<%= rawName %>')}
+      }
+    `,
+    viewer: () => Relay.QL`
+      fragment on Viewer {
+        id
+      }
+    `,
+  },
+});

@@ -1,0 +1,109 @@
+import React, { Component, PropTypes } from 'react';
+import Relay from 'react-relay';
+import RelayStore from '../../RelayStore';
+import { withRouter } from 'react-router';
+
+import <%= name %>AddMutation from './<%= name %>AddMutation';
+
+import Form from '../common/Form';
+
+class <%= name %>Add extends Component {
+  static contextTypes = {
+    showSnackbar: PropTypes.func,
+  };
+
+  fields = [
+    {
+      name: 'id',
+      placeholder: 'ID',
+      required: true,
+    },
+    // TODO - add ObjectType fields here
+  ];
+
+  onSubmit = (data) => {
+    const mutation = new <%= name %>AddMutation({
+      viewer: this.props.viewer,
+      ...data,
+    });
+
+    RelayStore.commitUpdate(mutation, {
+      onSuccess: ({ <%= name %>Add }) => {
+        this.context.showSnackbar({
+          message: '<%= rawName %> created successfully!',
+        });
+
+        this.props.router.push(`/<%= pluralCamelCaseName %>/view/${<%= name %>Add.<%= camelCaseName %>Edge.node.id}`);
+      },
+      onFailure: (failureResponse) => {
+        this.context.showSnackbar({
+          message: 'There was an error while trying to create a <%= rawName %>.',
+        });
+
+        console.log('FAIL', failureResponse);
+      },
+    });
+  };
+
+  render() {
+    return (
+      <div>
+        <h1 style={styles.title}>
+          New <%= name %>
+        </h1>
+        <Form
+          fields={this.fields}
+          onSubmit={this.onSubmit}
+        />
+      </div>
+    );
+  }
+}
+
+const styles = {
+  form: {
+    backgroundColor: 'white',
+    boxShadow: 'rgba(0, 0, 0, 0.056863) 0px 7px 8px, rgba(0, 0, 0, 0.227451) 0px 0px 0px',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: '#E7ECEA',
+    padding: 20,
+    paddingTop: 50,
+  },
+  formContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  title: {
+    fontSize: 25,
+    fontWeight: 300,
+  },
+  actionsContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    marginTop: 5,
+    paddingRight: 8,
+    borderTopStyle: 'solid',
+    borderTopWidth: 1,
+    paddingTop: 15,
+    borderColor: '#ECECEC',
+  },
+  formField: {
+    marginRight: 10,
+    flex: '1 0 47%',
+  },
+  selectField: {
+    marginRight: 10,
+    flex: '1 0 48%',
+  },
+};
+
+export default Relay.createContainer(withRouter(<%= name %>Add), {
+  fragments: {
+    viewer: () => Relay.QL`
+      fragment on Viewer {
+        ${<%= name %>AddMutation.getFragment('viewer')}
+      }
+    `,
+  },
+});

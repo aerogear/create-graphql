@@ -1,0 +1,127 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generate list files 1`] = `
+Object {
+  "list": "// @flow
+
+import React, { Component } from 'react';
+import Relay from 'react-relay';
+import { withRouter } from 'react-router';
+
+import Table from '../common/Table';
+import Toolbar from '../common/Toolbar';
+
+class ExampleList extends Component {
+  state = {
+    isLoading: true,
+  };
+
+  tableColumns = [
+    {
+      property: '',
+      header: {
+        label: 'Actions',
+      },
+      icon: 'mode_edit',
+      type: 'icon',
+      clickPath: '/examples/view/:id',
+    },
+    {
+      property: 'id',
+      header: {
+        label: 'ID',
+      },
+    },
+    // TODO - add more fields to table
+  ];
+
+  componentDidMount = () => {
+    this.setState({
+      isLoading: false,
+    });
+  };
+
+  _handleNew = () => this.props.router.push('/Examples/new');
+
+  _handleRefreshList = () => {
+    this.setState({
+      isLoading: true,
+    });
+
+    this.props.relay.forceFetch({}, ({ done }) => {
+      if (done) {
+        this.setState({
+          isLoading: false,
+        });
+      }
+    });
+  };
+
+  _handleLoadMore = () => {
+    const { relay } = this.props;
+
+    this.setState({
+      isLoading: true,
+    });
+
+    relay.setVariables({
+      count: relay.variables.count + 10,
+    }, ({ done }) => {
+      if (done) {
+        this.setState({
+          isLoading: false,
+        });
+      }
+    });
+  };
+
+  render() {
+    const { isLoading } = this.state;
+
+    return (
+      <div>
+        <Toolbar
+          title=\\"Examples\\"
+          primaryActionLabel=\\"New Example\\"
+          primaryActionOnClick={this._handleNew}
+          onRefresh={this._handleRefreshList}
+        />
+
+        <Table
+          name=\\"Example\\"
+          columns={this.tableColumns}
+          rows={this.props.viewer.examples}
+          router={this.props.router}
+          onLoadMore={this._handleLoadMore}
+          isLoading={isLoading}
+        />
+      </div>
+    );
+  }
+}
+
+export default Relay.createContainer(withRouter(ExampleList), {
+  initialVariables: {
+    count: 20,
+  },
+  fragments: {
+    viewer: () => Relay.QL\`
+      fragment on Viewer {
+        examples(first: $count) {
+          pageInfo {
+            hasNextPage
+          }
+          edges {
+            node {
+              id
+              // TODO - add relay fields
+            }
+          }
+        }
+      }
+    \`,
+  },
+});
+",
+}
+`;
