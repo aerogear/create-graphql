@@ -5,6 +5,8 @@
   Create production-ready GraphQL servers
 </p>
 
+> NOTE: New command line client is currently under construction
+
 <p align="center">
   <a href="https://travis-ci.org/graphql-community/create-graphql"><img src="https://travis-ci.org/graphql-community/create-graphql.svg?branch=master"></a>
   <a href="https://ci.appveyor.com/project/graphql-community/create-graphql/branch/master"><img src="https://ci.appveyor.com/api/projects/status/cpxul2ofnyf6ypy8/branch/master?svg=true"></a>
